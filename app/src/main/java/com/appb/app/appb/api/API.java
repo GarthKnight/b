@@ -2,7 +2,6 @@ package com.appb.app.appb.api;
 
 import com.appb.app.appb.data.BoardPage;
 import com.appb.app.appb.data.Boards;
-import com.appb.app.appb.data.Threads;
 import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;

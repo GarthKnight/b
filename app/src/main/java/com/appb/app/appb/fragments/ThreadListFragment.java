@@ -14,7 +14,6 @@ import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Board;
 import com.appb.app.appb.data.BoardPage;
 import com.appb.app.appb.data.Thread;
-import com.appb.app.appb.data.Threads;
 
 import java.util.ArrayList;
 
@@ -55,7 +54,13 @@ public class ThreadListFragment extends BaseFragment {
         API.getInstance().getThreads(new Callback<BoardPage>() {
             @Override
             public void onResponse(Call<BoardPage> call, Response<BoardPage> response) {
-                threadListAdapter = new ThreadListAdapter(response.body().getThreads());
+                ThreadListFragment.this.threads = response.body().getThreads();
+                threadListAdapter = new ThreadListAdapter(threads) {
+                    @Override
+                    public void onItemClick(View v, int position) {
+                        showFragment(PicViewerFragment.create(threads.get(position).getPosts().get(0).getFiles(), true);
+                    }
+                };
                 rvThreads.setAdapter(threadListAdapter);
             }
 
