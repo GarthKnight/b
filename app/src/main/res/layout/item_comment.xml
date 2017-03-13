@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/grayBack">
+
+    <TextView
+        android:id="@+id/tvCommentDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="09/03/17 Чтв 15:18"
+        android:textSize="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="@dimen/right_thread"
+        />
+
+    <TextView
+        android:id="@+id/tvCommentNumer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/right_thread"
+        android:textSize="16dp"
+        android:text="№000000000"
+        />
+
+    <TextView
+        android:id="@+id/tvTextComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvCommentDate"
+        android:layout_marginTop="14dp"
+        android:layout_marginLeft="@dimen/right_thread"
+        android:paddingRight="14dp"
+        android:textSize="18dp"
+        android:textColor="@color/black"
+        android:text="Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой."
+        />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvCommentPictures"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTextComment"
+        android:layout_marginTop="14dp">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:src="@color/gray"
+        android:layout_below="@+id/rvCommentPictures"
+        android:layout_marginTop="10dp"/>
+
+</RelativeLayout>
