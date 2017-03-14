@@ -1,5 +1,6 @@
 package com.appb.app.appb.fragments;
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -47,4 +48,8 @@ public class BaseFragment extends Fragment {
         transaction.commitAllowingStateLoss();
     }
 
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+    }
 }

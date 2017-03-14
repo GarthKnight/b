@@ -55,13 +55,7 @@ public class BoardListFragment extends BaseFragment {
         API.getInstance().getLists(new Callback<Boards>() {
             @Override
             public void onResponse(Call<Boards> call, Response<Boards> response) {
-                boardListAdapter = new BoardListAdapter(response.body().getDifferent(), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        addFragment(new ThreadListFragment(), true);
-                    }
-                });
-                rvBoard.setAdapter(boardListAdapter);
+                initAdapter(response.body().getDifferent());
             }
 
             @Override
@@ -70,6 +64,16 @@ public class BoardListFragment extends BaseFragment {
                 showError(t.getMessage());
             }
         });
+    }
+
+    private void initAdapter(ArrayList<Board> different) {
+        boardListAdapter = new BoardListAdapter(different, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFragment(new ThreadListFragment(), true);
+            }
+        });
+        rvBoard.setAdapter(boardListAdapter);
     }
 
     public void addFragment(Fragment fragment, boolean addToBack) {

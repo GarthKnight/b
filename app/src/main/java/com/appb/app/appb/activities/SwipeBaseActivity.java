@@ -2,29 +2,25 @@ package com.appb.app.appb.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
 import com.appb.app.appb.R;
+import com.liuguangqiang.swipeback.SwipeBackActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by 1 on 06.03.2017.
+ * Created by 1 on 14.03.2017.
  */
 
-public class BaseActivity extends AppCompatActivity {
+public class SwipeBaseActivity extends SwipeBackActivity {
 
-    private static final String TAG = "BaseActivity";
+    private static final String TAG = "Swipe";
     private Unbinder unbinder;
     private ProgressDialog pbDialog;
     private Typeface ptSansRegular;
@@ -58,7 +54,6 @@ public class BaseActivity extends AppCompatActivity {
             transaction.addToBackStack(null);
         }
         transaction.commitAllowingStateLoss();
-        hideKeyboard();
     }
 
 
@@ -89,31 +84,6 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-
-
-    public void clearStack() {
-        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-    }
-
-    public Fragment findFragmentById(int id) {
-        return getSupportFragmentManager().findFragmentById(id);
-    }
-
-    public Typeface getPTSansRegular() {
-        if (ptSansRegular == null) {
-            ptSansRegular = Typeface.createFromAsset(getAssets(), "fonts/pt_sans_regular.ttf");
-        }
-        return ptSansRegular;
-    }
-
-    public Typeface getPTSansBold() {
-        if (ptSansBold == null) {
-            ptSansBold = Typeface.createFromAsset(getAssets(), "fonts/pt_sans_bold.ttf");
-        }
-        return ptSansBold;
-    }
-
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -127,30 +97,12 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void hideKeyboard() {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if (getCurrentFocus() != null) {
-            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-    }
-
     public void log(String s) {
         if (s != null) {
             Log.d(getClass().getSimpleName(), s);
         }
     }
 
-    protected void focus(final EditText editText) {
-        editText.post(new Runnable() {
-            @Override
-            public void run() {
-                editText.requestFocus();
-                editText.setSelection(editText.getText().length());
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
-    }
 
     public void hideStatusBar() {
         // Set the IMMERSIVE flag.

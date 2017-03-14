@@ -20,6 +20,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activities.PicViewerActivity"
+            android:parentActivityName=".activities.StartActivity"
+            android:theme="@style/Theme.Swipe.Back">
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.StartActivity" />
+        </activity>
     </application>
 
 </manifest>

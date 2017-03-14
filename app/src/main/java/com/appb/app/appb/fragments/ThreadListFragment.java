@@ -1,5 +1,6 @@
 package com.appb.app.appb.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.appb.app.appb.R;
+import com.appb.app.appb.activities.PicViewerActivity;
+import com.appb.app.appb.adapters.PicViewerAdapter;
 import com.appb.app.appb.adapters.ThreadListAdapter;
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Board;
@@ -21,6 +24,9 @@ import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.appb.app.appb.activities.PicViewerActivity.FILES;
+import static com.appb.app.appb.activities.PicViewerActivity.POS;
 
 /**
  * Created by 1 on 10.03.2017.
@@ -61,7 +67,11 @@ public class ThreadListFragment extends BaseFragment {
                     public void onItemClick(View v, int position, int pos) {
 
 
-                        showFragment(PicViewerFragment.create(threads.get(position).getPosts().get(0).getFiles(), pos), true);
+//                        showFragment(PicViewerFragment.create(threads.get(position).getPosts().get(0).getFiles(), pos), true);
+                        Intent intent =  new Intent(getContext(), PicViewerActivity.class);
+                        intent.putExtra(FILES, threads.get(position).getPosts().get(0).getFiles());
+                        intent.putExtra(POS, pos);
+                        startActivity(intent);
                     }
                 };
                 rvThreads.setAdapter(threadListAdapter);
