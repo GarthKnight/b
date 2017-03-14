@@ -55,10 +55,13 @@ public class ThreadListFragment extends BaseFragment {
             @Override
             public void onResponse(Call<BoardPage> call, Response<BoardPage> response) {
                 ThreadListFragment.this.threads = response.body().getThreads();
-                threadListAdapter = new ThreadListAdapter(threads) {
+                threadListAdapter = new ThreadListAdapter(threads)
+                {
                     @Override
-                    public void onItemClick(View v, int position) {
-                        showFragment(PicViewerFragment.create(threads.get(position).getPosts().get(0).getFiles(), true);
+                    public void onItemClick(View v, int position, int pos) {
+
+
+                        showFragment(PicViewerFragment.create(threads.get(position).getPosts().get(0).getFiles(), pos), true);
                     }
                 };
                 rvThreads.setAdapter(threadListAdapter);

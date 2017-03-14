@@ -44,11 +44,27 @@ public class PicViewerFragment extends BaseFragment {
         vpPicPager.setPageMargin(16);
     }
 
-    public static PicViewerFragment create(ArrayList<File> files) {
+    @Override
+    public void onResume() {
+        super.onResume();
+        vpPicPager.setCurrentItem(getArguments().getInt("PPOS"));
+    }
+
+    public static PicViewerFragment create(ArrayList<File> files, int pPos) {
         Bundle args = new Bundle();
         args.putParcelableArrayList(FILES, files);
+        args.putInt("PPOS", pPos);
         PicViewerFragment fragment = new PicViewerFragment();
         fragment.setArguments(args);
         return fragment;
     }
+
+//    public static PicViewerFragment newInstance(int pPos) {
+//
+//        Bundle args = new Bundle();
+//        PicViewerFragment fragment = new PicViewerFragment();
+//        fragment.setArguments(args);
+//        args.putInt("PPOS", pPos);
+//        return fragment;
+//    }
 }

@@ -74,17 +74,18 @@ public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.Vi
             holder.llPicLine3.setVisibility(VISIBLE);
         }
 
+        final int pFinal = position;
         for (int i = 0; i < size; i++) {
+            final int iFinal = i;
             String path = url + (threads.get(position).getPosts().get(0).getFiles().get(i).getThumbnail());
             Context context = holder.imageViews.get(i).getContext();
             Glide.with(context).load(path).asBitmap().into(holder.imageViews.get(i));
             holder.textViews.get(i).setText(threads.get(position).getPosts().get(0).getFiles().get(i).getName());
-            final int iFinal = i;
             holder.imageViews.get(i).setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    onItemClick(v, iFinal);
+                    onItemClick(v, pFinal, iFinal);
                 }
             });
         }
@@ -95,9 +96,10 @@ public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.Vi
         holder.tvCommentThread.setText(Html.fromHtml(threads.get(position).getPosts().get(0).getComment()));
     }
 
-    public void onItemClick(View v, int position) {
+    public void onItemClick(View v, int position, int pos) {
 
     }
+
 
     @Override
     public int getItemCount() {
