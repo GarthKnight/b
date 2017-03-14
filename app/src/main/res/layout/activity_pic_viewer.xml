@@ -4,13 +4,13 @@
     android:id="@+id/swipeBackLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grayBack">
+    android:background="@color/blackTranparent">
 
     <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grayBack">
+    android:background="@color/blackTranparent">
 
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"

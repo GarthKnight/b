@@ -7,4 +7,5 @@
     <color name="gray">#9e9e9e</color>
     <color name="grayBack">#eeeeee</color>
     <color name="grayThred">#dcdcdc</color>
+    <color name="blackTranparent">#d1000000</color>
 </resources>

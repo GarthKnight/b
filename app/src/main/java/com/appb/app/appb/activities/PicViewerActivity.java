@@ -37,6 +37,9 @@ public class PicViewerActivity extends SwipeBaseActivity {
         getIntent().getExtras().getInt(POS);
         setDragEdge(SwipeBackLayout.DragEdge.BOTTOM);
 
+
+
+
     }
 
 
