@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.appb.app.appb.R;
-import com.liuguangqiang.swipeback.SwipeBackActivity;
+import com.appb.app.appb.custom.SwipeBackActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

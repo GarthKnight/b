@@ -47,11 +47,6 @@ public class BoardListFragment extends BaseFragment {
     @Override
     public void init() {
         rvBoard.setLayoutManager(new LinearLayoutManager(getContext()));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         API.getInstance().getLists(new Callback<Boards>() {
             @Override
             public void onResponse(Call<Boards> call, Response<Boards> response) {

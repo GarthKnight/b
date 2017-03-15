@@ -3,12 +3,15 @@ package com.appb.app.appb.activities;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.MotionEvent;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.adapters.PicViewerAdapter;
+import com.appb.app.appb.custom.SwipeBackLayout;
 import com.appb.app.appb.data.File;
 import com.appb.app.appb.fragments.PicViewerFragment;
-import com.liuguangqiang.swipeback.SwipeBackLayout;
+
 
 import java.util.ArrayList;
 
@@ -27,6 +30,12 @@ public class PicViewerActivity extends SwipeBaseActivity {
     @BindView(R.id.vpPicPager)
     ViewPager vpPicPager;
     PicViewerAdapter picViewerAdapter;
+    private boolean enablePullToBack;
+
+    @BindView(R.id.swipeBackLayout) SwipeBackLayout swipeBackLayout;
+
+    MotionEvent motionEvent;
+
 
 
     @Override
@@ -35,11 +44,6 @@ public class PicViewerActivity extends SwipeBaseActivity {
         setContentView(R.layout.activity_pic_viewer);
         bindUI(this);
         getIntent().getExtras().getInt(POS);
-        setDragEdge(SwipeBackLayout.DragEdge.BOTTOM);
-
-
-
-
     }
 
 

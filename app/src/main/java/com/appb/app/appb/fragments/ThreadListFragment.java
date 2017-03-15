@@ -52,23 +52,14 @@ public class ThreadListFragment extends BaseFragment {
     @Override
     public void init() {
         rvThreads.setLayoutManager(new LinearLayoutManager(getContext()));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         API.getInstance().getThreads(new Callback<BoardPage>() {
             @Override
             public void onResponse(Call<BoardPage> call, Response<BoardPage> response) {
                 ThreadListFragment.this.threads = response.body().getThreads();
-                threadListAdapter = new ThreadListAdapter(threads)
-                {
+                threadListAdapter = new ThreadListAdapter(threads) {
                     @Override
                     public void onItemClick(View v, int position, int pos) {
-
-
-//                        showFragment(PicViewerFragment.create(threads.get(position).getPosts().get(0).getFiles(), pos), true);
-                        Intent intent =  new Intent(getContext(), PicViewerActivity.class);
+                        Intent intent = new Intent(getContext(), PicViewerActivity.class);
                         intent.putExtra(FILES, threads.get(position).getPosts().get(0).getFiles());
                         intent.putExtra(POS, pos);
                         startActivity(intent);
@@ -83,4 +74,5 @@ public class ThreadListFragment extends BaseFragment {
             }
         });
     }
+
 }
