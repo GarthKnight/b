@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -44,6 +45,9 @@ public class BaseActivity extends AppCompatActivity {
     public void init(){
 
     }
+
+
+
 
     @Override
     protected void onPause() {
@@ -117,7 +121,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        checkFragmentStack();
+//        checkFragmentStack();
     }
 
     public void checkFragmentStack() {
@@ -136,7 +140,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public void log(String s) {
         if (s != null) {
-            Log.d(getClass().getSimpleName(), s);
+            Log.d("Base Activity", s);
         }
     }
 

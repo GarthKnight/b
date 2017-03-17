@@ -8,8 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.appb.app.appb.R;
+import com.appb.app.appb.activities.MyPlayerActivity;
 import com.appb.app.appb.activities.PicViewerActivity;
 import com.appb.app.appb.adapters.PicViewerAdapter;
 import com.appb.app.appb.adapters.ThreadListAdapter;
@@ -21,6 +23,7 @@ import com.appb.app.appb.data.Thread;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,6 +39,7 @@ public class ThreadListFragment extends BaseFragment {
 
     @BindView(R.id.rvThreads)
     RecyclerView rvThreads;
+
 
     ThreadListAdapter threadListAdapter;
     ArrayList<Thread> threads;
@@ -65,7 +69,7 @@ public class ThreadListFragment extends BaseFragment {
                         startActivity(intent);
                     }
                 };
-                rvThreads.setAdapter(threadListAdapter);
+                if (rvThreads != null) rvThreads.setAdapter(threadListAdapter);
             }
 
             @Override
@@ -73,6 +77,12 @@ public class ThreadListFragment extends BaseFragment {
                 showError(t.getMessage());
             }
         });
+    }
+
+    @OnClick(R.id.btnWebm)
+    public void Onclick(){
+        Intent intent = new Intent(getContext(), MyPlayerActivity.class);
+        startActivity(intent);
     }
 
 }

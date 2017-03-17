@@ -1,29 +1,48 @@
 package com.appb.app.appb.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.fragments.BoardListFragment;
+import com.appb.app.appb.adapters.BoardListAdapter;
+import com.appb.app.appb.api.API;
+import com.appb.app.appb.data.Board;
+import com.appb.app.appb.data.Boards;
+import com.appb.app.appb.fragments.ThreadListFragment;
 
+import java.util.ArrayList;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class StartActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    @BindView(R.id.rvBoards)
+    RecyclerView rvBoard;
+    BoardListAdapter boardListAdapter;
+    ArrayList<Board> boards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        ButterKnife.bind(this);
+        log("Start Activity onCreate");
+        bindUI(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -35,8 +54,42 @@ public class StartActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        addFragment(new BoardListFragment(), true);
+
+
+//        startActivity(new Intent(StartActivity.this, BoardListActivity.class));
     }
+
+
+    @Override
+    public void init() {
+        log("BoardListFragment: " + "init");
+        rvBoard.setLayoutManager(new LinearLayoutManager(this));
+        API.getInstance().getLists(new Callback<Boards>() {
+            @Override
+            public void onResponse(Call<Boards> call, Response<Boards> response) {
+                log("BoardListFragment: " + "onResponse");
+                initAdapter(response.body().getDifferent());
+            }
+
+            @Override
+            public void onFailure(Call<Boards> call, Throwable t) {
+                Log.d("RETROFIT", "onFailure: " + t.toString());
+//                showError(t.getMessage());
+            }
+        });
+    }
+
+
+    private void initAdapter(ArrayList<Board> different) {
+        boardListAdapter = new BoardListAdapter(different, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFragment(new ThreadListFragment(), true);
+            }
+        });
+        rvBoard.setAdapter(boardListAdapter);
+    }
+
 
     @Override
     public void onBackPressed() {

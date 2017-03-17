@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Два.ч</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="my_player_activity">Player</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
 </resources>

@@ -1,9 +1,8 @@
-package com.appb.app.appb.fragments;
+package com.appb.app.appb.activities;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +15,7 @@ import com.appb.app.appb.adapters.BoardListAdapter;
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Board;
 import com.appb.app.appb.data.Boards;
+import com.appb.app.appb.fragments.ThreadListFragment;
 
 import java.util.ArrayList;
 
@@ -25,10 +25,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by 1 on 06.03.2017.
+ * Created by 1 on 17.03.2017.
  */
 
-public class BoardListFragment extends BaseFragment {
+public class BoardListActivity extends BaseActivity {
+
 
     @BindView(R.id.rvBoards)
     RecyclerView rvBoard;
@@ -36,25 +37,16 @@ public class BoardListFragment extends BaseFragment {
     ArrayList<Board> boards;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        log("onCreate");
+        setContentView(R.layout.activity_list_of_boards);
+        bindUI(this);
     }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_list_of_boards, container, false);
-        log("onCreateView");
-        bindUI(v);
-        return v;
-    }
-
 
     @Override
     public void init() {
         log("BoardListFragment: " + "init");
-        rvBoard.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvBoard.setLayoutManager(new LinearLayoutManager(this));
         API.getInstance().getLists(new Callback<Boards>() {
             @Override
             public void onResponse(Call<Boards> call, Response<Boards> response) {
@@ -65,16 +57,15 @@ public class BoardListFragment extends BaseFragment {
             @Override
             public void onFailure(Call<Boards> call, Throwable t) {
                 Log.d("RETROFIT", "onFailure: " + t.toString());
-                showError(t.getMessage());
+//                showError(t.getMessage());
             }
         });
     }
 
-    @Override
-    public void onDestroyView() {
-        log("BoardListFragment: " + "onDestroyView ");
-        super.onDestroyView();
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//    }
 
     private void initAdapter(ArrayList<Board> different) {
         boardListAdapter = new BoardListAdapter(different, new View.OnClickListener() {
@@ -86,11 +77,4 @@ public class BoardListFragment extends BaseFragment {
         rvBoard.setAdapter(boardListAdapter);
     }
 
-    public void addFragment(Fragment fragment, boolean addToBack) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
-        transaction.replace(R.id.container, fragment);
-        if (addToBack) transaction.addToBackStack(null);
-        transaction.commitAllowingStateLoss();
-    }
 }

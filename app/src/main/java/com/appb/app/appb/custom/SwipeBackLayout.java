@@ -116,6 +116,9 @@ public class SwipeBackLayout extends ViewGroup {
     float newX = 0;
     float offsetX = 0;
 
+    private void log(String log) {
+        Log.d("SwipeBack", log);
+    }
     private void chkDragable() {
         setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -137,7 +140,8 @@ public class SwipeBackLayout extends ViewGroup {
                     switch (dragEdge) {
                         case TOP:
                         case BOTTOM:
-                                setEnablePullToBack(offsetY > offsetX);
+                            log("setEnablePullToBack: " + (offsetY > offsetX));
+                            setEnablePullToBack(offsetY > offsetX);
                         case LEFT:
                         case RIGHT:
                             setEnablePullToBack(offsetY < offsetX);
@@ -259,21 +263,23 @@ public class SwipeBackLayout extends ViewGroup {
         }
     }
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        boolean handled = false;
-        ensureTarget();
-        if (isEnabled()) {
-            handled = viewDragHelper.shouldInterceptTouchEvent(ev);
-        } else {
-            viewDragHelper.cancel();
-        }
-//        return !handled ? super.onInterceptTouchEvent(ev) : handled;
-        return false;
-    }
+//    @Override
+//    public boolean onInterceptTouchEvent(MotionEvent ev) {
+//        log("onInterceptTouchEvent");
+//        boolean handled = false;
+//        ensureTarget();
+//        if (isEnabled()) {
+//            handled = viewDragHelper.shouldInterceptTouchEvent(ev);
+//        } else {
+//            viewDragHelper.cancel();
+//        }
+////        return !handled ? super.onInterceptTouchEvent(ev) : handled;
+//        return true;
+//    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        log("onTouchEvent");
         viewDragHelper.processTouchEvent(event);
         return false;
     }
