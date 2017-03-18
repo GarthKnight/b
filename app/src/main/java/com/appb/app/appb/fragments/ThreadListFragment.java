@@ -37,13 +37,21 @@ import static com.appb.app.appb.activities.PicViewerActivity.POS;
 
 public class ThreadListFragment extends BaseFragment {
 
+    private static final String THREADS = "threads";
     @BindView(R.id.rvThreads)
     RecyclerView rvThreads;
 
 
     ThreadListAdapter threadListAdapter;
-    ArrayList<Thread> threads;
+    ArrayList<Thread> threads = new ArrayList<>();
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            threads = savedInstanceState.getParcelableArrayList(THREADS);
+        }
+    }
 
     @Nullable
     @Override
@@ -53,36 +61,51 @@ public class ThreadListFragment extends BaseFragment {
         return v;
     }
 
+
     @Override
     public void init() {
         rvThreads.setLayoutManager(new LinearLayoutManager(getContext()));
-        API.getInstance().getThreads(new Callback<BoardPage>() {
-            @Override
-            public void onResponse(Call<BoardPage> call, Response<BoardPage> response) {
-                ThreadListFragment.this.threads = response.body().getThreads();
-                threadListAdapter = new ThreadListAdapter(threads) {
-                    @Override
-                    public void onItemClick(View v, int position, int pos) {
-                        Intent intent = new Intent(getContext(), PicViewerActivity.class);
-                        intent.putExtra(FILES, threads.get(position).getPosts().get(0).getFiles());
-                        intent.putExtra(POS, pos);
-                        startActivity(intent);
-                    }
-                };
-                if (rvThreads != null) rvThreads.setAdapter(threadListAdapter);
-            }
+        initAdapter();
+        if (threads.size() == 0) {
+            API.getInstance().getThreads(new Callback<BoardPage>() {
+                @Override
+                public void onResponse(Call<BoardPage> call, Response<BoardPage> response) {
+                    if (response.body().getThreads() != null)
+                    threads.addAll(response.body().getThreads());
+                    threadListAdapter.notifyDataSetChanged();
+                }
 
-            @Override
-            public void onFailure(Call<BoardPage> call, Throwable t) {
-                showError(t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<BoardPage> call, Throwable t) {
+                    showError(t.getMessage());
+                }
+            });
+        }
     }
 
+    private void initAdapter(){
+        threadListAdapter = new ThreadListAdapter(threads) {
+            @Override
+            public void onItemClick(View v, int position, int pos) {
+                Intent intent = new Intent(getContext(), PicViewerActivity.class);
+                intent.putExtra(FILES, threads.get(position).getPosts().get(0).getFiles());
+                intent.putExtra(POS, pos);
+                startActivity(intent);
+            }
+        };
+        rvThreads.setAdapter(threadListAdapter);
+    }
+
+
     @OnClick(R.id.btnWebm)
-    public void Onclick(){
+    public void Onclick() {
         Intent intent = new Intent(getContext(), MyPlayerActivity.class);
         startActivity(intent);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(THREADS, threads);
+    }
 }

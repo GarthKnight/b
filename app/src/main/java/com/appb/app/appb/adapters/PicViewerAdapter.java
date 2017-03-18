@@ -57,6 +57,7 @@ public class PicViewerAdapter extends PagerAdapter {
 //            container.addView(bvp, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 //            return bvp;
         } else {
+            
             PhotoView photoView = new PhotoView(container.getContext());
             Context context = photoView.getContext();
             Glide.with(context).load(url).asBitmap().into(photoView);
