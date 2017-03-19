@@ -3,9 +3,7 @@ package com.appb.app.appb.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * Created by 1 on 10.03.2017.

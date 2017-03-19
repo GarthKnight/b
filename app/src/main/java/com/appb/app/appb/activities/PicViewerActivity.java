@@ -1,27 +1,19 @@
 package com.appb.app.appb.activities;
 
 import android.content.Intent;
-import android.graphics.Path;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.adapters.PicViewerAdapter;
 import com.appb.app.appb.custom.SwipeBackLayout;
 import com.appb.app.appb.data.File;
-import com.appb.app.appb.data.Thread;
-import com.appb.app.appb.fragments.PicViewerFragment;
-
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by 1 on 14.03.2017.

@@ -1,24 +1,17 @@
 package com.appb.app.appb.adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.activities.PicViewerActivity;
-import com.appb.app.appb.api.API;
 import com.appb.app.appb.custom.ForegroundImageView;
 import com.appb.app.appb.data.File;
 import com.bumptech.glide.Glide;
-import com.halilibo.bettervideoplayer.BetterVideoCallback;
-import com.halilibo.bettervideoplayer.BetterVideoPlayer;
 
 import java.util.ArrayList;
 
@@ -64,7 +57,6 @@ public class PicViewerAdapter extends PagerAdapter {
         } else {
             FrameLayout frame = new FrameLayout(container.getContext());
             ProgressBar progressBar = new ProgressBar(container.getContext(), null, android.R.attr.progressBarStyleSmall);
-//            progressBar.getIndeterminateDrawable().setColorFilter(0xFF9900,android.graphics.PorterDuff.Mode.MULTIPLY);
             PhotoView photoView = new PhotoView(container.getContext());
             Glide.with(container.getContext()).load(url).asBitmap().into(photoView);
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(100, 100);
@@ -72,8 +64,6 @@ public class PicViewerAdapter extends PagerAdapter {
             container.addView(frame, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             frame.addView(progressBar, lp);
             frame.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
-
             return frame;
         }
     }

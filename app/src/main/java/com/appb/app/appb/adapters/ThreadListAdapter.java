@@ -1,10 +1,6 @@
 package com.appb.app.appb.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -16,11 +12,8 @@ import android.widget.TextView;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.data.Thread;
-import com.appb.app.appb.fragments.PicViewerFragment;
 import com.bumptech.glide.Glide;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +31,6 @@ import static android.view.View.VISIBLE;
 public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.ViewHolder> {
 
     ArrayList<Thread> threads;
-    private FragmentManager fragmentManager;
 
     public ThreadListAdapter(ArrayList<Thread> threads) {
         this.threads = threads;
@@ -97,9 +89,7 @@ public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.Vi
     }
 
     public void onItemClick(View v, int position, int pos) {
-
     }
-
 
     @Override
     public int getItemCount() {
@@ -111,7 +101,6 @@ public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.Vi
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         @BindViews({R.id.ivPic1, R.id.ivPic2, R.id.ivPic3, R.id.ivPic4, R.id.ivPic5, R.id.ivPic6, R.id.ivPic7, R.id.ivPic8, R.id.ivPic9,})
         List<ImageView> imageViews;
         @BindViews({R.id.tvPic1, R.id.tvPic2, R.id.tvPic3, R.id.tvPic4, R.id.tvPic5, R.id.tvPic6, R.id.tvPic7, R.id.tvPic8, R.id.tvPic9,})
