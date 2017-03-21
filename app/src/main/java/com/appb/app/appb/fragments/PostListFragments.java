@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,22 +62,55 @@ public class PostListFragments extends BaseFragment {
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         initAdapter();
         if(posts.size() == 0){
-            int threadNum = getArguments().getInt(NUM);
-            API.getInstance().getPosts(new Callback<Posts>() {
+            String task = "get_thread";
+            String board = "b";
+            int tmp = getArguments().getInt(NUM);
+            String num = String.valueOf(tmp);
+            int postTmp = 1;
+            String postNum = String.valueOf(postTmp);
+            API.getInstance().getPosts(new Callback<ArrayList<Post>>() {
                 @Override
-                public void onResponse(Call<Posts> call, Response<Posts> response) {
-                    posts.addAll(response.body().getPosts());
+                public void onResponse(Call<ArrayList<Post>> call, Response<ArrayList<Post>> response) {
+                    posts.addAll(response.body());
                     postListAdapter.notifyDataSetChanged();
+
+                    if(!response.isSuccessful()){
+                        String task = "get_thread";
+                        String board = "b";
+                        int tmp = getArguments().getInt(NUM);
+                        String num = String.valueOf(tmp);
+                        int postTmp = 2;
+                        String postNum = String.valueOf(postTmp);
+                        API.getInstance().getPosts(new Callback<ArrayList<Post>>() {
+
+                            @Override
+                            public void onResponse(Call<ArrayList<Post>> call, Response<ArrayList<Post>> response) {
+                                posts.addAll(response.body());
+                                postListAdapter.notifyDataSetChanged();
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<ArrayList<Post>> call, Throwable t) {
+                                showError(t.getMessage());
+                                Log.d("Yoba", t.getMessage());
+                            }
+                        }, task, board, num, postNum);
+                    }
                 }
 
                 @Override
-                public void onFailure(Call<Posts> call, Throwable t) {
+                public void onFailure(Call<ArrayList<Post>> call, Throwable t) {
                     showError(t.getMessage());
+                    Log.d("Yoba", t.getMessage());
                 }
-            }, threadNum);
+            }, task, board, num, postNum);
+
         }
 
     }
+
+
 
     public void initAdapter() {
         postListAdapter = new PostListAdapter(posts);

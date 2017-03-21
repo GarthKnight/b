@@ -6,6 +6,7 @@ import com.appb.app.appb.data.Post;
 import com.appb.app.appb.data.Posts;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -78,8 +79,8 @@ public class API {
         serviceBoards.threads().enqueue(callback);
     }
 
-    public  void getPosts(Callback<Posts> callback, int num) {
-        serviceBoards.posts(num).enqueue(callback);
+    public  void getPosts(Callback<ArrayList<Post>> callback, String thread, String board, String  num, String pathNum) {
+        serviceBoards.posts(thread, board, num, pathNum).enqueue(callback);
     }
 
 
@@ -90,8 +91,11 @@ public class API {
         @GET("b/index.json")
         Call<BoardPage> threads();
 
-        @GET("/makaba/mobile.fcgi?task=get_thread&board=b&thread=threadNum&post=1")
-        Call<Posts> posts(@Query("threadNum") int threadNum);
+        @GET("/makaba/mobile.fcgi")
+        Call<ArrayList<Post>> posts(@Query("task") String thread,
+                              @Query("board") String board,
+                              @Query("thread") String num,
+                              @Query("post") String pathNum);
     }
 
 }

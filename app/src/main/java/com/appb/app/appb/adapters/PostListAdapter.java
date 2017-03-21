@@ -2,6 +2,7 @@ package com.appb.app.appb.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,10 +84,10 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
             });
 
         }
-
-        holder.tvTextComment.setText(posts.get(position).getComment());
+        String postNum = ("№" + String.valueOf(posts.get(position).getNum()));
+        holder.tvTextComment.setText(Html.fromHtml(posts.get(position).getComment()));
         holder.tvCommentDate.setText(posts.get(position).getDate());
-        holder.tvCommentNumber.setText(posts.get(position).getNum());
+        holder.tvCommentNumber.setText(postNum);
     }
 
     public void onItemClick(View v, int position, int pos) {
