@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/grayBack">
+    android:background="@color/grayThred">
 
     <TextView
         android:id="@+id/tvCommentDate"
@@ -39,21 +39,208 @@
         />
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvCommentPictures"
+    <LinearLayout
+        android:id="@+id/llPicLine1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="135dp"
         android:layout_below="@+id/tvTextComment"
-        android:layout_marginTop="14dp">
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tvPic1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"
+                android:textSize="14dp"/>
+            <ImageView
+                android:id="@+id/ivPic1"
+                android:layout_below="@+id/tvPic1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tvPic2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"
+                android:textSize="14dp"/>
+            <ImageView
+                android:id="@+id/ivPic2"
+                android:layout_below="@+id/tvPic2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tvPic3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"
+                android:textSize="14dp"/>
+            <ImageView
+                android:id="@+id/ivPic3"
+                android:layout_below="@+id/tvPic3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dp"/>
+        </RelativeLayout>
+    </LinearLayout>
 
 
-    </android.support.v7.widget.RecyclerView>
+    <LinearLayout
+        android:id="@+id/llPicLine2"
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:layout_below="@+id/llPicLine1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tvPic4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"
+                android:textSize="14dp"/>
+            <ImageView
+                android:id="@+id/ivPic4"
+                android:layout_below="@+id/tvPic4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tvPic5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"
+                android:textSize="14dp"/>
+            <ImageView
+                android:id="@+id/ivPic5"
+                android:layout_below="@+id/tvPic5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tvPic6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"
+                android:textSize="14dp"/>
+            <ImageView
+                android:id="@+id/ivPic6"
+                android:layout_below="@+id/tvPic6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dp"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/llPicLine3"
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:layout_below="@+id/llPicLine2">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tvPic7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"
+                android:textSize="14dp"/>
+            <ImageView
+                android:id="@+id/ivPic7"
+                android:layout_below="@+id/tvPic7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tvPic8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"
+                android:textSize="14dp"/>
+            <ImageView
+                android:id="@+id/ivPic8"
+                android:layout_below="@+id/tvPic8"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tvPic9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center"
+                android:textSize="14dp"/>
+            <ImageView
+                android:id="@+id/ivPic9"
+                android:layout_below="@+id/tvPic9"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="3dp"/>
+        </RelativeLayout>
+    </LinearLayout>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="2px"
         android:src="@color/gray"
-        android:layout_below="@+id/rvCommentPictures"
+        android:layout_below="@+id/llPicLine3"
         android:layout_marginTop="10dp"/>
 
 </RelativeLayout>

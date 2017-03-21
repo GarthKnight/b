@@ -2,6 +2,8 @@ package com.appb.app.appb.api;
 
 import com.appb.app.appb.data.BoardPage;
 import com.appb.app.appb.data.Boards;
+import com.appb.app.appb.data.Post;
+import com.appb.app.appb.data.Posts;
 import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
@@ -14,6 +16,9 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Part;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by 1 on 06.03.2017.
@@ -73,7 +78,9 @@ public class API {
         serviceBoards.threads().enqueue(callback);
     }
 
-
+    public  void getPosts(Callback<Posts> callback, int num) {
+        serviceBoards.posts(num).enqueue(callback);
+    }
 
 
     public interface DvachService {
@@ -82,6 +89,9 @@ public class API {
 
         @GET("b/index.json")
         Call<BoardPage> threads();
+
+        @GET("/makaba/mobile.fcgi?task=get_thread&board=b&thread=threadNum&post=1")
+        Call<Posts> posts(@Query("threadNum") int threadNum);
     }
 
 }

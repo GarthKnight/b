@@ -2,7 +2,6 @@ package com.appb.app.appb.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appb.app.appb.R;
+import com.appb.app.appb.data.Post;
 import com.appb.app.appb.data.Thread;
 import com.bumptech.glide.Glide;
 
@@ -25,29 +25,29 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 /**
- * Created by 1 on 10.03.2017.
+ * Created by 1 on 20.03.2017.
  */
 
-public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.ViewHolder> {
+public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
 
-    ArrayList<Thread> threads;
+    ArrayList<Post> posts;
 
-    public ThreadListAdapter(ArrayList<Thread> threads) {
-        this.threads = threads;
+    public PostListAdapter (ArrayList<Post> posts) {
+        this.posts = posts;
+    }
 
+
+    @Override
+    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false);
+        return new PostListAdapter.VH(v);
     }
 
     @Override
-    public ThreadListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_thread, parent, false);
-        return new ThreadListAdapter.ViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        int size = (threads.get(position).getPosts().get(0).getFiles().size());
+    public void onBindViewHolder(VH holder, int position) {
+        int size = (posts.get(position).getFiles().size());
         String url = "http://2ch.hk";
-        String num = ("№" + String.valueOf(threads.get(position).getPosts().get(0).getNum()));
+        String num = ("№" + String.valueOf(posts.get(position).getNum()));
 
         if (size < 1) {
             holder.llPicLine1.setVisibility(GONE);
@@ -70,48 +70,35 @@ public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.Vi
         final int pFinal = position;
         for (int i = 0; i < size; i++) {
             final int iFinal = i;
-            String path = url + (threads.get(position).getPosts().get(0).getFiles().get(i).getThumbnail());
+            String path = url + (posts.get(position).getFiles().get(i).getThumbnail());
             Context context = holder.imageViews.get(i).getContext();
             Glide.with(context).load(path).asBitmap().into(holder.imageViews.get(i));
-            holder.textViews.get(i).setText(threads.get(position).getPosts().get(0).getFiles().get(i).getName());
-            holder.imageViews.get(i).setOnClickListener(new View.OnClickListener() {
+            holder.textViews.get(i).setText(posts.get(position).getFiles().get(i).getName());
 
+            holder.imageViews.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onImageClick(v, pFinal, iFinal);
+                    onItemClick(v, pFinal, iFinal);
                 }
             });
-            holder.tvThreadNumber.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onThreadClick(v, pFinal);
-                }
-            });
+
         }
 
-        holder.tvDateThread.setText(threads.get(position).getPosts().get(0).getDate());
-        holder.tvThreadNumber.setText(num);
-        holder.tvThreadName.setText(Html.fromHtml(threads.get(position).getPosts().get(0).getName()));
-        holder.tvCommentThread.setText(Html.fromHtml(threads.get(position).getPosts().get(0).getComment()));
+        holder.tvTextComment.setText(posts.get(position).getComment());
+        holder.tvCommentDate.setText(posts.get(position).getDate());
+        holder.tvCommentNumber.setText(posts.get(position).getNum());
     }
 
-    public void onThreadClick(View v, int pos) {
-
-    }
-
-    public void onImageClick(View v, int position, int pos) {
+    public void onItemClick(View v, int position, int pos) {
     }
 
     @Override
     public int getItemCount() {
-        return threads.size();
+        return posts.size();
     }
 
+    public class VH extends RecyclerView.ViewHolder {
 
-
-
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
         @BindViews({R.id.ivPic1, R.id.ivPic2, R.id.ivPic3, R.id.ivPic4, R.id.ivPic5, R.id.ivPic6, R.id.ivPic7, R.id.ivPic8, R.id.ivPic9,})
         List<ImageView> imageViews;
         @BindViews({R.id.tvPic1, R.id.tvPic2, R.id.tvPic3, R.id.tvPic4, R.id.tvPic5, R.id.tvPic6, R.id.tvPic7, R.id.tvPic8, R.id.tvPic9,})
@@ -123,21 +110,14 @@ public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.Vi
         LinearLayout llPicLine2;
         @BindView(R.id.llPicLine3)
         LinearLayout llPicLine3;
-        @BindView(R.id.tvDateThread)
-        TextView tvDateThread;
-        @BindView(R.id.tvThreadNumer)
-        TextView tvThreadNumber;
-        @BindView(R.id.tvThreadName)
-        TextView tvThreadName;
-        @BindView(R.id.tvCommentThread)
-        TextView tvCommentThread;
+        @BindView(R.id.tvCommentDate) TextView tvCommentDate;
+        @BindView(R.id.tvCommentNumer) TextView tvCommentNumber;
+        @BindView(R.id.tvTextComment) TextView tvTextComment;
 
 
-        public ViewHolder(View v) {
+        public VH(View v) {
             super(v);
             ButterKnife.bind(this, v);
         }
     }
-
-
 }

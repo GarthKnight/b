@@ -14,9 +14,12 @@ import com.appb.app.appb.activities.PicViewerActivity;
 import com.appb.app.appb.adapters.ThreadListAdapter;
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.BoardPage;
+import com.appb.app.appb.data.Posts;
 import com.appb.app.appb.data.Thread;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import retrofit2.Call;
@@ -32,7 +35,9 @@ import static com.appb.app.appb.activities.PicViewerActivity.POS;
 
 public class ThreadListFragment extends BaseFragment {
 
+
     private static final String THREADS = "threads";
+    private static final String NUM = "num";
     @BindView(R.id.rvThreads)
     RecyclerView rvThreads;
 
@@ -75,16 +80,23 @@ public class ThreadListFragment extends BaseFragment {
                 }
             });
         }
+
+
     }
 
     private void initAdapter(){
         threadListAdapter = new ThreadListAdapter(threads) {
             @Override
-            public void onItemClick(View v, int position, int pos) {
+            public void onImageClick(View v, int position, int pos) {
                 Intent intent = new Intent(getContext(), PicViewerActivity.class);
                 intent.putExtra(FILES, threads.get(position).getPosts().get(0).getFiles());
                 intent.putExtra(POS, pos);
                 startActivity(intent);
+            }
+
+            @Override
+            public void onThreadClick(View v, int pos) {
+                showFragment(PostListFragments.newInstance(threads.get(pos).getPosts().get(0).getNum()), false);
             }
         };
         rvThreads.setAdapter(threadListAdapter);
@@ -95,4 +107,6 @@ public class ThreadListFragment extends BaseFragment {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(THREADS, threads);
     }
+
+
 }
