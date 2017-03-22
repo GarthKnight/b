@@ -3,6 +3,8 @@ package com.appb.app.appb.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appb.app.appb.R;
+import com.appb.app.appb.custom.TextViewWithClickableSpan;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.data.Thread;
 import com.bumptech.glide.Glide;
@@ -33,22 +36,33 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
 
     ArrayList<Post> posts;
 
-    public PostListAdapter (ArrayList<Post> posts) {
+    private static final int THREAD = 0;
+    private static final int COMMENT = 1;
+
+
+    public PostListAdapter(ArrayList<Post> posts) {
         this.posts = posts;
     }
 
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false);
-        return new PostListAdapter.VH(v);
+        if (viewType == THREAD) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_thread, parent, false);
+            return new PostListAdapter.VHThread(v);
+        } else {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false);
+            return new PostListAdapter.VHComment(v);
+        }
+
     }
 
     @Override
     public void onBindViewHolder(VH holder, int position) {
         int size = (posts.get(position).getFiles().size());
         String url = "http://2ch.hk";
-        String num = ("№" + String.valueOf(posts.get(position).getNum()));
+        String postNum = ("№" + String.valueOf(posts.get(position).getNum()));
+        final int pFinal = position;
 
         if (size < 1) {
             holder.llPicLine1.setVisibility(GONE);
@@ -68,7 +82,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
             holder.llPicLine3.setVisibility(VISIBLE);
         }
 
-        final int pFinal = position;
         for (int i = 0; i < size; i++) {
             final int iFinal = i;
             String path = url + (posts.get(position).getFiles().get(i).getThumbnail());
@@ -84,13 +97,45 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
             });
 
         }
-        String postNum = ("№" + String.valueOf(posts.get(position).getNum()));
-        holder.tvTextComment.setText(Html.fromHtml(posts.get(position).getComment()));
-        holder.tvCommentDate.setText(posts.get(position).getDate());
-        holder.tvCommentNumber.setText(postNum);
+
+        if (position == 0) {
+            VHThread vhThread = ((VHThread) holder);
+
+            vhThread.tvThreadName.setText(Html.fromHtml(posts.get(position).getSubject()));
+            vhThread.tvCommentThread.setText(Html.fromHtml(posts.get(position).getComment()));
+            vhThread.tvDateThread.setText(posts.get(position).getDate());
+            vhThread.tvThreadNumber.setText(postNum);
+        } else {
+            VHComment vhComment = ((VHComment) holder);
+
+            Spanned text = Html.fromHtml(posts.get(position).getComment());
+            if (TextUtils.isEmpty(text)){
+                vhComment.tvTextComment.setVisibility(GONE);
+            }
+
+            vhComment.tvTextComment.setSpannableText(text);
+            vhComment.tvTextComment.setLinkListener(new TextViewWithClickableSpan.LinkClickListener() {
+                @Override
+                public void onLinkClick(int number) {
+
+                }
+            });
+            vhComment.tvCommentDate.setText(posts.get(position).getDate());
+            vhComment.tvCommentNumber.setText(postNum);
+        }
     }
 
     public void onItemClick(View v, int position, int pos) {
+    }
+
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return THREAD;
+        } else {
+            return COMMENT;
+        }
     }
 
     @Override
@@ -111,12 +156,42 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
         LinearLayout llPicLine2;
         @BindView(R.id.llPicLine3)
         LinearLayout llPicLine3;
-        @BindView(R.id.tvCommentDate) TextView tvCommentDate;
-        @BindView(R.id.tvCommentNumer) TextView tvCommentNumber;
-        @BindView(R.id.tvTextComment) TextView tvTextComment;
+
+
 
 
         public VH(View v) {
+            super(v);
+            ButterKnife.bind(this, v);
+        }
+    }
+
+    public class VHThread extends VH{
+
+        @BindView(R.id.tvDateThread)
+        TextView tvDateThread;
+        @BindView(R.id.tvThreadNumer)
+        TextView tvThreadNumber;
+        @BindView(R.id.tvThreadName)
+        TextView tvThreadName;
+        @BindView(R.id.tvCommentThread)
+        TextView tvCommentThread;
+
+        public VHThread(View v) {
+            super(v);
+            ButterKnife.bind(this, v);
+        }
+    }
+
+    public class VHComment extends VH{
+        @BindView(R.id.tvCommentDate)
+        TextView tvCommentDate;
+        @BindView(R.id.tvCommentNumer)
+        TextView tvCommentNumber;
+        @BindView(R.id.tvTextComment)
+        TextViewWithClickableSpan tvTextComment;
+
+        public VHComment(View v) {
             super(v);
             ButterKnife.bind(this, v);
         }

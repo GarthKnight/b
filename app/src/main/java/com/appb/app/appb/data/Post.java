@@ -78,6 +78,10 @@ public class Post implements Parcelable{
         return num;
     }
 
+    public String getSubject(){
+        return subject;
+    }
+
     public ArrayList<File> getFiles() {
         return files;
     }

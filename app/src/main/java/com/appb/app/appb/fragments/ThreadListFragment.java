@@ -95,7 +95,7 @@ public class ThreadListFragment extends BaseFragment {
             }
 
             @Override
-            public void onThreadClick(View v, int pos) {
+            public void onCommentClick(View v, int pos) {
                 showFragment(PostListFragments.newInstance(threads.get(pos).getPosts().get(0).getNum()), true);
             }
         };

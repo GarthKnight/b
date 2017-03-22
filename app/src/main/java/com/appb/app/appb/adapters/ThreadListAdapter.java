@@ -3,6 +3,7 @@ package com.appb.app.appb.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,13 @@ public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.Vi
         int size = (threads.get(position).getPosts().get(0).getFiles().size());
         String url = "http://2ch.hk";
         String num = ("№" + String.valueOf(threads.get(position).getPosts().get(0).getNum()));
+        Spanned subject = Html.fromHtml(threads.get(position).getPosts().get(0).getName());
+        Spanned comment = Html.fromHtml(threads.get(position).getPosts().get(0).getComment());
+
+
+        if (comment.toString().toLowerCase().contains(subject.toString().toLowerCase())){
+            holder.tvThreadName.setVisibility(GONE);
+        }
 
         if (size < 1) {
             holder.llPicLine1.setVisibility(GONE);
@@ -81,21 +89,21 @@ public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.Vi
                     onImageClick(v, pFinal, iFinal);
                 }
             });
-            holder.tvThreadNumber.setOnClickListener(new View.OnClickListener() {
+            holder.tvCommentThread.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onThreadClick(v, pFinal);
+                    onCommentClick(v, pFinal);
                 }
             });
         }
 
         holder.tvDateThread.setText(threads.get(position).getPosts().get(0).getDate());
         holder.tvThreadNumber.setText(num);
-        holder.tvThreadName.setText(Html.fromHtml(threads.get(position).getPosts().get(0).getName()));
-        holder.tvCommentThread.setText(Html.fromHtml(threads.get(position).getPosts().get(0).getComment()));
+        holder.tvThreadName.setText(subject);
+        holder.tvCommentThread.setText(comment);
     }
 
-    public void onThreadClick(View v, int pos) {
+    public void onCommentClick(View v, int pos) {
 
     }
 

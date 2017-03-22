@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/grayThred">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/grayBack">
 
     <TextView
         android:id="@+id/tvCommentDate"
@@ -23,9 +24,10 @@
         android:layout_marginRight="@dimen/right_thread"
         android:textSize="16dp"
         android:text="№000000000"
+        android:textColor="@color/colorPrimary"
         />
 
-    <TextView
+    <com.appb.app.appb.custom.TextViewWithClickableSpan
         android:id="@+id/tvTextComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="135dp"
         android:layout_below="@+id/tvTextComment"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp">
 
@@ -242,5 +244,8 @@
         android:src="@color/gray"
         android:layout_below="@+id/llPicLine3"
         android:layout_marginTop="10dp"/>
+
+
+
 
 </RelativeLayout>

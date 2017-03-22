@@ -61,7 +61,7 @@ public class PostListFragments extends BaseFragment {
     public void init() {
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         initAdapter();
-        if(posts.size() == 0){
+        if (posts.size() == 0) {
             String task = "get_thread";
             String board = "b";
             int tmp = getArguments().getInt(NUM);
@@ -74,12 +74,12 @@ public class PostListFragments extends BaseFragment {
                     posts.addAll(response.body());
                     postListAdapter.notifyDataSetChanged();
 
-                    if(!response.isSuccessful()){
+                    if (!response.isSuccessful()) {
                         String task = "get_thread";
                         String board = "b";
                         int tmp = getArguments().getInt(NUM);
                         String num = String.valueOf(tmp);
-                        int postTmp = 2;
+                        int postTmp = 102;
                         String postNum = String.valueOf(postTmp);
                         API.getInstance().getPosts(new Callback<ArrayList<Post>>() {
 
@@ -93,7 +93,6 @@ public class PostListFragments extends BaseFragment {
                             @Override
                             public void onFailure(Call<ArrayList<Post>> call, Throwable t) {
                                 showError(t.getMessage());
-                                Log.d("Yoba", t.getMessage());
                             }
                         }, task, board, num, postNum);
                     }
@@ -102,7 +101,6 @@ public class PostListFragments extends BaseFragment {
                 @Override
                 public void onFailure(Call<ArrayList<Post>> call, Throwable t) {
                     showError(t.getMessage());
-                    Log.d("Yoba", t.getMessage());
                 }
             }, task, board, num, postNum);
 
@@ -111,9 +109,16 @@ public class PostListFragments extends BaseFragment {
     }
 
 
-
     public void initAdapter() {
-        postListAdapter = new PostListAdapter(posts);
+        postListAdapter = new PostListAdapter(posts) {
+            @Override
+            public void onItemClick(View v, int position, int pos) {
+                Intent intent = new Intent(getContext(), PicViewerActivity.class);
+                intent.putExtra(FILES, posts.get(position).getFiles());
+                intent.putExtra(POS, pos);
+                startActivity(intent);
+            }
+        };
         rvPosts.setAdapter(postListAdapter);
     }
 
