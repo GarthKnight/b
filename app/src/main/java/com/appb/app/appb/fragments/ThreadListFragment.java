@@ -93,7 +93,7 @@ public class ThreadListFragment extends BaseFragment {
                 intent.putExtra(POS, pos);
                 startActivity(intent);
             }
-
+            //может быть тебе пора?
             @Override
             public void onCommentClick(View v, int pos) {
                 showFragment(PostListFragments.newInstance(threads.get(pos).getPosts().get(0).getNum()), true);

@@ -1,19 +1,28 @@
 package com.appb.app.appb.fragments;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.PopupWindow;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.activities.PicViewerActivity;
+
 import com.appb.app.appb.adapters.PostListAdapter;
 import com.appb.app.appb.api.API;
+import com.appb.app.appb.custom.CustomDialogBox;
+import com.appb.app.appb.data.File;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.data.Posts;
 
@@ -118,9 +127,18 @@ public class PostListFragments extends BaseFragment {
                 intent.putExtra(POS, pos);
                 startActivity(intent);
             }
+
+            @Override
+            public void onPrefClick(String date, String num, String comment, int filesSize, Post post,  int positionForSpan) {
+                CustomDialogBox cdb = new CustomDialogBox(getContext(), date, num, comment, filesSize, post, positionForSpan);
+                cdb.show();
+                
+            }
         };
+
         rvPosts.setAdapter(postListAdapter);
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

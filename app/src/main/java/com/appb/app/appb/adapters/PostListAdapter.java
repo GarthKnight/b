@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.custom.TextViewWithClickableSpan;
+import com.appb.app.appb.data.File;
 import com.appb.app.appb.data.Post;
-import com.appb.app.appb.data.Thread;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -58,11 +58,12 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
     }
 
     @Override
-    public void onBindViewHolder(VH holder, int position) {
-        int size = (posts.get(position).getFiles().size());
+    public void onBindViewHolder(VH holder, final int position) {
+        final int size = (posts.get(position).getFiles().size());
         String url = "http://2ch.hk";
         String postNum = ("№" + String.valueOf(posts.get(position).getNum()));
         final int pFinal = position;
+
 
         if (size < 1) {
             holder.llPicLine1.setVisibility(GONE);
@@ -101,12 +102,11 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
         if (position == 0) {
             VHThread vhThread = ((VHThread) holder);
 
-            vhThread.tvThreadName.setText(Html.fromHtml(posts.get(position).getSubject()));
             vhThread.tvCommentThread.setText(Html.fromHtml(posts.get(position).getComment()));
             vhThread.tvDateThread.setText(posts.get(position).getDate());
             vhThread.tvThreadNumber.setText(postNum);
         } else {
-            VHComment vhComment = ((VHComment) holder);
+            final VHComment vhComment = ((VHComment) holder);
 
             Spanned text = Html.fromHtml(posts.get(position).getComment());
             if (TextUtils.isEmpty(text)){
@@ -117,6 +117,28 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
             vhComment.tvTextComment.setLinkListener(new TextViewWithClickableSpan.LinkClickListener() {
                 @Override
                 public void onLinkClick(int number) {
+                    int tmp = 0;
+                    String date;
+                    String num;
+                    String comment;
+                    Spanned tmpComment;
+                    Post post = posts.get(position);
+                    int positionForSpan = position;
+
+                    for(int i = 0; i < posts.size(); i++){
+                        if (posts.get(i).getNum() == number){
+                            tmp = i;
+                        }
+                    }
+
+                    if(tmp != 0){
+                        date = posts.get(tmp).getDate();
+                        num ="№" + String.valueOf(posts.get(tmp).getNum());
+                        tmpComment = Html.fromHtml(posts.get(tmp).getComment());
+                        comment = tmpComment.toString();
+
+                        onPrefClick(date, num, comment, size, post, positionForSpan);
+                    }
 
                 }
             });
@@ -125,6 +147,9 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
         }
     }
 
+    public void onPrefClick(String date, String num, String comment, int filesSize, Post post, int positionForSpan){
+
+    }
     public void onItemClick(View v, int position, int pos) {
     }
 
@@ -172,8 +197,6 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
         TextView tvDateThread;
         @BindView(R.id.tvThreadNumer)
         TextView tvThreadNumber;
-        @BindView(R.id.tvThreadName)
-        TextView tvThreadName;
         @BindView(R.id.tvCommentThread)
         TextView tvCommentThread;
 

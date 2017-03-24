@@ -53,10 +53,6 @@ public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.Vi
         Spanned comment = Html.fromHtml(threads.get(position).getPosts().get(0).getComment());
 
 
-        if (comment.toString().toLowerCase().contains(subject.toString().toLowerCase())){
-            holder.tvThreadName.setVisibility(GONE);
-        }
-
         if (size < 1) {
             holder.llPicLine1.setVisibility(GONE);
             holder.llPicLine2.setVisibility(GONE);
@@ -99,7 +95,6 @@ public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.Vi
 
         holder.tvDateThread.setText(threads.get(position).getPosts().get(0).getDate());
         holder.tvThreadNumber.setText(num);
-        holder.tvThreadName.setText(subject);
         holder.tvCommentThread.setText(comment);
     }
 
@@ -135,8 +130,6 @@ public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.Vi
         TextView tvDateThread;
         @BindView(R.id.tvThreadNumer)
         TextView tvThreadNumber;
-        @BindView(R.id.tvThreadName)
-        TextView tvThreadName;
         @BindView(R.id.tvCommentThread)
         TextView tvCommentThread;
 

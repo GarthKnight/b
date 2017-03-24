@@ -12,25 +12,25 @@ import java.util.Objects;
 
 public class Post implements Parcelable{
 
-    int banned;
-    int closed;
-    String comment;
-    String date;
-    String email;
-    ArrayList<File> files;
-    int files_count;
-    long lastshit;
-    int op;
-    String parent;
-    int post_count;
-    int sticky;
-    String subject;
-    String tags;
-    long timestamp;
-    String trip;
-    int num;
+    private int banned;
+    private int closed;
+    private String comment;
+    private String date;
+    private String email;
+    private ArrayList<File> files;
+    private int files_count;
+    private long lastshit;
+    private int op;
+    private String parent;
+    private int post_count;
+    private int sticky;
+    private String subject;
+    private String tags;
+    private long timestamp;
+    private String trip;
+    private int num;
 
-    protected Post(Parcel in) {
+    private Post(Parcel in) {
         banned = in.readInt();
         closed = in.readInt();
         comment = in.readString();

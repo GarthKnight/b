@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class TextViewWithClickableSpan extends TextView {
 
-    static String TAG = TextViewWithClickableSpan.class.getSimpleName();
+    static String TAG = "YOBA";
     private LinkClickListener linkListener;
 
 
@@ -41,42 +41,63 @@ public class TextViewWithClickableSpan extends TextView {
     public void setSpannableText(CharSequence textChars) {
         //// TODO: 22.03.2017
         String text = String.valueOf(textChars);
-        ArrayList<Integer> indices = new ArrayList<>();
+        ArrayList<Integer> indicesNum = new ArrayList<>();
         SpannableString ss = new SpannableString(text);
+
         int counter = text.indexOf(">>");
-        int spaceCounter = text.indexOf(" ", counter);
 
         if (counter != -1) {
-            indices.add(counter);
+            indicesNum.add(counter);
         }
 
         while (counter != -1) {
             Log.d(TAG, "counter: " + counter);
-            counter = text.indexOf(">>", counter+1);
+            counter = text.indexOf(">>", counter + 1);
             if (counter != -1) {
-                indices.add(counter);
+                indicesNum.add(counter);
+
             }
+
         }
 
-        ClickableSpan span = new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                Log.d("yoba", "pashel nahui: ");
-                linkListener.onLinkClick(12345);
-            }
-        };
 
-        for(int i = 0; i < indices.size(); i++){
-            ss.setSpan(span, indices.get(i), indices.get(i)+11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        for (int i = 0; i < indicesNum.size(); i++) {
+            NumberClickableSpan span = new NumberClickableSpan(text.substring(indicesNum.get(i)+2, indicesNum.get(i) + 11)) {
+                @Override
+                public void onNumberClick(String nubmer) {
+                    linkListener.onLinkClick(Integer.valueOf(nubmer));
+                    Log.d(TAG, "onNumberClick: " + nubmer);
+                }
+            };
+
+            ss.setSpan(span, indicesNum.get(i), indicesNum.get(i) + 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
-        Log.d(TAG, "setSpannableText: " + text);
+
         super.setText(ss);
         setMovementMethod(LinkMovementMethod.getInstance());
     }
 
+    private class NumberClickableSpan extends ClickableSpan {
+
+        public String nubmer;
+
+        public NumberClickableSpan(String number) {
+            this.nubmer = number;
+        }
+
+        @Override
+        public void onClick(View widget) {
+            onNumberClick(nubmer);
+        }
+
+        public void onNumberClick(String nubmer) {
+
+        }
+    }
 
 
-    public interface LinkClickListener{
+    public interface LinkClickListener {
         void onLinkClick(int number);
     }
 }
