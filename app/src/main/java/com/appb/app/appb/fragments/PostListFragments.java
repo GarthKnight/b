@@ -129,10 +129,17 @@ public class PostListFragments extends BaseFragment {
             }
 
             @Override
-            public void onPrefClick(String date, String num, String comment, int filesSize, Post post,  int positionForSpan) {
-                CustomDialogBox cdb = new CustomDialogBox(getContext(), date, num, comment, filesSize, post, positionForSpan);
+            public void onPrefClick(String date, String num, String comment, int filesSize, Post post, int positionForSpan) {
+                CustomDialogBox cdb = new CustomDialogBox(getContext(), date, num, comment, filesSize, post, positionForSpan) {
+                    @Override
+                    public void onItemClick(View v, int position, int pos) {
+                        Intent intent = new Intent(getContext(), PicViewerActivity.class);
+                        intent.putExtra(FILES, posts.get(position).getFiles());
+                        intent.putExtra(POS, pos);
+                        startActivity(intent);
+                    }
+                };
                 cdb.show();
-                
             }
         };
 

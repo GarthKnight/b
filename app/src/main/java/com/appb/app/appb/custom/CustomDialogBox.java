@@ -131,7 +131,4 @@ public class CustomDialogBox extends Dialog {
     }
 
 
-    interface ItemClick{
-        public void onItemClickHelper(View v, int position, int pos);
-    }
 }

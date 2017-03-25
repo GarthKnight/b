@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.activities.PicViewerActivity;
@@ -22,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,12 +40,18 @@ public class ThreadListFragment extends BaseFragment {
 
     private static final String THREADS = "threads";
     private static final String NUM = "num";
-    @BindView(R.id.rvThreads)
-    RecyclerView rvThreads;
-
-
+    private int count = 1;
+    private String index;
     ThreadListAdapter threadListAdapter;
     ArrayList<Thread> threads = new ArrayList<>();
+
+    @BindView(R.id.rvThreads)
+    RecyclerView rvThreads;
+    @BindView(R.id.btnForward)
+    Button btnForward;
+    @BindView(R.id.btnBack)
+    Button btnBack;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,7 +78,7 @@ public class ThreadListFragment extends BaseFragment {
                 @Override
                 public void onResponse(Call<BoardPage> call, Response<BoardPage> response) {
                     if (response.body().getThreads() != null)
-                    threads.addAll(response.body().getThreads());
+                        threads.addAll(response.body().getThreads());
                     threadListAdapter.notifyDataSetChanged();
                 }
 
@@ -84,7 +92,31 @@ public class ThreadListFragment extends BaseFragment {
 
     }
 
-    private void initAdapter(){
+    
+
+
+    @OnClick(R.id.btnForward)
+    public void onForwardClick(View v) {
+        if (count != 20) {
+            count = count++;
+        }
+    }
+
+    @OnClick(R.id.btnBack)
+    public void onBackClick(View v) {
+        if (count != 1) {
+            count = count--;
+        }
+    }
+
+    private void initAdapter() {
+
+        if (count == 1) {
+            index = "index";
+        } else {
+            index = String.valueOf(count);
+        }
+
         threadListAdapter = new ThreadListAdapter(threads) {
             @Override
             public void onImageClick(View v, int position, int pos) {
@@ -93,6 +125,7 @@ public class ThreadListFragment extends BaseFragment {
                 intent.putExtra(POS, pos);
                 startActivity(intent);
             }
+
             //может быть тебе пора?
             @Override
             public void onCommentClick(View v, int pos) {
@@ -101,6 +134,7 @@ public class ThreadListFragment extends BaseFragment {
         };
         rvThreads.setAdapter(threadListAdapter);
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
