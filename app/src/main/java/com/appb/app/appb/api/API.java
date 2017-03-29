@@ -75,11 +75,12 @@ public class API {
     }
 
 
-    public void getThreads(Callback<BoardPage> callback) {
-        serviceBoards.threads().enqueue(callback);
+    public void getThreads(int index, Callback<BoardPage> callback) {
+        String page = index == 1 ? "index" : String.valueOf(index);
+        serviceBoards.threads(page).enqueue(callback);
     }
 
-    public  void getPosts(Callback<ArrayList<Post>> callback, String thread, String board, String  num, String pathNum) {
+    public void getPosts(Callback<ArrayList<Post>> callback, String thread, String board, String num, String pathNum) {
         serviceBoards.posts(thread, board, num, pathNum).enqueue(callback);
     }
 
@@ -88,14 +89,14 @@ public class API {
         @GET("makaba/mobile.fcgi?task=get_boards")
         Call<Boards> boards();
 
-        @GET("b/index.json")
-        Call<BoardPage> threads();
+        @GET("b/{index}.json")
+        Call<BoardPage> threads(@Path("index") String index);
 
         @GET("/makaba/mobile.fcgi")
         Call<ArrayList<Post>> posts(@Query("task") String thread,
-                              @Query("board") String board,
-                              @Query("thread") String num,
-                              @Query("post") String pathNum);
+                                    @Query("board") String board,
+                                    @Query("thread") String num,
+                                    @Query("post") String pathNum);
     }
 
 }

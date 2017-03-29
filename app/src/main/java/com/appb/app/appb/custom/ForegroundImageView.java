@@ -96,7 +96,7 @@ public class ForegroundImageView extends ImageView {
             display.getSize(size);
             int width = size.x;
             int height = size.y;
-            foreground.setBounds(width/2-50, height/2-45, width/2+50, height/2+55);
+            foreground.setBounds(width/2-50, height/2-50, width/2+50, height/2+50);
             invalidate();
         }
     }

@@ -37,6 +37,16 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="16dp" />
 
+            <TextView
+                android:id="@+id/tvThreadCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_toLeftOf="@+id/tvThreadNumer"
+                android:layout_marginRight="20dp"
+                android:textSize="16dp"
+                android:text="#1"
+                />
 
             <TextView
                 android:id="@+id/tvCommentThread"

@@ -24,7 +24,8 @@
 
         <activity android:name=".activities.PicViewerActivity"
             android:parentActivityName=".activities.StartActivity"
-            android:theme="@style/Theme.Swipe.Back">
+            android:theme="@style/Theme.Swipe.Back"
+            android:configChanges="orientation">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

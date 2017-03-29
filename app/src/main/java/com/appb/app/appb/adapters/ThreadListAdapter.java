@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,31 +72,42 @@ public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.Vi
             holder.llPicLine3.setVisibility(VISIBLE);
         }
 
-        final int pFinal = position;
-        for (int i = 0; i < size; i++) {
-            final int iFinal = i;
-            String path = url + (threads.get(position).getPosts().get(0).getFiles().get(i).getThumbnail());
-            Context context = holder.imageViews.get(i).getContext();
-            Glide.with(context).load(path).asBitmap().into(holder.imageViews.get(i));
-            holder.textViews.get(i).setText(threads.get(position).getPosts().get(0).getFiles().get(i).getName());
-            holder.imageViews.get(i).setOnClickListener(new View.OnClickListener() {
+        Log.d("yoba", "onBindViewHolder: pos: "  + position + " filescount: " + size);
 
-                @Override
-                public void onClick(View v) {
-                    onImageClick(v, pFinal, iFinal);
-                }
-            });
-            holder.tvCommentThread.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onCommentClick(v, pFinal);
-                }
-            });
+        final int pFinal = position;
+        for (int i = 0; i < 9; i++) {
+            final int iFinal = i;
+            if(i < size){
+                String path = url + (threads.get(position).getPosts().get(0).getFiles().get(i).getThumbnail());
+                Context context = holder.imageViews.get(i).getContext();
+                holder.imageViews.get(i).setVisibility(VISIBLE);
+                holder.textViews.get(i).setVisibility(VISIBLE);
+                Glide.with(context).load(path).asBitmap().into(holder.imageViews.get(i));
+                holder.textViews.get(i).setText(threads.get(position).getPosts().get(0).getFiles().get(i).getName());
+                holder.imageViews.get(i).setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        onImageClick(v, pFinal, iFinal);
+                    }
+                });
+                holder.tvCommentThread.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onCommentClick(v, pFinal);
+                    }
+                });
+            } else {
+                holder.imageViews.get(i).setImageDrawable(null);
+                holder.imageViews.get(i).setVisibility(GONE);
+                holder.textViews.get(i).setVisibility(GONE);
+            }
         }
 
         holder.tvDateThread.setText(threads.get(position).getPosts().get(0).getDate());
         holder.tvThreadNumber.setText(num);
         holder.tvCommentThread.setText(comment);
+        holder.tvThreadCounter.setText("#" + position);
     }
 
     public void onCommentClick(View v, int pos) {
@@ -132,6 +144,8 @@ public class ThreadListAdapter extends RecyclerView.Adapter<ThreadListAdapter.Vi
         TextView tvThreadNumber;
         @BindView(R.id.tvCommentThread)
         TextView tvCommentThread;
+        @BindView(R.id.tvThreadCounter)
+        TextView tvThreadCounter;
 
 
         public ViewHolder(View v) {

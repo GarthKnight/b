@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,21 +60,21 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
 
     @Override
     public void onBindViewHolder(VH holder, final int position) {
-        final int size = (posts.get(position).getFiles().size());
+        final int filesCount = (posts.get(position).getFiles().size());
         String url = "http://2ch.hk";
         String postNum = ("№" + String.valueOf(posts.get(position).getNum()));
         final int pFinal = position;
 
 
-        if (size < 1) {
+        if (filesCount < 1) {
             holder.llPicLine1.setVisibility(GONE);
             holder.llPicLine2.setVisibility(GONE);
             holder.llPicLine3.setVisibility(GONE);
-        } else if (size > 0 && size < 4) {
+        } else if (filesCount > 0 && filesCount < 4) {
             holder.llPicLine1.setVisibility(VISIBLE);
             holder.llPicLine2.setVisibility(GONE);
             holder.llPicLine3.setVisibility(GONE);
-        } else if (size > 3 && size < 7) {
+        } else if (filesCount > 3 && filesCount < 7) {
             holder.llPicLine1.setVisibility(VISIBLE);
             holder.llPicLine2.setVisibility(VISIBLE);
             holder.llPicLine3.setVisibility(GONE);
@@ -83,20 +84,28 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
             holder.llPicLine3.setVisibility(VISIBLE);
         }
 
-        for (int i = 0; i < size; i++) {
+        Log.d("yoba", "onBindViewHolder: pos: "  + position + " filescount: " + filesCount);
+        for (int i = 0; i < 9; i++) {
             final int iFinal = i;
-            String path = url + (posts.get(position).getFiles().get(i).getThumbnail());
-            Context context = holder.imageViews.get(i).getContext();
-            Glide.with(context).load(path).asBitmap().into(holder.imageViews.get(i));
-            holder.textViews.get(i).setText(posts.get(position).getFiles().get(i).getName());
+            if (i < filesCount) {
+                String path = url + (posts.get(position).getFiles().get(i).getThumbnail());
+                Context context = holder.imageViews.get(i).getContext();
+                Glide.with(context).load(path).asBitmap().into(holder.imageViews.get(i));
+                holder.imageViews.get(i).setVisibility(VISIBLE);
+                holder.textViews.get(i).setVisibility(VISIBLE);
+                holder.textViews.get(i).setText(posts.get(position).getFiles().get(i).getName());
 
-            holder.imageViews.get(i).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClick(v, pFinal, iFinal);
-                }
-            });
-
+                holder.imageViews.get(i).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onItemClick(v, pFinal, iFinal);
+                    }
+                });
+            } else {
+                holder.imageViews.get(i).setImageDrawable(null);
+                holder.imageViews.get(i).setVisibility(GONE);
+                holder.textViews.get(i).setVisibility(GONE);
+            }
         }
 
         if (position == 0) {
@@ -109,8 +118,10 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
             final VHComment vhComment = ((VHComment) holder);
 
             Spanned text = Html.fromHtml(posts.get(position).getComment());
-            if (TextUtils.isEmpty(text)){
+            if (TextUtils.isEmpty(text)) {
                 vhComment.tvTextComment.setVisibility(GONE);
+            } else {
+                vhComment.tvTextComment.setVisibility(VISIBLE);
             }
 
             vhComment.tvTextComment.setSpannableText(text);
@@ -125,19 +136,19 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
                     Post post = posts.get(position);
                     int positionForSpan = position;
 
-                    for(int i = 0; i < posts.size(); i++){
-                        if (posts.get(i).getNum() == number){
+                    for (int i = 0; i < posts.size(); i++) {
+                        if (posts.get(i).getNum() == number) {
                             tmp = i;
                         }
                     }
 
-                    if(tmp != 0){
+                    if (tmp != 0) {
                         date = posts.get(tmp).getDate();
-                        num ="№" + String.valueOf(posts.get(tmp).getNum());
+                        num = "№" + String.valueOf(posts.get(tmp).getNum());
                         tmpComment = Html.fromHtml(posts.get(tmp).getComment());
                         comment = tmpComment.toString();
 
-                        onPrefClick(date, num, comment, size, post, positionForSpan);
+                        onPrefClick(date, num, comment, filesCount, post, positionForSpan);
                     }
 
                 }
@@ -147,9 +158,10 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
         }
     }
 
-    public void onPrefClick(String date, String num, String comment, int filesSize, Post post, int positionForSpan){
+    public void onPrefClick(String date, String num, String comment, int filesSize, Post post, int positionForSpan) {
 
     }
+
     public void onItemClick(View v, int position, int pos) {
     }
 
@@ -183,15 +195,13 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
         LinearLayout llPicLine3;
 
 
-
-
         public VH(View v) {
             super(v);
             ButterKnife.bind(this, v);
         }
     }
 
-    public class VHThread extends VH{
+    public class VHThread extends VH {
 
         @BindView(R.id.tvDateThread)
         TextView tvDateThread;
@@ -206,7 +216,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
         }
     }
 
-    public class VHComment extends VH{
+    public class VHComment extends VH {
         @BindView(R.id.tvCommentDate)
         TextView tvCommentDate;
         @BindView(R.id.tvCommentNumer)

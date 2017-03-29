@@ -15,6 +15,8 @@ import android.widget.EditText;
 
 import com.appb.app.appb.R;
 
+import java.util.ArrayList;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -41,11 +43,11 @@ public class BaseActivity extends AppCompatActivity {
         init();
     }
 
-    public void init(){
+
+
+    public void init() {
 
     }
-
-
 
 
     @Override
@@ -63,7 +65,6 @@ public class BaseActivity extends AppCompatActivity {
         transaction.commitAllowingStateLoss();
         hideKeyboard();
     }
-
 
 
     public void showFragment(Fragment fragment, boolean addToBack) {
@@ -91,7 +92,6 @@ public class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
-
 
 
     public void clearStack() {

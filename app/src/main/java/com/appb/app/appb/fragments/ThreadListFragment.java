@@ -8,22 +8,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.activities.PicViewerActivity;
 import com.appb.app.appb.adapters.ThreadListAdapter;
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.BoardPage;
-import com.appb.app.appb.data.Posts;
 import com.appb.app.appb.data.Thread;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,19 +35,20 @@ public class ThreadListFragment extends BaseFragment {
 
 
     private static final String THREADS = "threads";
-    private static final String NUM = "num";
-    private int count = 1;
-    private String index;
+    private static final String COUNT = "currentPage";
+    private int currentPage = 1;
+    private boolean mIsLoadingData = false;
+    private boolean hasNextPage;
+
+    LinearLayoutManager llm;
+
     ThreadListAdapter threadListAdapter;
     ArrayList<Thread> threads = new ArrayList<>();
 
     @BindView(R.id.rvThreads)
     RecyclerView rvThreads;
-    @BindView(R.id.btnForward)
-    Button btnForward;
-    @BindView(R.id.btnBack)
-    Button btnBack;
-
+    @BindView(R.id.progressBarLoading)
+    ProgressBar progressBarLoading;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,51 +68,52 @@ public class ThreadListFragment extends BaseFragment {
 
     @Override
     public void init() {
-        rvThreads.setLayoutManager(new LinearLayoutManager(getContext()));
         initAdapter();
         if (threads.size() == 0) {
-            API.getInstance().getThreads(new Callback<BoardPage>() {
-                @Override
-                public void onResponse(Call<BoardPage> call, Response<BoardPage> response) {
-                    if (response.body().getThreads() != null)
-                        threads.addAll(response.body().getThreads());
-                    threadListAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onFailure(Call<BoardPage> call, Throwable t) {
-                    showError(t.getMessage());
-                }
-            });
+            loadThreads();
         }
+        initRV();
+    }
 
+    public void initRV() {
+        rvThreads.setHasFixedSize(true);
+        llm = new LinearLayoutManager(getContext());
+        rvThreads.setLayoutManager(llm);
+        rvThreads.addOnScrollListener(listScrollListener);
 
     }
 
-    
+    public void loadThreads() {
 
+        mIsLoadingData = true;
 
-    @OnClick(R.id.btnForward)
-    public void onForwardClick(View v) {
-        if (count != 20) {
-            count = count++;
-        }
-    }
+        API.getInstance().getThreads(currentPage, new Callback<BoardPage>() {
+            @Override
+            public void onResponse(Call<BoardPage> call, Response<BoardPage> response) {
+                if (response.body().getThreads() != null)
+                    threads.addAll(response.body().getThreads());
+                log("On Response thread size: " + response.body().getThreads().size());
+                threadListAdapter.notifyDataSetChanged();
+                currentPage++;
+                mIsLoadingData = false;
+                progressBarLoading.setVisibility(View.GONE);
 
-    @OnClick(R.id.btnBack)
-    public void onBackClick(View v) {
-        if (count != 1) {
-            count = count--;
-        }
+                if (response.body().getThreads().size() == 22) {
+                    hasNextPage = true;
+                }
+            }
+
+            @Override
+
+            public void onFailure(Call<BoardPage> call, Throwable t) {
+                showError(t.getMessage());
+                mIsLoadingData = false;
+            }
+        });
+
     }
 
     private void initAdapter() {
-
-        if (count == 1) {
-            index = "index";
-        } else {
-            index = String.valueOf(count);
-        }
 
         threadListAdapter = new ThreadListAdapter(threads) {
             @Override
@@ -140,7 +138,33 @@ public class ThreadListFragment extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(THREADS, threads);
+
     }
 
 
+    private RecyclerView.OnScrollListener listScrollListener = new RecyclerView.OnScrollListener() {
+
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        }
+
+        public void onScrolled(RecyclerView recyclerView, int scrollHorizontal, int scrollVertical) {
+
+            if (scrollVertical > 0) {
+                int visibleItemCount = llm.getChildCount();
+                int totalItemCount = llm.getItemCount();
+                int pastVisibleItems = llm.findFirstVisibleItemPosition();
+                log("pastVisibleItems : " + pastVisibleItems + ", visibleItemCount : " + visibleItemCount +
+                        ", totalItemCount : " + totalItemCount);
+                if (!mIsLoadingData) {
+                    if ((visibleItemCount + pastVisibleItems) >= totalItemCount && hasNextPage) {
+                        mIsLoadingData = true;
+                        hasNextPage = false;
+                        loadThreads();
+                        progressBarLoading.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+        }
+    };
 }
