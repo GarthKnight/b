@@ -63,20 +63,28 @@ public class TextViewWithClickableSpan extends TextView {
 
 
         for (int i = 0; i < indicesNum.size(); i++) {
-            NumberClickableSpan span = new NumberClickableSpan(text.substring(indicesNum.get(i)+2, indicesNum.get(i) + 11)) {
-                @Override
-                public void onNumberClick(String nubmer) {
-                    linkListener.onLinkClick(Integer.valueOf(nubmer));
-                    Log.d(TAG, "onNumberClick: " + nubmer);
-                }
-            };
+                NumberClickableSpan span = new NumberClickableSpan(text.substring(indicesNum.get(i) + 2, indicesNum.get(i) + 11)) {
+                    @Override
+                    public void onNumberClick(String nubmer) {
+                        linkListener.onLinkClick(Integer.valueOf(nubmer));
+                        Log.d(TAG, "onNumberClick: " + nubmer);
+                    }
+                };
 
-            ss.setSpan(span, indicesNum.get(i), indicesNum.get(i) + 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if(text.substring(indicesNum.get(i), indicesNum.get(i)+16).contains("OP")){
+                ss.setSpan(span, indicesNum.get(i), indicesNum.get(i) + 16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            } else {
+                ss.setSpan(span, indicesNum.get(i), indicesNum.get(i) + 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            }
+
         }
 
         super.setText(ss);
         setMovementMethod(LinkMovementMethod.getInstance());
     }
+
+
 
     private class NumberClickableSpan extends ClickableSpan {
 

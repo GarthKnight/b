@@ -128,13 +128,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
             vhComment.tvTextComment.setLinkListener(new TextViewWithClickableSpan.LinkClickListener() {
                 @Override
                 public void onLinkClick(int number) {
-                    int tmp = 0;
-                    String date;
-                    String num;
-                    String comment;
-                    Spanned tmpComment;
-                    Post post = posts.get(position);
-                    int positionForSpan = position;
+                    int tmp = -1;
+                    int pos = position;
 
                     for (int i = 0; i < posts.size(); i++) {
                         if (posts.get(i).getNum() == number) {
@@ -142,13 +137,8 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
                         }
                     }
 
-                    if (tmp != 0) {
-                        date = posts.get(tmp).getDate();
-                        num = "№" + String.valueOf(posts.get(tmp).getNum());
-                        tmpComment = Html.fromHtml(posts.get(tmp).getComment());
-                        comment = tmpComment.toString();
-
-                        onPrefClick(date, num, comment, filesCount, post, positionForSpan);
+                    if (tmp != -1) {
+                        onPrefClick(posts, tmp);
                     }
 
                 }
@@ -158,7 +148,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
         }
     }
 
-    public void onPrefClick(String date, String num, String comment, int filesSize, Post post, int positionForSpan) {
+    public void onPrefClick(ArrayList<Post> posts, int index) {
 
     }
 
@@ -174,6 +164,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.VH> {
             return COMMENT;
         }
     }
+
 
     @Override
     public int getItemCount() {

@@ -1,30 +1,20 @@
 package com.appb.app.appb.fragments;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.PopupWindow;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.activities.PicViewerActivity;
-
 import com.appb.app.appb.adapters.PostListAdapter;
 import com.appb.app.appb.api.API;
-import com.appb.app.appb.custom.CustomDialogBox;
-import com.appb.app.appb.data.File;
 import com.appb.app.appb.data.Post;
-import com.appb.app.appb.data.Posts;
+import com.appb.app.appb.dialogs.AnswerDialog;
 
 import java.util.ArrayList;
 
@@ -129,8 +119,8 @@ public class PostListFragments extends BaseFragment {
             }
 
             @Override
-            public void onPrefClick(String date, String num, String comment, int filesSize, Post post, int positionForSpan) {
-                CustomDialogBox cdb = new CustomDialogBox(getContext(), date, num, comment, filesSize, post, positionForSpan) {
+            public void onPrefClick(ArrayList<Post> postsAnswer,int index) {
+                AnswerDialog answerDialog = new AnswerDialog((getContext()), postsAnswer, index) {
                     @Override
                     public void onItemClick(View v, int position, int pos) {
                         Intent intent = new Intent(getContext(), PicViewerActivity.class);
@@ -139,7 +129,17 @@ public class PostListFragments extends BaseFragment {
                         startActivity(intent);
                     }
                 };
-                cdb.show();
+                answerDialog.show();
+
+//                CustomDialogBox cdb = new CustomDialogBox(getContext(), date, num, comment, filesSize, post, positionForSpan) {
+//                    @Override
+//                    public void onItemClick(View v, int position, int pos) {
+//                        Intent intent = new Intent(getContext(), PicViewerActivity.class);
+//                        intent.putExtra(FILES, posts.get(position).getFiles());
+//                        intent.putExtra(POS, pos);
+//                        startActivity(intent);
+//                    }
+//                };
             }
         };
 

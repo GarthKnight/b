@@ -5,11 +5,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.adapters.PicViewerAdapter;
 import com.appb.app.appb.adapters.ViewerAdapter;
 import com.appb.app.appb.custom.SwipeBackLayout;
 import com.appb.app.appb.data.File;
