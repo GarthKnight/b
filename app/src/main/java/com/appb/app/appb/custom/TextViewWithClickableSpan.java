@@ -71,12 +71,12 @@ public class TextViewWithClickableSpan extends TextView {
                     }
                 };
 
-            if(text.substring(indicesNum.get(i), indicesNum.get(i)+16).contains("OP")){
-                ss.setSpan(span, indicesNum.get(i), indicesNum.get(i) + 16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            } else {
+//            if(text.substring(indicesNum.get(i), indicesNum.get(i)+16).contains("OP")){
+//                ss.setSpan(span, indicesNum.get(i), indicesNum.get(i) + 16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//            } else {
                 ss.setSpan(span, indicesNum.get(i), indicesNum.get(i) + 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-            }
+//            }
 
         }
 

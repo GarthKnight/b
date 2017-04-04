@@ -25,8 +25,6 @@ public class PicViewerActivity extends SwipeBaseActivity {
 
     public static final String FILES = "files";
     public static final String POS = "pos";
-    private static final String PATH = "path";
-    private static final String NAME = "name";
 
 
     @BindView(R.id.vpPicPager)
@@ -42,8 +40,8 @@ public class PicViewerActivity extends SwipeBaseActivity {
         setContentView(R.layout.activity_pic_viewer);
         bindUI(this);
         getIntent().getExtras().getInt(POS);
-
-        setDragEdge(SwipeBackLayout.DragEdge.BOTTOM);
+        setDragEdge(SwipeBackLayout.DragEdge.TOP);
+        getSwipeBackLayout().setScrollChild(vpPicPager);
     }
 
 

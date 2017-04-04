@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015 Eric Liu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.appb.app.appb.custom;
 
 import android.app.Activity;
@@ -15,9 +31,18 @@ import android.widget.AbsListView;
 import android.widget.ScrollView;
 
 /**
- * Created by 1 on 15.03.2017.
+ * Swipe or Pull to finish a Activity.
+ * <p/>
+ * This layout must be a root layout and contains only one direct child view.
+ * <p/>
+ * The activity must use a theme that with translucent style.
+ * <style name="Theme.Swipe.Back" parent="AppTheme">
+ * <item name="android:windowIsTranslucent">true</item>
+ * <item name="android:windowBackground">@android:color/transparent</item>
+ * </style>
+ * <p/>
+ * Created by Eric on 15/1/8.
  */
-
 public class SwipeBackLayout extends ViewGroup {
 
     private static final String TAG = "SwipeBackLayout";
@@ -116,9 +141,6 @@ public class SwipeBackLayout extends ViewGroup {
     float newX = 0;
     float offsetX = 0;
 
-    private void log(String log) {
-        Log.d("SwipeBack", log);
-    }
     private void chkDragable() {
         setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -140,7 +162,6 @@ public class SwipeBackLayout extends ViewGroup {
                     switch (dragEdge) {
                         case TOP:
                         case BOTTOM:
-                            log("setEnablePullToBack: " + (offsetY > offsetX));
                             setEnablePullToBack(offsetY > offsetX);
                         case LEFT:
                         case RIGHT:
@@ -263,25 +284,22 @@ public class SwipeBackLayout extends ViewGroup {
         }
     }
 
-//    @Override
-//    public boolean onInterceptTouchEvent(MotionEvent ev) {
-//        log("onInterceptTouchEvent");
-//        boolean handled = false;
-//        ensureTarget();
-//        if (isEnabled()) {
-//            handled = viewDragHelper.shouldInterceptTouchEvent(ev);
-//        } else {
-//            viewDragHelper.cancel();
-//        }
-////        return !handled ? super.onInterceptTouchEvent(ev) : handled;
-//        return true;
-//    }
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        boolean handled = false;
+        ensureTarget();
+        if (isEnabled()) {
+            handled = viewDragHelper.shouldInterceptTouchEvent(ev);
+        } else {
+            viewDragHelper.cancel();
+        }
+        return !handled ? super.onInterceptTouchEvent(ev) : handled;
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        log("onTouchEvent");
         viewDragHelper.processTouchEvent(event);
-        return false;
+        return true;
     }
 
     @Override
@@ -489,4 +507,5 @@ public class SwipeBackLayout extends ViewGroup {
         void onViewPositionChanged(float fractionAnchor, float fractionScreen);
 
     }
+
 }

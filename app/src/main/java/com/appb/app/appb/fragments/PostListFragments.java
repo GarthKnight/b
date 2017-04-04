@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.activities.PicViewerActivity;
-import com.appb.app.appb.adapters.PostListAdapter;
+import com.appb.app.appb.adapters.PostsAdapter;
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.dialogs.AnswerDialog;
@@ -37,7 +37,7 @@ public class PostListFragments extends BaseFragment {
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
 
-    PostListAdapter postListAdapter;
+    PostsAdapter postsAdapter;
     ArrayList<Post> posts = new ArrayList<>();
 
     @Override
@@ -71,7 +71,7 @@ public class PostListFragments extends BaseFragment {
                 @Override
                 public void onResponse(Call<ArrayList<Post>> call, Response<ArrayList<Post>> response) {
                     posts.addAll(response.body());
-                    postListAdapter.notifyDataSetChanged();
+                    postsAdapter.notifyDataSetChanged();
 
                     if (!response.isSuccessful()) {
                         String task = "get_thread";
@@ -85,7 +85,7 @@ public class PostListFragments extends BaseFragment {
                             @Override
                             public void onResponse(Call<ArrayList<Post>> call, Response<ArrayList<Post>> response) {
                                 posts.addAll(response.body());
-                                postListAdapter.notifyDataSetChanged();
+                                postsAdapter.notifyDataSetChanged();
 
                             }
 
@@ -109,7 +109,7 @@ public class PostListFragments extends BaseFragment {
 
 
     public void initAdapter() {
-        postListAdapter = new PostListAdapter(posts) {
+        postsAdapter = new PostsAdapter(posts) {
             @Override
             public void onItemClick(View v, int position, int pos) {
                 Intent intent = new Intent(getContext(), PicViewerActivity.class);
@@ -119,7 +119,7 @@ public class PostListFragments extends BaseFragment {
             }
 
             @Override
-            public void onPrefClick(ArrayList<Post> postsAnswer,int index) {
+            public void onPrefClick(ArrayList<Post> postsAnswer, int index) {
                 AnswerDialog answerDialog = new AnswerDialog((getContext()), postsAnswer, index) {
                     @Override
                     public void onItemClick(View v, int position, int pos) {
@@ -130,20 +130,10 @@ public class PostListFragments extends BaseFragment {
                     }
                 };
                 answerDialog.show();
-
-//                CustomDialogBox cdb = new CustomDialogBox(getContext(), date, num, comment, filesSize, post, positionForSpan) {
-//                    @Override
-//                    public void onItemClick(View v, int position, int pos) {
-//                        Intent intent = new Intent(getContext(), PicViewerActivity.class);
-//                        intent.putExtra(FILES, posts.get(position).getFiles());
-//                        intent.putExtra(POS, pos);
-//                        startActivity(intent);
-//                    }
-//                };
             }
         };
 
-        rvPosts.setAdapter(postListAdapter);
+        rvPosts.setAdapter(postsAdapter);
     }
 
 

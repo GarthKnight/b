@@ -100,7 +100,7 @@ public class AnswerDialog extends Dialog {
         tvTextComment.setLinkListener(new TextViewWithClickableSpan.LinkClickListener() {
             @Override
             public void onLinkClick(int number) {
-                int tmp = 0;
+                int tmp = -1;
 
 
                 for (int i = 0; i < posts.size(); i++) {
@@ -109,8 +109,16 @@ public class AnswerDialog extends Dialog {
                     }
                 }
 
-                if (tmp != 0) {
-                    AnswerDialog answerDialog = new AnswerDialog(context, posts, tmp);
+                if (tmp != -1) {
+                    AnswerDialog answerDialog = new AnswerDialog(context, posts, tmp){
+                        @Override
+                        public void onItemClick(View v, int position, int pos) {
+                            Intent intent = new Intent(getContext(), PicViewerActivity.class);
+                            intent.putExtra(FILES, posts.get(position).getFiles());
+                            intent.putExtra(POS, pos);
+                            context.startActivity(intent);
+                        }
+                    };
                     answerDialog.show();
                 }
             }
@@ -141,8 +149,7 @@ public class AnswerDialog extends Dialog {
     public void onItemClick(View v, int position, int pos) {
     }
 
-    public void onPrefClick(ArrayList<Post> posts, int pos) {
-    }
+
 
     public void visibilitySetter(){
         int filesSize = posts.get(index).getFiles().size();

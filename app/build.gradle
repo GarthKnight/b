@@ -51,4 +51,5 @@ dependencies {
     compile 'com.github.halilozercan:BetterVideoPlayer:1.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
 }

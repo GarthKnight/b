@@ -2,25 +2,30 @@ package com.appb.app.appb.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.custom.SwipeBackActivity;
+
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by 1 on 14.03.2017.
+ * Created by 1 on 02.04.2017.
  */
 
-public class SwipeBaseActivity extends SwipeBackActivity {
+public class SwipeBaseActivity extends SwipeBackActivity{
 
-    private static final String TAG = "Swipe";
+    private static final String TAG = "BaseActivity";
     private Unbinder unbinder;
     private ProgressDialog pbDialog;
     private Typeface ptSansRegular;
@@ -37,9 +42,12 @@ public class SwipeBaseActivity extends SwipeBackActivity {
         init();
     }
 
-    public void init(){
+
+
+    public void init() {
 
     }
+
 
     @Override
     protected void onPause() {
@@ -54,8 +62,8 @@ public class SwipeBaseActivity extends SwipeBackActivity {
             transaction.addToBackStack(null);
         }
         transaction.commitAllowingStateLoss();
+        hideKeyboard();
     }
-
 
 
     public void showFragment(Fragment fragment, boolean addToBack) {
@@ -84,10 +92,34 @@ public class SwipeBaseActivity extends SwipeBackActivity {
         super.onDestroy();
     }
 
+
+    public void clearStack() {
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    public Fragment findFragmentById(int id) {
+        return getSupportFragmentManager().findFragmentById(id);
+    }
+
+    public Typeface getPTSansRegular() {
+        if (ptSansRegular == null) {
+            ptSansRegular = Typeface.createFromAsset(getAssets(), "fonts/pt_sans_regular.ttf");
+        }
+        return ptSansRegular;
+    }
+
+    public Typeface getPTSansBold() {
+        if (ptSansBold == null) {
+            ptSansBold = Typeface.createFromAsset(getAssets(), "fonts/pt_sans_bold.ttf");
+        }
+        return ptSansBold;
+    }
+
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        checkFragmentStack();
+//        checkFragmentStack();
     }
 
     public void checkFragmentStack() {
@@ -97,12 +129,30 @@ public class SwipeBaseActivity extends SwipeBackActivity {
         }
     }
 
-    public void log(String s) {
-        if (s != null) {
-            Log.d(getClass().getSimpleName(), s);
+    public void hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (getCurrentFocus() != null) {
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
 
+    public void log(String s) {
+        if (s != null) {
+            Log.d("Base Activity", s);
+        }
+    }
+
+    protected void focus(final EditText editText) {
+        editText.post(new Runnable() {
+            @Override
+            public void run() {
+                editText.requestFocus();
+                editText.setSelection(editText.getText().length());
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+    }
 
     public void hideStatusBar() {
         // Set the IMMERSIVE flag.
