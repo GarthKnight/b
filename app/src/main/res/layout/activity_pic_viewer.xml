@@ -5,11 +5,12 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
+        <com.appb.app.appb.custom.CustomViewPager
+            android:id="@+id/vpPicPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vpPicPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+
 
 </FrameLayout>

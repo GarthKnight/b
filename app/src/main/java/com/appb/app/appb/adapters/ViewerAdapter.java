@@ -50,5 +50,4 @@ public class ViewerAdapter extends FragmentPagerAdapter {
         return files.size();
     }
 
-
 }

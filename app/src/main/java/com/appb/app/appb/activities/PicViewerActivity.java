@@ -5,12 +5,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.adapters.ViewerAdapter;
+import com.appb.app.appb.custom.CustomViewPager;
 import com.appb.app.appb.custom.SwipeBackLayout;
 import com.appb.app.appb.data.File;
+import com.appb.app.appb.fragments.BaseFragment;
 import com.appb.app.appb.fragments.WebmFragment;
 
 import java.util.ArrayList;
@@ -21,14 +26,15 @@ import butterknife.BindView;
  * Created by 1 on 14.03.2017.
  */
 
-public class PicViewerActivity extends SwipeBaseActivity {
+public class PicViewerActivity extends BaseActivity {
 
     public static final String FILES = "files";
     public static final String POS = "pos";
 
 
     @BindView(R.id.vpPicPager)
-    ViewPager vpPicPager;
+    CustomViewPager vpPicPager;
+
     ViewerAdapter viewerAdapter;
 
 
@@ -40,30 +46,35 @@ public class PicViewerActivity extends SwipeBaseActivity {
         setContentView(R.layout.activity_pic_viewer);
         bindUI(this);
         getIntent().getExtras().getInt(POS);
-        setDragEdge(SwipeBackLayout.DragEdge.TOP);
-//        getSwipeBackLayout().setEnabled(false);
-        getSwipeBackLayout().setScrollChild(vpPicPager);
-//        vpPicPager.setOnTouchListener(new View.OnTouchListener() {
-//
-//            float startX = 0;
-//            float startY = 0;
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//
-//                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//                    startX = event.getX();
-//                    startY = event.getY();
-//                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-//                    if (Math.abs(startX - event.getX()) < Math.abs(startY - event.getY())) {
-//                        getSwipeBackLayout().setEnabled(true);
-//                    } else {
-//                        getSwipeBackLayout().setEnabled(false);
-//                    }
-//                }
-//                return false;
-//            }
-//        });
+//        setDragEdge(SwipeBackLayout.DragEdge.TOP);
+//        getSwipeBackLayout().setScrollChild(vpPicPager);
+
+        vpPicPager.setOnTouchListener(new View.OnTouchListener() {
+
+            float startX = 0;
+            float startY = 0;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    startX = event.getRawX();
+                    startY = event.getRawY();
+                    Log.d("yoba", "x: " + startX + " | " + "y: " + startY);
+
+                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+
+                    float x = startX -event.getX();
+                    float y = Math.abs(startY - event.getY());
+                    Log.d("yoba", x + " | " + y);
+
+                    if (Math.abs(startX - event.getX())*2 < Math.abs(startY - event.getY())) {
+                        finish();
+                    }
+                }
+                return false;
+            }
+        });
     }
 
 
@@ -76,8 +87,8 @@ public class PicViewerActivity extends SwipeBaseActivity {
         vpPicPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                getSwipeBackLayout().interceptStartY = 0;
-                getSwipeBackLayout().interceptStartX = 0;
+//                getSwipeBackLayout().interceptStartY = 0;
+//                getSwipeBackLayout().interceptStartX = 0;
             }
 
             @Override
@@ -92,8 +103,8 @@ public class PicViewerActivity extends SwipeBaseActivity {
 //                } else {
 //                    getSwipeBackLayout().setEnabled(true);
 //                }
-                getSwipeBackLayout().interceptStartY = 0;
-                getSwipeBackLayout().interceptStartX = 0;
+//                getSwipeBackLayout().interceptStartY = 0;
+//                getSwipeBackLayout().interceptStartX = 0;
                 int pos = vpPicPager.getCurrentItem();
                 Fragment fragment = getFragmentForPosition(pos);
                 if(fragment instanceof WebmFragment){
@@ -103,6 +114,7 @@ public class PicViewerActivity extends SwipeBaseActivity {
             }
         });
     }
+
 
 
     @Override
