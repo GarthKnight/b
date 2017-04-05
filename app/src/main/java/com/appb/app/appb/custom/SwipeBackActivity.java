@@ -12,7 +12,7 @@ import com.appb.app.appb.R;
  * Created by 1 on 15.03.2017.
  */
 
-public class SwipeBackActivity extends AppCompatActivity implements SwipeBackLayout.SwipeBackListener{
+public class SwipeBackActivity extends AppCompatActivity implements SwipeBackLayout.SwipeBackListener {
 
     private static final SwipeBackLayout.DragEdge DEFAULT_DRAG_EDGE = SwipeBackLayout.DragEdge.LEFT;
 
@@ -55,4 +55,6 @@ public class SwipeBackActivity extends AppCompatActivity implements SwipeBackLay
     public void onViewPositionChanged(float fractionAnchor, float fractionScreen) {
         ivShadow.setAlpha(1 - fractionScreen);
     }
+
+
 }

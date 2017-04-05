@@ -65,6 +65,7 @@ public class SwipeBackLayout extends ViewGroup {
 
     private static final double AUTO_FINISHED_SPEED_LIMIT = 2000.0;
 
+
     private final ViewDragHelper viewDragHelper;
 
     private View target;
@@ -145,10 +146,18 @@ public class SwipeBackLayout extends ViewGroup {
         setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.d(TAG, "onTouch: y: " + motionEvent.getY());
+
+                if (interceptStartY == 0f) {
+                    interceptStartY = motionEvent.getY();
+                    interceptStartX = motionEvent.getX();
+                }
 
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     lastY = motionEvent.getRawY();
                     lastX = motionEvent.getRawX();
+                    interceptOffsetX = 0;
+                    interceptOffsetY = 0;
                 } else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
                     newY = motionEvent.getRawY();
                     lastX = motionEvent.getRawX();
@@ -284,16 +293,38 @@ public class SwipeBackLayout extends ViewGroup {
         }
     }
 
+    public float interceptStartX = 0;
+    public float interceptStartY = 0;
+
+    float interceptOffsetX = 0;
+    float interceptOffsetY = 0;
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         boolean handled = false;
         ensureTarget();
+
+        if (interceptStartY == 0f) {
+            interceptStartY = ev.getY();
+            interceptStartX = ev.getX();
+        }
+
+        if (interceptStartY < ev.getRawY()) {
+            interceptOffsetY = ev.getRawY() - interceptStartY;
+            interceptOffsetX = Math.abs(ev.getRawX() - interceptStartX);
+        }
+
         if (isEnabled()) {
-            handled = viewDragHelper.shouldInterceptTouchEvent(ev);
+            handled = viewDragHelper.shouldInterceptTouchEvent(ev) && interceptOffsetY > 0 && (interceptOffsetX < interceptOffsetY) ;
         } else {
             viewDragHelper.cancel();
         }
+
+        Log.d(TAG, "onInterceptTouchEventY: " + ev.getY());
+        Log.d(TAG, "interceptOffsetX: " + interceptOffsetX);
+        Log.d(TAG, "interceptOffsetY: " + interceptOffsetY);
         return !handled ? super.onInterceptTouchEvent(ev) : handled;
+//        return true;
     }
 
     @Override

@@ -41,7 +41,29 @@ public class PicViewerActivity extends SwipeBaseActivity {
         bindUI(this);
         getIntent().getExtras().getInt(POS);
         setDragEdge(SwipeBackLayout.DragEdge.TOP);
+//        getSwipeBackLayout().setEnabled(false);
         getSwipeBackLayout().setScrollChild(vpPicPager);
+//        vpPicPager.setOnTouchListener(new View.OnTouchListener() {
+//
+//            float startX = 0;
+//            float startY = 0;
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    startX = event.getX();
+//                    startY = event.getY();
+//                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+//                    if (Math.abs(startX - event.getX()) < Math.abs(startY - event.getY())) {
+//                        getSwipeBackLayout().setEnabled(true);
+//                    } else {
+//                        getSwipeBackLayout().setEnabled(false);
+//                    }
+//                }
+//                return false;
+//            }
+//        });
     }
 
 
@@ -54,7 +76,8 @@ public class PicViewerActivity extends SwipeBaseActivity {
         vpPicPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                getSwipeBackLayout().interceptStartY = 0;
+                getSwipeBackLayout().interceptStartX = 0;
             }
 
             @Override
@@ -64,6 +87,13 @@ public class PicViewerActivity extends SwipeBaseActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+//                if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+//                    getSwipeBackLayout().setEnabled(false);
+//                } else {
+//                    getSwipeBackLayout().setEnabled(true);
+//                }
+                getSwipeBackLayout().interceptStartY = 0;
+                getSwipeBackLayout().interceptStartX = 0;
                 int pos = vpPicPager.getCurrentItem();
                 Fragment fragment = getFragmentForPosition(pos);
                 if(fragment instanceof WebmFragment){
@@ -89,7 +119,7 @@ public class PicViewerActivity extends SwipeBaseActivity {
     Fragment getFragmentForPosition(int position) {
         String tag = makeFragmentName(R.id.vpPicPager, position);
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-        Log.d("yoba", "getFragmentForPosition: " + fragment);
+//        Log.d("yoba", "getFragmentForPosition: " + fragment);
         return fragment;
     }
 
