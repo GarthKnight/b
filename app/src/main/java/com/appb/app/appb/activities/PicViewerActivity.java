@@ -30,6 +30,7 @@ public class PicViewerActivity extends BaseActivity {
 
     public static final String FILES = "files";
     public static final String POS = "pos";
+    String TAG = "picviewer";
 
 
     @BindView(R.id.vpPicPager)
@@ -60,15 +61,19 @@ public class PicViewerActivity extends BaseActivity {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     startX = event.getRawX();
                     startY = event.getRawY();
-                    Log.d("yoba", "x: " + startX + " | " + "y: " + startY);
-
                 } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
 
-                    float x = startX -event.getX();
+                    float x = Math.abs(startX - event.getX());
                     float y = Math.abs(startY - event.getY());
-                    Log.d("yoba", x + " | " + y);
 
-                    if (Math.abs(startX - event.getX())*2 < Math.abs(startY - event.getY())) {
+                    Log.d(TAG, "onTouch: " + x + " | " + y );
+
+                    if (Math.abs(startX - event.getX())*2 + 50 < Math.abs(startY - event.getY())) {
+                        int pos = vpPicPager.getCurrentItem();
+                        Fragment fragment = getFragmentForPosition(pos);
+                        if(fragment instanceof WebmFragment){
+                            ((WebmFragment) fragment).onBackPress();
+                        }
                         finish();
                     }
                 }
@@ -109,7 +114,6 @@ public class PicViewerActivity extends BaseActivity {
                 Fragment fragment = getFragmentForPosition(pos);
                 if(fragment instanceof WebmFragment){
                     ((WebmFragment) fragment).onScrolledPause();
-                    Log.d("yoba", "onPageScrollStateChanged: " + fragment);
                 }
             }
         });
@@ -131,7 +135,6 @@ public class PicViewerActivity extends BaseActivity {
     Fragment getFragmentForPosition(int position) {
         String tag = makeFragmentName(R.id.vpPicPager, position);
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-//        Log.d("yoba", "getFragmentForPosition: " + fragment);
         return fragment;
     }
 
@@ -142,7 +145,6 @@ public class PicViewerActivity extends BaseActivity {
         Fragment fragment = getFragmentForPosition(pos);
         if(fragment instanceof WebmFragment){
             ((WebmFragment) fragment).onBackPress();
-            Log.d("yoba", "onPageScrollStateChanged: " + fragment);
         }
     }
 

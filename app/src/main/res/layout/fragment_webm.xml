@@ -9,7 +9,7 @@
     <com.appb.app.appb.custom.ForegroundImageView
         android:id="@+id/fivPlay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
 
         />
@@ -27,11 +27,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:keepScreenOn="true"
-        bvp:bvp_autoPlay="false">
-
-
-
-
+        bvp:bvp_autoPlay="true">
 
 
     </com.halilibo.bettervideoplayer.BetterVideoPlayer>
