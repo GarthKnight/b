@@ -3,21 +3,31 @@ package com.appb.app.appb.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by 1 on 11.03.2017.
  */
 
-public class File implements Parcelable{
+public class File implements Parcelable {
 
-    String displayname;
-    String fullname;
+    private static final String JPG = ".jpg";
+    private static final String PNG = ".png";
+    private static final String WEBM = ".webm";
+    private static final String GIF = ".gif";
+    private static final String UNKNOWN = "?";
+
+    @SerializedName("displayName")
+    String displayName;
+    @SerializedName("fullName")
+    String fullName;
     String name;
     String path;
     String thumbnail;
 
     protected File(Parcel in) {
-        displayname = in.readString();
-        fullname = in.readString();
+        displayName = in.readString();
+        fullName = in.readString();
         name = in.readString();
         path = in.readString();
         thumbnail = in.readString();
@@ -35,8 +45,8 @@ public class File implements Parcelable{
         }
     };
 
-    public String getDisplayname() {
-        return displayname;
+    public String getDisplayName() {
+        return displayName;
     }
 
     public String getThumbnail() {
@@ -48,14 +58,16 @@ public class File implements Parcelable{
     }
 
     public String getName() {
-        if(name.toLowerCase().contains(".jpg")){
-         name = ".jpg";
-        } else if(name.toLowerCase().contains(".webm")){
-            name = ".webm";
-        } else if(name.toLowerCase().contains(".png")){
-            name = ".png";
-        } else{
-            name = "?";
+        if (name.toLowerCase().contains(JPG)) {
+            name = JPG;
+        } else if (name.toLowerCase().contains(WEBM)) {
+            name = WEBM;
+        } else if (name.toLowerCase().contains(PNG)) {
+            name = PNG;
+        } else if (name.toLowerCase().contains(GIF)) {
+            name = GIF;
+        } else {
+            name = UNKNOWN;
         }
         return name;
     }
@@ -67,8 +79,8 @@ public class File implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(displayname);
-        dest.writeString(fullname);
+        dest.writeString(displayName);
+        dest.writeString(fullName);
         dest.writeString(name);
         dest.writeString(path);
         dest.writeString(thumbnail);

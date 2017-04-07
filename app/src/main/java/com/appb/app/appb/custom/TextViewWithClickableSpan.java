@@ -17,9 +17,12 @@ import java.util.ArrayList;
 
 public class TextViewWithClickableSpan extends android.support.v7.widget.AppCompatTextView {
 
-    static String TAG = "YOBA";
-    private LinkClickListener linkListener;
+    private final static String TAG = "YOBA";
+    private static final int ANSWER_NUMBER_LENGTH = 11;
+    private static final int ARROWS_LENGTH = 2;
+    private static final String ARROWS = ">>";
 
+    private LinkClickListener linkClickListener;
 
     public TextViewWithClickableSpan(Context context) {
         super(context);
@@ -33,65 +36,72 @@ public class TextViewWithClickableSpan extends android.support.v7.widget.AppComp
         super(context, attrs, defStyleAttr);
     }
 
-    public void setLinkListener(LinkClickListener linkListener) {
-        this.linkListener = linkListener;
+    public void setLinkClickListener(LinkClickListener linkClickListener) {
+        this.linkClickListener = linkClickListener;
     }
 
     public void setSpannableText(CharSequence textChars) {
 
+        ArrayList<Integer> answersLinkArray = new ArrayList<>();
+
         String text = String.valueOf(textChars);
-        ArrayList<Integer> indicesNum = new ArrayList<>();
         SpannableString ss = new SpannableString(text);
 
-        int counter = text.indexOf(">>");
+        int startOfAnswerLink = text.indexOf(ARROWS);
 
-        if (counter != -1) {
-            indicesNum.add(counter);
+        if (startOfAnswerLink != -1) {
+            answersLinkArray.add(startOfAnswerLink);
         }
 
-        while (counter != -1) {
-            Log.d(TAG, "counter: " + counter);
-            counter = text.indexOf(">>", counter + 1);
-            if (counter != -1) {
-                indicesNum.add(counter);
+        while (startOfAnswerLink != -1) {
 
+            Log.d(TAG, "counter: " + startOfAnswerLink);
+
+            startOfAnswerLink = text.indexOf(ARROWS, startOfAnswerLink + 1);
+            if (startOfAnswerLink != -1) {
+                answersLinkArray.add(startOfAnswerLink);
             }
-
         }
 
-        for (int i = 0; i < indicesNum.size(); i++) {
+        for (int i = 0; i < answersLinkArray.size(); i++) {
 
-                NumberClickableSpan span = new NumberClickableSpan(text.substring(indicesNum.get(i) + 2, indicesNum.get(i) + 11)) {
-                    @Override
-                    public void onNumberClick(String nubmer) {
-                        linkListener.onLinkClick(Integer.valueOf(nubmer));
-                        Log.d(TAG, "onNumberClick: " + nubmer);
-                    }
-                };
+            int startOfAnswerNumber = answersLinkArray.get(i) + ARROWS_LENGTH;
+            int endOfAnswerNumber = answersLinkArray.get(i) + ANSWER_NUMBER_LENGTH;
 
-                ss.setSpan(span, indicesNum.get(i), indicesNum.get(i) + 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            String answerNumber = text.substring(startOfAnswerNumber, endOfAnswerNumber);
+            NumberClickableSpan span = getSpanForNumber(answerNumber);
+            ss.setSpan(span, answersLinkArray.get(i), endOfAnswerNumber, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         super.setText(ss);
         setMovementMethod(LinkMovementMethod.getInstance());
     }
 
+    private NumberClickableSpan getSpanForNumber(String number) {
+        return new NumberClickableSpan(number) {
+            @Override
+            public void onNumberClick(String number) {
+                linkClickListener.onLinkClick(Integer.valueOf(number));
+                Log.d(TAG, "onNumberClick: " + number);
+            }
+        };
+    }
 
 
     private class NumberClickableSpan extends ClickableSpan {
 
-        public String nubmer;
+        public String number;
 
         public NumberClickableSpan(String number) {
-            this.nubmer = number;
+            this.number = number;
         }
 
         @Override
         public void onClick(View widget) {
-            onNumberClick(nubmer);
+            onNumberClick(number);
         }
 
-        public void onNumberClick(String nubmer) {
+        public void onNumberClick(String number) {
 
         }
     }

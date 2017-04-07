@@ -1,5 +1,7 @@
 package com.appb.app.appb.data;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -8,17 +10,22 @@ import java.util.Objects;
  */
 
 public class Board {
-    int bump_limit;
+    @SerializedName("bump_limit")
+    int bumpLimit;
     String category;
-    String default_name;
+    @SerializedName("default_name")
+    String defaultName;
     String id;
     String name;
     int pages;
     int sage;
     int tripcodes;
-    int enable_likes;
-    int enable_posting;
-    int enable_thread_tags;
+    @SerializedName("enable_likes")
+    int enableLikes;
+    @SerializedName("enable_posting")
+    int enablePosting;
+    @SerializedName("enable_thread_tags")
+    int enableThreadTags;
     ArrayList<Objects> icons;
 
     public String getName() {

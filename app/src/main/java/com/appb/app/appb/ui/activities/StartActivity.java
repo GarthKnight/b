@@ -8,16 +8,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.ui.adapters.BoardListAdapter;
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Board;
 import com.appb.app.appb.data.Boards;
+import com.appb.app.appb.ui.adapters.BoardListAdapter;
 import com.appb.app.appb.ui.fragments.ThreadListFragment;
 
 import java.util.ArrayList;
@@ -58,24 +57,27 @@ public class StartActivity extends BaseActivity
     @Override
     public void init() {
         log("BoardListFragment: " + "init");
-        rvBoard.setLayoutManager(new LinearLayoutManager(this));
+        loadBoards();
+    }
+
+    private void loadBoards() {
         API.getInstance().getLists(new Callback<Boards>() {
             @Override
             public void onResponse(Call<Boards> call, Response<Boards> response) {
                 log("BoardListFragment: " + "onResponse");
-                initAdapter(response.body().getDifferent());
+                initRV(response.body().getDifferent());
             }
 
             @Override
             public void onFailure(Call<Boards> call, Throwable t) {
-                Log.d("RETROFIT", "onFailure: " + t.toString());
-//                showError(t.getMessage());
+                log("onFailure: " + t.toString());
             }
         });
     }
 
 
-    private void initAdapter(ArrayList<Board> different) {
+    private void initRV(ArrayList<Board> different) {
+        rvBoard.setLayoutManager(new LinearLayoutManager(this));
         boardListAdapter = new BoardListAdapter(different, new View.OnClickListener() {
             @Override
             public void onClick(View v) {

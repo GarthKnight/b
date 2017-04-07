@@ -16,9 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.ui.activities.PicViewerActivity;
 import com.appb.app.appb.custom.TextViewWithClickableSpan;
 import com.appb.app.appb.data.Post;
+import com.appb.app.appb.ui.activities.PicViewerActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -27,7 +27,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -40,7 +39,6 @@ import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
 
 public class AnswerDialog extends Dialog {
 
-    private Unbinder unbinder;
     ArrayList<Post> posts;
     int index;
     int pFinal;
@@ -80,7 +78,7 @@ public class AnswerDialog extends Dialog {
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setContentView(R.layout.custom_dialog);
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
         init();
 
     }
@@ -97,7 +95,7 @@ public class AnswerDialog extends Dialog {
         }
 
         tvTextComment.setSpannableText(text);
-        tvTextComment.setLinkListener(new TextViewWithClickableSpan.LinkClickListener() {
+        tvTextComment.setLinkClickListener(new TextViewWithClickableSpan.LinkClickListener() {
             @Override
             public void onLinkClick(int number) {
                 int tmp = -1;

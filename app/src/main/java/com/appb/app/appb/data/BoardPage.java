@@ -1,5 +1,7 @@
 package com.appb.app.appb.data;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 /**
@@ -8,13 +10,18 @@ import java.util.ArrayList;
 
 public class BoardPage {
 
-
-    String Board;
-    String BoardInfo;
-    String BoardName;
-    int board_speed;
-    int current_page;
-    int bump_limit;
+    @SerializedName("Board")
+    String board;
+    @SerializedName("BoardInfo")
+    String boardInfo;
+    @SerializedName("BoardName")
+    String boardName;
+    @SerializedName("board_speed")
+    int boardSpeed;
+    @SerializedName("current_page")
+    int currentPage;
+    @SerializedName("bump_limit")
+    int bumpLimit;
     ArrayList<Thread> threads;
 
     public ArrayList<Thread> getThreads() {

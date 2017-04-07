@@ -3,6 +3,8 @@ package com.appb.app.appb.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 /**
@@ -11,15 +13,18 @@ import java.util.ArrayList;
 
 public class Thread implements Parcelable {
 
+    @SerializedName("files_count")
     int files_count;
-    int post_count;
-    String thread_num;
+    @SerializedName("post_count")
+    int postCount;
+    @SerializedName("thread_num")
+    String threadNum;
     ArrayList<Post> posts;
 
     protected Thread(Parcel in) {
         files_count = in.readInt();
-        post_count = in.readInt();
-        thread_num = in.readString();
+        postCount = in.readInt();
+        threadNum = in.readString();
     }
 
     public static final Creator<Thread> CREATOR = new Creator<Thread>() {
@@ -46,7 +51,7 @@ public class Thread implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(files_count);
-        dest.writeInt(post_count);
-        dest.writeString(thread_num);
+        dest.writeInt(postCount);
+        dest.writeString(threadNum);
     }
 }

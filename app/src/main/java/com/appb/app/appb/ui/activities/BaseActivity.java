@@ -2,7 +2,6 @@ package com.appb.app.appb.ui.activities;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,9 +24,6 @@ public class BaseActivity extends AppCompatActivity {
 
     private static final String TAG = "BaseActivity";
     public Unbinder unbinder;
-    private Typeface ptSansRegular;
-    private Typeface ptSansBold;
-
 
     @Override
     protected void onResume() {
@@ -90,26 +86,6 @@ public class BaseActivity extends AppCompatActivity {
 
     public Fragment findFragmentById(int id) {
         return getSupportFragmentManager().findFragmentById(id);
-    }
-
-    public Typeface getPTSansRegular() {
-        if (ptSansRegular == null) {
-            ptSansRegular = Typeface.createFromAsset(getAssets(), "fonts/pt_sans_regular.ttf");
-        }
-        return ptSansRegular;
-    }
-
-    public Typeface getPTSansBold() {
-        if (ptSansBold == null) {
-            ptSansBold = Typeface.createFromAsset(getAssets(), "fonts/pt_sans_bold.ttf");
-        }
-        return ptSansBold;
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-//        checkFragmentStack();
     }
 
     public void checkFragmentStack() {

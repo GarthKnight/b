@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public class Boards {
 
+    private static final String B = "b";
+
     @SerializedName("Разное")
     private ArrayList<Board> different;
 
@@ -20,7 +22,7 @@ public class Boards {
     public ArrayList<Board> getBordsByIndex(){
         ArrayList<Board> newBoards = new ArrayList<>();
         for (int i = 0; i < different.size(); i++){
-            if (different.get(i).id.toLowerCase().contains("b") ){
+            if (different.get(i).id.toLowerCase().contains(B) ){
                 newBoards.add(different.get(i));
             }
         }

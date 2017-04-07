@@ -13,8 +13,6 @@ import com.appb.app.appb.data.Post;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by 1 on 31.03.2017.
@@ -22,19 +20,17 @@ import butterknife.Unbinder;
 
 public class AnswersDialog extends Dialog {
 
-    private Unbinder unbinder;
-    ArrayList<Post> posts;
-    ArrayList<Integer> indices;
-    String answers = "";
-    Context context;
+    private static final String ARROWS = ">>";
 
+    private ArrayList<Post> posts;
+    private ArrayList<Integer> indices;
+    private String answers = "";
 
     @BindView(R.id.tvwcsAnswers)
-    TextViewWithClickableSpan tvwcsAnswers;
+    TextViewWithClickableSpan clickableTextView;
 
     public AnswersDialog(Context context, ArrayList<Post> posts, ArrayList<Integer> indices) {
         super(context);
-        this.context = context;
         this.posts = posts;
         this.indices = indices;
     }
@@ -42,20 +38,25 @@ public class AnswersDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        if (getWindow() != null) {
+            getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
         setContentView(R.layout.dialog_answers);
-        unbinder = ButterKnife.bind(this);
         init();
     }
 
     public void init() {
         for (int i = 0; i < indices.size(); i++) {
-            answers = answers + (">>" + posts.get(indices.get(i)).getNum() + (i == indices.size() - 1 ? "" : ", "));
+            new StringBuilder(answers)
+                    .append(ARROWS + posts.get(indices.get(i)).getNum())
+                    .append(i == indices.size() - 1 ? "" : ", ");
+//            answers = answers + (ARROWS + posts.get(indices.get(i)).getNum() + (i == indices.size() - 1 ? "" : ", "));
         }
-        tvwcsAnswers.setSpannableText(answers);
-        tvwcsAnswers.setLinkListener(new TextViewWithClickableSpan.LinkClickListener() {
+        clickableTextView.setSpannableText(answers);
+        clickableTextView.setLinkClickListener(new TextViewWithClickableSpan.LinkClickListener() {
             @Override
             public void onLinkClick(int number) {
+
                 int tmp = -1;
 
                 for (int i = 0; i < posts.size(); i++) {
@@ -65,7 +66,7 @@ public class AnswersDialog extends Dialog {
                 }
 
                 if (tmp != -1) {
-                    AnswerDialog answerDialog = new AnswerDialog(context, posts, tmp);
+                    AnswerDialog answerDialog = new AnswerDialog(getContext(), posts, tmp);
                     answerDialog.show();
                 }
             }

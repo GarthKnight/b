@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.custom.CustomViewPager;
+import com.appb.app.appb.custom.TouchableViewPager;
 import com.appb.app.appb.data.File;
 import com.appb.app.appb.ui.adapters.ViewerAdapter;
 import com.appb.app.appb.ui.fragments.WebmFragment;
@@ -27,95 +27,37 @@ public class PicViewerActivity extends BaseActivity {
 
     public static final String FILES = "files";
     public static final String POS = "pos";
-    String TAG = "picviewer";
+    public static final String TAG = "picViewer";
 
     @BindView(R.id.vpPicPager)
-    CustomViewPager vpPicPager;
+    TouchableViewPager vpPicPager;
 
-    ViewerAdapter viewerAdapter;
+    private ViewerAdapter viewerAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_pic_viewer);
         bindUI(this);
-        getIntent().getExtras().getInt(POS);
-
-        vpPicPager.setOnTouchListener(new View.OnTouchListener() {
-
-            float startX = 0;
-            float startY = 0;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    startX = event.getRawX();
-                    startY = event.getRawY();
-                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-
-                    float x = Math.abs(startX - event.getX());
-                    float y = Math.abs(startY - event.getY());
-
-                    Log.d(TAG, "onTouch: " + x + " | " + y );
-
-                    if (Math.abs(startX - event.getX())*2 + 25 < Math.abs(startY - event.getY())) {
-                        int pos = vpPicPager.getCurrentItem();
-                        Fragment fragment = getFragmentForPosition(pos);
-                        if(fragment instanceof WebmFragment){
-                            ((WebmFragment) fragment).onBackPress();
-                        }
-                        finish();
-                    }
-                }
-                return false;
-            }
-        });
     }
 
 
     @Override
     public void init() {
-        final ArrayList<File> files = getIntent().getExtras().getParcelableArrayList(FILES);
+        initPager();
+    }
+
+    private void initPager() {
+        ArrayList<File> files = getIntent().getExtras().getParcelableArrayList(FILES);
         viewerAdapter = new ViewerAdapter(files, getSupportFragmentManager());
         vpPicPager.setAdapter(viewerAdapter);
         vpPicPager.setPageMargin(16);
-        vpPicPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-            @Override
-            public void onPageSelected(int position) {
-            }
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                int pos = vpPicPager.getCurrentItem();
-                Fragment fragment = getFragmentForPosition(pos);
-                if(fragment instanceof WebmFragment){
-                    ((WebmFragment) fragment).onScrolledPause();
-                }
-            }
-        });
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
+        vpPicPager.addOnPageChangeListener(onPageChangeListener);
         vpPicPager.setCurrentItem(getIntent().getExtras().getInt(POS));
-    }
-
-    public static String makeFragmentName(int containerViewId, long id) {
-        return "android:switcher:" + containerViewId + ":" + id;
-    }
-
-    public @Nullable
-    Fragment getFragmentForPosition(int position) {
-        String tag = makeFragmentName(R.id.vpPicPager, position);
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-        return fragment;
+        vpPicPager.setOnTouchListener(backSwipeTouchListener);
     }
 
     @Override
@@ -123,9 +65,64 @@ public class PicViewerActivity extends BaseActivity {
         super.onBackPressed();
         int pos = vpPicPager.getCurrentItem();
         Fragment fragment = getFragmentForPosition(pos);
-        if(fragment instanceof WebmFragment){
+        if (fragment instanceof WebmFragment) {
             ((WebmFragment) fragment).onBackPress();
         }
+    }
+
+    private View.OnTouchListener backSwipeTouchListener = new View.OnTouchListener() {
+
+        float startX = 0;
+        float startY = 0;
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                startX = event.getRawX();
+                startY = event.getRawY();
+            } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+
+                float x = Math.abs(startX - event.getX());
+                float y = Math.abs(startY - event.getY());
+
+                Log.d(TAG, "onTouch: " + x + " | " + y);
+
+                if (Math.abs(startX - event.getX()) * 2 + 25 < Math.abs(startY - event.getY())) {
+                    int pos = vpPicPager.getCurrentItem();
+                    Fragment fragment = getFragmentForPosition(pos);
+                    if (fragment instanceof WebmFragment) {
+                        ((WebmFragment) fragment).onBackPress();
+                    }
+                    finish();
+                }
+            }
+            return false;
+        }
+    };
+
+    private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            int pos = vpPicPager.getCurrentItem();
+            Fragment fragment = getFragmentForPosition(pos);
+            if (fragment instanceof WebmFragment) {
+                ((WebmFragment) fragment).stopVideo();
+            }
+        }
+    };
+
+    public static String makeVPFragmentName(int containerViewId, long id) {
+        return "android:switcher:" + containerViewId + ":" + id;
+    }
+
+    public
+    @Nullable
+    Fragment getFragmentForPosition(int position) {
+        String tag = makeVPFragmentName(R.id.vpPicPager, position);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        return fragment;
     }
 
 }

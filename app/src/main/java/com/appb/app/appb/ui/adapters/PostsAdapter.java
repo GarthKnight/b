@@ -35,7 +35,7 @@ import static android.view.View.VISIBLE;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.VHolder> {
 
-    ArrayList<Post> posts;
+    private ArrayList<Post> posts;
 
     public PostsAdapter(ArrayList<Post> posts) {
         this.posts = posts;
@@ -47,13 +47,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.VHolder> {
         return new PostsAdapter.VHolder(v);
     }
 
-
     @Override
     public void onBindViewHolder(VHolder holder, int position) {
         final int filesCount = (posts.get(position).getFiles().size());
         String url = "http://2ch.hk";
         String postNum = ("№" + String.valueOf(posts.get(position).getNum()));
-        String answers = "";
         final ArrayList<Integer> answersNumbers = new ArrayList<>();
         final int pFinal = position;
 
@@ -109,7 +107,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.VHolder> {
         }
 
         holder.tvTextComment.setSpannableText(text);
-        holder.tvTextComment.setLinkListener(new TextViewWithClickableSpan.LinkClickListener() {
+        holder.tvTextComment.setLinkClickListener(new TextViewWithClickableSpan.LinkClickListener() {
             @Override
             public void onLinkClick(int number) {
                 int tmp = -1;
