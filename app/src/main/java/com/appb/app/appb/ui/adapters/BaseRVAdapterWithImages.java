@@ -16,7 +16,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 /**
- * Created by janaperhun on 07.04.17.
+ * Created by Garth Knight on 07.04.17.
  */
 
 public abstract class BaseRVAdapterWithImages<VH extends VHImages> extends RecyclerView.Adapter<VH> {

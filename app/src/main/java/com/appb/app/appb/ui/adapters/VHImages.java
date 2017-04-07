@@ -15,7 +15,7 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 /**
- * Created by janaperhun on 07.04.17.
+ * Created by Garth Knight on 07.04.17.
  */
 
 public class VHImages extends RecyclerView.ViewHolder {
