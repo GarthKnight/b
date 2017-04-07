@@ -1,4 +1,4 @@
-package com.appb.app.appb.fragments;
+package com.appb.app.appb.ui.fragments;
 
 import android.content.Intent;
 import android.support.design.widget.Snackbar;

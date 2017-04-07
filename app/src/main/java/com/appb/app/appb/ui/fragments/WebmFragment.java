@@ -1,4 +1,4 @@
-package com.appb.app.appb.fragments;
+package com.appb.app.appb.ui.fragments;
 
 
 import android.net.Uri;
@@ -17,7 +17,6 @@ import com.halilibo.bettervideoplayer.BetterVideoCallback;
 import com.halilibo.bettervideoplayer.BetterVideoPlayer;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 import static android.view.View.GONE;
 
@@ -29,6 +28,8 @@ public class WebmFragment extends BaseFragment {
 
     private static final String PATH = "path";
     private static final String THUMBNAIL = "thumbnail";
+    private static final String CURRENT_POSITION = "currentpositon";
+    int currentPosition;
 
 
     @BindView(R.id.bvpWebm)
@@ -37,6 +38,15 @@ public class WebmFragment extends BaseFragment {
     ForegroundImageView fivPlay;
     @BindView(R.id.btnPlay)
     Button btnPlay;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            currentPosition = savedInstanceState.getInt(CURRENT_POSITION);
+        }
+    }
 
     @Nullable
     @Override
@@ -50,7 +60,7 @@ public class WebmFragment extends BaseFragment {
     public void init() {
         Glide.with(getContext()).load(getArguments().getString(THUMBNAIL)).asBitmap().into(fivPlay);
         bvpWebm.setVisibility(GONE);
-        Log.d("yoba", "init: "+R.drawable.ic_play1);
+        Log.d("yoba", "init: " + R.drawable.ic_play1);
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,11 +138,32 @@ public class WebmFragment extends BaseFragment {
         return fragment;
     }
 
-    public void onScrolledPause(){
+    public void onScrolledPause() {
         bvpWebm.pause();
     }
 
-    public void onBackPress(){
+    public void onBackPress() {
         bvpWebm.stop();
+    }
+
+    public BetterVideoPlayer getBvpWebm() {
+        return bvpWebm;
+    }
+
+    public void onOrientationChanged() {
+        bvpWebm.setInitialPosition(currentPosition);
+        Log.d("currentpos", "onOrientationChanged: " + currentPosition);
+        bvpWebm.start();
+        bvpWebm.setAutoPlay(true);
+        bvpWebm.setVisibility(View.VISIBLE);
+        fivPlay.setVisibility(GONE);
+        btnPlay.setVisibility(GONE);
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.getInt(CURRENT_POSITION, bvpWebm.getCurrentPosition());
     }
 }

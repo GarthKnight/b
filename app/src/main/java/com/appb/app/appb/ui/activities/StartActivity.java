@@ -1,4 +1,4 @@
-package com.appb.app.appb.activities;
+package com.appb.app.appb.ui.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -14,11 +14,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.adapters.BoardListAdapter;
+import com.appb.app.appb.ui.adapters.BoardListAdapter;
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Board;
 import com.appb.app.appb.data.Boards;
-import com.appb.app.appb.fragments.ThreadListFragment;
+import com.appb.app.appb.ui.fragments.ThreadListFragment;
 
 import java.util.ArrayList;
 
@@ -52,9 +52,6 @@ public class StartActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
-//        startActivity(new Intent(StartActivity.this, BoardListActivity.class));
     }
 
 
@@ -144,9 +141,6 @@ public class StartActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-
-
-
 
     }
 }

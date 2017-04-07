@@ -1,4 +1,4 @@
-package com.appb.app.appb.activities;
+package com.appb.app.appb.ui.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,15 +8,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.adapters.ViewerAdapter;
 import com.appb.app.appb.custom.CustomViewPager;
-import com.appb.app.appb.custom.SwipeBackLayout;
 import com.appb.app.appb.data.File;
-import com.appb.app.appb.fragments.BaseFragment;
-import com.appb.app.appb.fragments.WebmFragment;
+import com.appb.app.appb.ui.adapters.ViewerAdapter;
+import com.appb.app.appb.ui.fragments.WebmFragment;
 
 import java.util.ArrayList;
 
@@ -32,12 +29,10 @@ public class PicViewerActivity extends BaseActivity {
     public static final String POS = "pos";
     String TAG = "picviewer";
 
-
     @BindView(R.id.vpPicPager)
     CustomViewPager vpPicPager;
 
     ViewerAdapter viewerAdapter;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,8 +42,6 @@ public class PicViewerActivity extends BaseActivity {
         setContentView(R.layout.activity_pic_viewer);
         bindUI(this);
         getIntent().getExtras().getInt(POS);
-//        setDragEdge(SwipeBackLayout.DragEdge.TOP);
-//        getSwipeBackLayout().setScrollChild(vpPicPager);
 
         vpPicPager.setOnTouchListener(new View.OnTouchListener() {
 
@@ -68,7 +61,7 @@ public class PicViewerActivity extends BaseActivity {
 
                     Log.d(TAG, "onTouch: " + x + " | " + y );
 
-                    if (Math.abs(startX - event.getX())*2 + 50 < Math.abs(startY - event.getY())) {
+                    if (Math.abs(startX - event.getX())*2 + 25 < Math.abs(startY - event.getY())) {
                         int pos = vpPicPager.getCurrentItem();
                         Fragment fragment = getFragmentForPosition(pos);
                         if(fragment instanceof WebmFragment){
@@ -92,24 +85,12 @@ public class PicViewerActivity extends BaseActivity {
         vpPicPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                getSwipeBackLayout().interceptStartY = 0;
-//                getSwipeBackLayout().interceptStartX = 0;
             }
-
             @Override
             public void onPageSelected(int position) {
-
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
-//                if (state == ViewPager.SCROLL_STATE_DRAGGING) {
-//                    getSwipeBackLayout().setEnabled(false);
-//                } else {
-//                    getSwipeBackLayout().setEnabled(true);
-//                }
-//                getSwipeBackLayout().interceptStartY = 0;
-//                getSwipeBackLayout().interceptStartX = 0;
                 int pos = vpPicPager.getCurrentItem();
                 Fragment fragment = getFragmentForPosition(pos);
                 if(fragment instanceof WebmFragment){
@@ -118,7 +99,6 @@ public class PicViewerActivity extends BaseActivity {
             }
         });
     }
-
 
 
     @Override
@@ -148,13 +128,5 @@ public class PicViewerActivity extends BaseActivity {
         }
     }
 
-    //    public static PicViewerFragment create(ArrayList<File> files, int pPos) {
-//        Bundle args = new Bundle();
-//        args.putParcelableArrayList(FILES, files);
-//        args.putInt("PPOS", pPos);
-//        PicViewerFragment fragment = new PicViewerFragment();
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 }
 

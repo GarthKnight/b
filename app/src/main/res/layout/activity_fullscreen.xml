@@ -5,7 +5,7 @@
     xmlns:bvp="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#0099cc"
-    tools:context="com.appb.app.appb.activities.FullscreenActivity">
+    tools:context=".ui.activities.FullscreenActivity">
 
     <com.halilibo.bettervideoplayer.BetterVideoPlayer
         android:id="@+id/bvp"

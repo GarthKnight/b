@@ -3,7 +3,6 @@ package com.appb.app.appb.api;
 import com.appb.app.appb.data.BoardPage;
 import com.appb.app.appb.data.Boards;
 import com.appb.app.appb.data.Post;
-import com.appb.app.appb.data.Posts;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
-import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -37,11 +35,9 @@ public class API {
         return instance;
     }
 
-
     private API() {
         init();
     }
-
 
     public void init() {
 
@@ -56,7 +52,6 @@ public class API {
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .build();
 
-
         retrofit = new Retrofit.Builder()
                 .baseUrl(URL)
                 .client(client)
@@ -66,14 +61,11 @@ public class API {
 
         serviceBoards = retrofit.create(DvachService.class);
 
-
     }
-
 
     public void getLists(Callback<Boards> callback) {
         serviceBoards.boards().enqueue(callback);
     }
-
 
     public void getThreads(int index, Callback<BoardPage> callback) {
         String page = index == 1 ? "index" : String.valueOf(index);
@@ -83,7 +75,6 @@ public class API {
     public void getPosts(Callback<ArrayList<Post>> callback, String thread, String board, String num, String pathNum) {
         serviceBoards.posts(thread, board, num, pathNum).enqueue(callback);
     }
-
 
     public interface DvachService {
         @GET("makaba/mobile.fcgi?task=get_boards")

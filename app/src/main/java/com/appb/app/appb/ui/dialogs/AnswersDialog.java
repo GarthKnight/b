@@ -1,4 +1,4 @@
-package com.appb.app.appb.dialogs;
+package com.appb.app.appb.ui.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;

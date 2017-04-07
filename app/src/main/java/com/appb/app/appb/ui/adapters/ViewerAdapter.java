@@ -1,19 +1,12 @@
-package com.appb.app.appb.adapters;
+package com.appb.app.appb.ui.adapters;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.appb.app.appb.R;
 import com.appb.app.appb.data.File;
-import com.appb.app.appb.fragments.BaseFragment;
-import com.appb.app.appb.fragments.PictureFragment;
-import com.appb.app.appb.fragments.WebmFragment;
+import com.appb.app.appb.ui.fragments.PictureFragment;
+import com.appb.app.appb.ui.fragments.WebmFragment;
 
 import java.util.ArrayList;
 

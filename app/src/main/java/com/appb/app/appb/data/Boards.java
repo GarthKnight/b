@@ -17,13 +17,14 @@ public class Boards {
         return different;
     }
 
-    public ArrayList<Board> getBordsByBumpLimit(){
+    public ArrayList<Board> getBordsByIndex(){
         ArrayList<Board> newBoards = new ArrayList<>();
         for (int i = 0; i < different.size(); i++){
-            if (different.get(i).bump_limit == 500 ){
+            if (different.get(i).id.toLowerCase().contains("b") ){
                 newBoards.add(different.get(i));
             }
         }
         return newBoards;
     }
+
 }

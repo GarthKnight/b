@@ -1,4 +1,4 @@
-package com.appb.app.appb.fragments;
+package com.appb.app.appb.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.activities.PicViewerActivity;
-import com.appb.app.appb.adapters.ThreadListAdapter;
+import com.appb.app.appb.ui.activities.PicViewerActivity;
+import com.appb.app.appb.ui.adapters.ThreadListAdapter;
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.BoardPage;
 import com.appb.app.appb.data.Thread;
@@ -24,8 +24,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.appb.app.appb.activities.PicViewerActivity.FILES;
-import static com.appb.app.appb.activities.PicViewerActivity.POS;
+import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
+import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
 
 /**
  * Created by 1 on 10.03.2017.

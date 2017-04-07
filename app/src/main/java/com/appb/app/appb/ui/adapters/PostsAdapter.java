@@ -1,4 +1,4 @@
-package com.appb.app.appb.adapters;
+package com.appb.app.appb.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -16,8 +16,7 @@ import android.widget.TextView;
 import com.appb.app.appb.R;
 import com.appb.app.appb.custom.TextViewWithClickableSpan;
 import com.appb.app.appb.data.Post;
-import com.appb.app.appb.dialogs.AnswerDialog;
-import com.appb.app.appb.dialogs.AnswersDialog;
+import com.appb.app.appb.ui.dialogs.AnswersDialog;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;

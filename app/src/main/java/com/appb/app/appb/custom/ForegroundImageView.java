@@ -8,7 +8,6 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Display;
-import android.widget.ImageView;
 
 import com.appb.app.appb.R;
 
@@ -16,7 +15,7 @@ import com.appb.app.appb.R;
  * Created by 1 on 17.03.2017.
  */
 
-public class ForegroundImageView extends ImageView {
+public class ForegroundImageView extends android.support.v7.widget.AppCompatImageView {
     private Drawable foreground;
 
     public ForegroundImageView(Context context) {

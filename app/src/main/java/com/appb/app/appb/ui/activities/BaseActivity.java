@@ -1,7 +1,6 @@
-package com.appb.app.appb.activities;
+package com.appb.app.appb.ui.activities;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
@@ -15,8 +14,6 @@ import android.widget.EditText;
 
 import com.appb.app.appb.R;
 
-import java.util.ArrayList;
-
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -27,8 +24,7 @@ import butterknife.Unbinder;
 public class BaseActivity extends AppCompatActivity {
 
     private static final String TAG = "BaseActivity";
-    private Unbinder unbinder;
-    private ProgressDialog pbDialog;
+    public Unbinder unbinder;
     private Typeface ptSansRegular;
     private Typeface ptSansBold;
 
@@ -43,12 +39,9 @@ public class BaseActivity extends AppCompatActivity {
         init();
     }
 
-
-
     public void init() {
 
     }
-
 
     @Override
     protected void onPause() {
@@ -66,11 +59,9 @@ public class BaseActivity extends AppCompatActivity {
         hideKeyboard();
     }
 
-
     public void showFragment(Fragment fragment, boolean addToBack) {
         showFragment(fragment, addToBack, R.id.container);
     }
-
 
     public void addFragment(Fragment fragment, boolean addToBack) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -93,7 +84,6 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-
     public void clearStack() {
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
@@ -115,7 +105,6 @@ public class BaseActivity extends AppCompatActivity {
         }
         return ptSansBold;
     }
-
 
     @Override
     public void onBackPressed() {

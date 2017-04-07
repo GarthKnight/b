@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.appb.app.appb.activities.StartActivity"
+    tools:context=".ui.activities.StartActivity"
     android:background="@color/grayBack">
 
     <android.support.design.widget.AppBarLayout

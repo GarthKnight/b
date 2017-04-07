@@ -1,4 +1,4 @@
-package com.appb.app.appb.dialogs;
+package com.appb.app.appb.ui.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.activities.PicViewerActivity;
+import com.appb.app.appb.ui.activities.PicViewerActivity;
 import com.appb.app.appb.custom.TextViewWithClickableSpan;
 import com.appb.app.appb.data.Post;
 import com.bumptech.glide.Glide;
@@ -31,8 +31,8 @@ import butterknife.Unbinder;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static com.appb.app.appb.activities.PicViewerActivity.FILES;
-import static com.appb.app.appb.activities.PicViewerActivity.POS;
+import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
+import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
 
 /**
  * Created by 1 on 31.03.2017.
