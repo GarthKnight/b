@@ -20,9 +20,8 @@ import butterknife.ButterKnife;
 
 public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.VH> {
 
-    ArrayList<Board> boards;
-
-    private final View.OnClickListener threadOnClickListener;
+    private ArrayList<Board> boards;
+    private View.OnClickListener threadOnClickListener;
 
 
     public BoardListAdapter(ArrayList<Board> boards, View.OnClickListener threadOnClickListener){

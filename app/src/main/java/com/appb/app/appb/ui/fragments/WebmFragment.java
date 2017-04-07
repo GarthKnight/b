@@ -138,7 +138,7 @@ public class WebmFragment extends BaseFragment {
         return fragment;
     }
 
-    public void onScrolledPause() {
+    public void stopVideo() {
         bvpWebm.pause();
     }
 

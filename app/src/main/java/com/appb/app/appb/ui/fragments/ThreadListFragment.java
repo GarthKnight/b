@@ -11,11 +11,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.ui.activities.PicViewerActivity;
-import com.appb.app.appb.ui.adapters.ThreadListAdapter;
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.BoardPage;
+import com.appb.app.appb.data.File;
+import com.appb.app.appb.data.Post;
 import com.appb.app.appb.data.Thread;
+import com.appb.app.appb.ui.activities.PicViewerActivity;
+import com.appb.app.appb.ui.adapters.ThreadListAdapter;
 
 import java.util.ArrayList;
 
@@ -33,17 +35,17 @@ import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
 
 public class ThreadListFragment extends BaseFragment {
 
-
     private static final String THREADS = "threads";
-    private static final String COUNT = "currentPage";
+    private static final int FIRST = 0;
+    private static final int THREAD_MAX_COUNT = 22;
+
     private int currentPage = 1;
     private boolean mIsLoadingData = false;
     private boolean hasNextPage;
 
-    LinearLayoutManager llm;
-
-    ThreadListAdapter threadListAdapter;
-    ArrayList<Thread> threads = new ArrayList<>();
+    private LinearLayoutManager llm;
+    private ThreadListAdapter threadListAdapter;
+    private ArrayList<Thread> threads = new ArrayList<>();
 
     @BindView(R.id.rvThreads)
     RecyclerView rvThreads;
@@ -69,10 +71,10 @@ public class ThreadListFragment extends BaseFragment {
     @Override
     public void init() {
         initAdapter();
+        initRV();
         if (threads.size() == 0) {
             loadThreads();
         }
-        initRV();
     }
 
     public void initRV() {
@@ -80,26 +82,33 @@ public class ThreadListFragment extends BaseFragment {
         llm = new LinearLayoutManager(getContext());
         rvThreads.setLayoutManager(llm);
         rvThreads.addOnScrollListener(listScrollListener);
+    }
 
+    private void initAdapter() {
+        threadListAdapter = new ThreadListAdapter(threads) {
+            @Override
+            public void onImageClick(View v, int position, int pos) {
+                openPicViewerActivity(getFirstPostForThread(position).getFiles(), pos);
+            }
+
+            //может быть тебе пора?
+            @Override
+            public void onCommentClick(View v, int pos) {
+                showFragment(PostListFragments.newInstance(getFirstPostForThread(pos).getNum()), true);
+            }
+        };
+        rvThreads.setAdapter(threadListAdapter);
     }
 
     public void loadThreads() {
-
         mIsLoadingData = true;
-
         API.getInstance().getThreads(currentPage, new Callback<BoardPage>() {
             @Override
             public void onResponse(Call<BoardPage> call, Response<BoardPage> response) {
-                if (response.body().getThreads() != null)
-                    threads.addAll(response.body().getThreads());
-                log("On Response thread size: " + response.body().getThreads().size());
-                threadListAdapter.notifyDataSetChanged();
-                currentPage++;
                 mIsLoadingData = false;
                 progressBarLoading.setVisibility(View.GONE);
-
-                if (response.body().getThreads().size() == 22) {
-                    hasNextPage = true;
+                if (response.body().getThreads() != null) {
+                    processThreadCallResponse(response.body().getThreads());
                 }
             }
 
@@ -110,37 +119,30 @@ public class ThreadListFragment extends BaseFragment {
                 mIsLoadingData = false;
             }
         });
-
     }
 
-    private void initAdapter() {
-
-        threadListAdapter = new ThreadListAdapter(threads) {
-            @Override
-            public void onImageClick(View v, int position, int pos) {
-                Intent intent = new Intent(getContext(), PicViewerActivity.class);
-                intent.putExtra(FILES, threads.get(position).getPosts().get(0).getFiles());
-                intent.putExtra(POS, pos);
-                startActivity(intent);
-            }
-
-            //может быть тебе пора?
-            @Override
-            public void onCommentClick(View v, int pos) {
-                showFragment(PostListFragments.newInstance(threads.get(pos).getPosts().get(0).getNum()), true);
-            }
-        };
-        rvThreads.setAdapter(threadListAdapter);
+    private void processThreadCallResponse(ArrayList<Thread> threads) {
+        this.threads.addAll(threads);
+        log("On Response thread size: " + threads.size());
+        threadListAdapter.notifyDataSetChanged();
+        currentPage++;
+        if (threads.size() == THREAD_MAX_COUNT) {
+            hasNextPage = true;
+        }
     }
 
+    private void openPicViewerActivity(ArrayList<File> files, int imageIndex) {
+        Intent intent = new Intent(getContext(), PicViewerActivity.class);
+        intent.putExtra(FILES, files);
+        intent.putExtra(POS, imageIndex);
+        startActivity(intent);
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(THREADS, threads);
-
     }
-
 
     private RecyclerView.OnScrollListener listScrollListener = new RecyclerView.OnScrollListener() {
 
@@ -148,13 +150,14 @@ public class ThreadListFragment extends BaseFragment {
         }
 
         public void onScrolled(RecyclerView recyclerView, int scrollHorizontal, int scrollVertical) {
-
             if (scrollVertical > 0) {
+
                 int visibleItemCount = llm.getChildCount();
                 int totalItemCount = llm.getItemCount();
                 int pastVisibleItems = llm.findFirstVisibleItemPosition();
                 log("pastVisibleItems : " + pastVisibleItems + ", visibleItemCount : " + visibleItemCount +
                         ", totalItemCount : " + totalItemCount);
+
                 if (!mIsLoadingData) {
                     if ((visibleItemCount + pastVisibleItems) >= totalItemCount && hasNextPage) {
                         mIsLoadingData = true;
@@ -167,4 +170,8 @@ public class ThreadListFragment extends BaseFragment {
 
         }
     };
+
+    private Post getFirstPostForThread(int position) {
+        return threads.get(position).getPosts().get(FIRST);
+    }
 }

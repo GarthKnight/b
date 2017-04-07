@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.File;
 import com.appb.app.appb.ui.fragments.PictureFragment;
 import com.appb.app.appb.ui.fragments.WebmFragment;
@@ -16,7 +17,9 @@ import java.util.ArrayList;
 
 public class ViewerAdapter extends FragmentPagerAdapter {
 
-    ArrayList<File> files;
+    private static final String WEBM = ".webm";
+
+    private ArrayList<File> files;
 
     public ViewerAdapter(ArrayList<File> files, FragmentManager fm) {
         super(fm);
@@ -25,16 +28,15 @@ public class ViewerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        final int pos = position;
 
-        String tmp = (files.get(position).getName());
-        String url = "http://2ch.hk" + (files.get(position).getPath());
-        String thubmUrl = "http://2ch.hk" + (files.get(position).getThumbnail());
+        String fileName = files.get(position).getName();
+        String fileUrl = API.URL + files.get(position).getPath();
+        String thumbUrl = API.URL + files.get(position).getThumbnail();
 
-        if (tmp.toLowerCase().contains(".webm")) {
-            return WebmFragment.newInstance(url, thubmUrl);
+        if (fileName.toLowerCase().contains(WEBM)) {
+            return WebmFragment.newInstance(fileUrl, thumbUrl);
         } else {
-            return PictureFragment.newInstance(url);
+            return PictureFragment.newInstance(fileUrl);
         }
     }
 

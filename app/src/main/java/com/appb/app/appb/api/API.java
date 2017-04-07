@@ -25,7 +25,7 @@ import retrofit2.http.Query;
 
 public class API {
 
-    private static final String URL = "http://2ch.hk";
+    public static final String URL = "http://2ch.hk";
     private Retrofit retrofit;
 
     private static API instance = new API();
@@ -72,8 +72,8 @@ public class API {
         serviceBoards.threads(page).enqueue(callback);
     }
 
-    public void getPosts(Callback<ArrayList<Post>> callback, String thread, String board, String num, String pathNum) {
-        serviceBoards.posts(thread, board, num, pathNum).enqueue(callback);
+    public void getPosts(String boardName, int threadNumber, int pathNum, Callback<ArrayList<Post>> callback) {
+        serviceBoards.posts("get_thread", boardName, threadNumber, pathNum).enqueue(callback);
     }
 
     public interface DvachService {
@@ -85,9 +85,9 @@ public class API {
 
         @GET("/makaba/mobile.fcgi")
         Call<ArrayList<Post>> posts(@Query("task") String thread,
-                                    @Query("board") String board,
-                                    @Query("thread") String num,
-                                    @Query("post") String pathNum);
+                                    @Query("board") String boardName,
+                                    @Query("thread") int threadNumber,
+                                    @Query("post") int pathNum);
     }
 
 }

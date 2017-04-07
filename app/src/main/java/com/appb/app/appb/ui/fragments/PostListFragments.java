@@ -10,10 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.appb.app.appb.R;
+import com.appb.app.appb.api.API;
+import com.appb.app.appb.data.File;
+import com.appb.app.appb.data.Post;
 import com.appb.app.appb.ui.activities.PicViewerActivity;
 import com.appb.app.appb.ui.adapters.PostsAdapter;
-import com.appb.app.appb.api.API;
-import com.appb.app.appb.data.Post;
 import com.appb.app.appb.ui.dialogs.AnswerDialog;
 
 import java.util.ArrayList;
@@ -33,12 +34,13 @@ import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
 public class PostListFragments extends BaseFragment {
 
     private static final String POSTS = "posts";
-    private static final String NUM = "num";
-    @BindView(R.id.rvPosts)
-    RecyclerView rvPosts;
+    private static final String THREAD_NUMBER = "num";
+    private static final int FIRST = 1;
 
-    PostsAdapter postsAdapter;
-    ArrayList<Post> posts = new ArrayList<>();
+    @BindView(R.id.rvPosts) RecyclerView rvPosts;
+
+    private PostsAdapter postsAdapter;
+    private ArrayList<Post> posts = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,49 +63,26 @@ public class PostListFragments extends BaseFragment {
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         initAdapter();
         if (posts.size() == 0) {
-            String task = "get_thread";
-            String board = "b";
-            int tmp = getArguments().getInt(NUM);
-            String num = String.valueOf(tmp);
-            int postTmp = 1;
-            String postNum = String.valueOf(postTmp);
-            API.getInstance().getPosts(new Callback<ArrayList<Post>>() {
-                @Override
-                public void onResponse(Call<ArrayList<Post>> call, Response<ArrayList<Post>> response) {
-                    posts.addAll(response.body());
-                    postsAdapter.notifyDataSetChanged();
-
-                    if (!response.isSuccessful()) {
-                        String task = "get_thread";
-                        String board = "b";
-                        int tmp = getArguments().getInt(NUM);
-                        String num = String.valueOf(tmp);
-                        int postTmp = 102;
-                        String postNum = String.valueOf(postTmp);
-                        API.getInstance().getPosts(new Callback<ArrayList<Post>>() {
-
-                            @Override
-                            public void onResponse(Call<ArrayList<Post>> call, Response<ArrayList<Post>> response) {
-                                posts.addAll(response.body());
-                                postsAdapter.notifyDataSetChanged();
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<ArrayList<Post>> call, Throwable t) {
-                                showError(t.getMessage());
-                            }
-                        }, task, board, num, postNum);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ArrayList<Post>> call, Throwable t) {
-                    showError(t.getMessage());
-                }
-            }, task, board, num, postNum);
-
+            loadPosts();
         }
+
+    }
+
+    private void loadPosts() {
+        String board = "b";
+        int threadNumber = getArguments().getInt(THREAD_NUMBER);
+        API.getInstance().getPosts(board, threadNumber, FIRST, new Callback<ArrayList<Post>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Post>> call, Response<ArrayList<Post>> response) {
+                posts.addAll(response.body());
+                postsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Post>> call, Throwable t) {
+                showError(t.getMessage());
+            }
+        });
 
     }
 
@@ -111,31 +90,30 @@ public class PostListFragments extends BaseFragment {
     public void initAdapter() {
         postsAdapter = new PostsAdapter(posts) {
             @Override
-            public void onItemClick(View v, int position, int pos) {
-                Intent intent = new Intent(getContext(), PicViewerActivity.class);
-                intent.putExtra(FILES, posts.get(position).getFiles());
-                intent.putExtra(POS, pos);
-                startActivity(intent);
+            public void onImageClick(View v, int position, int pos) {
+                startPicViewerActivity(posts.get(position).getFiles(), pos);
             }
 
             @Override
-            public void onPrefClick(ArrayList<Post> postsAnswer, int index) {
+            public void onAnswerClick(ArrayList<Post> postsAnswer, int index) {
                 AnswerDialog answerDialog = new AnswerDialog((getContext()), postsAnswer, index) {
                     @Override
                     public void onItemClick(View v, int position, int pos) {
-                        Intent intent = new Intent(getContext(), PicViewerActivity.class);
-                        intent.putExtra(FILES, posts.get(position).getFiles());
-                        intent.putExtra(POS, pos);
-                        startActivity(intent);
+                        startPicViewerActivity(posts.get(position).getFiles(), pos);
                     }
                 };
                 answerDialog.show();
             }
         };
-
         rvPosts.setAdapter(postsAdapter);
     }
 
+    private void startPicViewerActivity(ArrayList<File> files, int pos) {
+        Intent intent = new Intent(getContext(), PicViewerActivity.class);
+        intent.putExtra(FILES, files);
+        intent.putExtra(POS, pos);
+        startActivity(intent);
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -145,7 +123,7 @@ public class PostListFragments extends BaseFragment {
 
     public static PostListFragments newInstance(int num) {
         Bundle args = new Bundle();
-        args.putInt(NUM, num);
+        args.putInt(THREAD_NUMBER, num);
         PostListFragments fragment = new PostListFragments();
         fragment.setArguments(args);
         return fragment;

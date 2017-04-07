@@ -18,7 +18,7 @@ import butterknife.BindView;
  * Created by 1 on 31.03.2017.
  */
 
-public class AnswersDialog extends Dialog {
+public class AnswersForPostDialog extends Dialog {
 
     private static final String ARROWS = ">>";
 
@@ -29,7 +29,7 @@ public class AnswersDialog extends Dialog {
     @BindView(R.id.tvwcsAnswers)
     TextViewWithClickableSpan clickableTextView;
 
-    public AnswersDialog(Context context, ArrayList<Post> posts, ArrayList<Integer> indices) {
+    public AnswersForPostDialog(Context context, ArrayList<Post> posts, ArrayList<Integer> indices) {
         super(context);
         this.posts = posts;
         this.indices = indices;
