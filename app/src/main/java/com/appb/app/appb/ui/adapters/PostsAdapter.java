@@ -54,7 +54,7 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
                 public void onLinkClick(int number) {
                     for (int i = 0; i < posts.size(); i++) {
                         if (posts.get(i).getNum() == number) {
-                            onAnswerClick(posts, number);
+                            onAnswerClick(posts, i);
                             break;
                         }
                     }

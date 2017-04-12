@@ -46,12 +46,15 @@ public class AnswersForPostDialog extends Dialog {
     }
 
     public void init() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(answers);
         for (int i = 0; i < indices.size(); i++) {
-            new StringBuilder(answers)
-                    .append(ARROWS + posts.get(indices.get(i)).getNum())
+
+            stringBuilder.append(ARROWS).append(posts.get(indices.get(i)).getNum())
                     .append(i == indices.size() - 1 ? "" : ", ");
 //            answers = answers + (ARROWS + posts.get(indices.get(i)).getNum() + (i == indices.size() - 1 ? "" : ", "));
         }
+        answers = stringBuilder.toString();
         clickableTextView.setSpannableText(answers);
         clickableTextView.setLinkClickListener(new TextViewWithClickableSpan.LinkClickListener() {
             @Override
