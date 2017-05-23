@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.appb.app.appb.R;
@@ -25,6 +26,10 @@ import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Observer;
+import rx.Scheduler;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
 import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
@@ -47,6 +52,8 @@ public class ThreadListFragment extends BaseFragment {
     private ThreadListAdapter threadListAdapter;
     private ArrayList<Thread> threads = new ArrayList<>();
 
+    @BindView(R.id.btnTest)
+    Button btnTest;
     @BindView(R.id.rvThreads)
     RecyclerView rvThreads;
     @BindView(R.id.progressBarLoading)
@@ -73,8 +80,10 @@ public class ThreadListFragment extends BaseFragment {
         initAdapter();
         initRV();
         if (threads.size() == 0) {
-            loadThreads();
+            loadThreadsRX();
         }
+
+        showFragment(new TestFragment(), true);
     }
 
     public void initRV() {
@@ -98,6 +107,34 @@ public class ThreadListFragment extends BaseFragment {
             }
         };
         rvThreads.setAdapter(threadListAdapter);
+    }
+
+    public void loadThreadsRX(){
+        mIsLoadingData = true;
+        API.getInstance().getThreadsRX(currentPage)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BoardPage>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        showError(e.getMessage());
+                        mIsLoadingData = false;
+                    }
+
+                    @Override
+                    public void onNext(BoardPage boardPage) {
+                        mIsLoadingData = false;
+                        progressBarLoading.setVisibility(View.GONE);
+                        if (boardPage != null) {
+                            processThreadCallResponse(boardPage.getThreads());
+                        }
+                    }
+                });
     }
 
     public void loadThreads() {
@@ -162,7 +199,7 @@ public class ThreadListFragment extends BaseFragment {
                     if ((visibleItemCount + pastVisibleItems) >= totalItemCount && hasNextPage) {
                         mIsLoadingData = true;
                         hasNextPage = false;
-                        loadThreads();
+                        loadThreadsRX();
                         progressBarLoading.setVisibility(View.VISIBLE);
                     }
                 }

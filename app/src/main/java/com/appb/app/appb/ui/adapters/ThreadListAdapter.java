@@ -36,6 +36,7 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
 
     @Override
     public void onBindViewHolder(final VHThread holder, int position) {
+        super.onBindViewHolder(holder, position);
         String threadNumber = String.format("%s%s", NUMBER_SYMBOL,
                 threads.get(position).getPosts().get(0).getNum());
 

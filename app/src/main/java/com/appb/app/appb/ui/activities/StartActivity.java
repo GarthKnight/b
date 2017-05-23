@@ -3,6 +3,7 @@ package com.appb.app.appb.ui.activities;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ScaleGestureDetectorCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,10 @@ import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Observer;
+import rx.Scheduler;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class StartActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -57,7 +62,30 @@ public class StartActivity extends BaseActivity
     @Override
     public void init() {
         log("BoardListFragment: " + "init");
-        loadBoards();
+        loadBoardsRX();
+    }
+
+    private void loadBoardsRX(){
+        API.getInstance()
+                .getListsRX()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Boards>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        log("onFailure: " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Boards boards) {
+                        initRV(boards.getDifferent());
+                    }
+                });
     }
 
     private void loadBoards() {

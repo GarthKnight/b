@@ -6,6 +6,12 @@
     android:id="@+id/rlThread"
     >
 
+    <Button
+        android:id="@+id/btnTest"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        />
+
     <ProgressBar
         android:layout_width="50dp"
         android:layout_height="50dp"

@@ -10,10 +10,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="09/03/17 Чтв 15:18"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:layout_marginTop="12dp"
         android:layout_marginLeft="@dimen/right_thread"
         />
+
+    <TextView
+        android:id="@+id/tvPosition"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/tvCommentNumer"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="15dp"
+        android:text="#1"/>
 
     <TextView
         android:id="@+id/tvCommentNumer"
@@ -240,14 +250,14 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <TextView
+    <com.appb.app.appb.custom.TextViewWithClickableSpan
         android:id="@+id/tvAnswers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/llPicLine3"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:textSize="18dp"
+        android:textSize="14dp"
         android:textColor="@color/colorPrimary"
         />
 

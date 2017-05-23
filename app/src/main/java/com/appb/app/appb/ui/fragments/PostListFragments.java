@@ -23,6 +23,11 @@ import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Observer;
+import rx.Scheduler;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.schedulers.Schedulers;
 
 import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
 import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
@@ -63,9 +68,48 @@ public class PostListFragments extends BaseFragment {
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         initAdapter();
         if (posts.size() == 0) {
-            loadPosts();
+            loadPostsRX();
         }
 
+    }
+
+    private void loadPostsRX(){
+        String board = "b";
+        int threadNumber = getArguments().getInt(THREAD_NUMBER);
+        API.getInstance()
+                .getPostsRX(board, threadNumber, FIRST)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+
+                    }
+                })
+                .doOnTerminate(new Action0() {
+                    @Override
+                    public void call() {
+
+                    }
+                })
+                .subscribe(new Observer<ArrayList<Post>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        showError(e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(ArrayList<Post> posts) {
+                        PostListFragments.this.posts.addAll(posts);
+                        postsAdapter.notifyDataSetChanged();
+
+                    }
+                });
     }
 
     private void loadPosts() {
@@ -88,7 +132,7 @@ public class PostListFragments extends BaseFragment {
 
 
     public void initAdapter() {
-        postsAdapter = new PostsAdapter(posts) {
+        postsAdapter = new PostsAdapter(posts, getContext()) {
             @Override
             public void onImageClick(View v, int position, int pos) {
                 startPicViewerActivity(posts.get(position).getFiles(), pos);
@@ -128,5 +172,6 @@ public class PostListFragments extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 }
 

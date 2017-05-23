@@ -18,6 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import rx.Observable;
 
 /**
  * Created by 1 on 06.03.2017.
@@ -76,6 +77,21 @@ public class API {
         serviceBoards.posts("get_thread", boardName, threadNumber, pathNum).enqueue(callback);
     }
 
+    public Observable<Boards> getListsRX() {
+        return serviceBoards.boardsRX();
+    }
+
+    public Observable<BoardPage> getThreadsRX(int index) {
+        String page = index == 1 ? "index" : String.valueOf(index);
+        return serviceBoards.threadsRX(page);
+    }
+
+    public Observable<ArrayList<Post>> getPostsRX(String boardName, int threadNumber, int pathNum) {
+        return serviceBoards.postsRX("get_thread", boardName, threadNumber, pathNum);
+    }
+
+
+
     public interface DvachService {
         @GET("makaba/mobile.fcgi?task=get_boards")
         Call<Boards> boards();
@@ -88,6 +104,21 @@ public class API {
                                     @Query("board") String boardName,
                                     @Query("thread") int threadNumber,
                                     @Query("post") int pathNum);
+
+
+
+        @GET("b/{index}.json")
+        Observable<BoardPage> threadsRX(@Path("index") String index);
+
+        @GET("makaba/mobile.fcgi?task=get_boards")
+        Observable<Boards> boardsRX();
+
+        @GET("/makaba/mobile.fcgi")
+        Observable<ArrayList<Post>> postsRX(@Query("task") String thread,
+                                    @Query("board") String boardName,
+                                    @Query("thread") int threadNumber,
+                                    @Query("post") int pathNum);
+
     }
 
 }
