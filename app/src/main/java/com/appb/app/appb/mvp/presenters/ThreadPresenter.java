@@ -2,25 +2,35 @@ package com.appb.app.appb.mvp.presenters;
 
 import android.text.Html;
 
+import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.mvp.views.ThreadView;
+import com.appb.app.appb.ui.fragments.PostListFragments;
+import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by 1 on 22.04.2017.
  */
-
+@InjectViewState
 public class ThreadPresenter extends MvpPresenter<ThreadView> {
+
+
+    private static final int FIRST = 1;
 
     ArrayList<Post> posts;
     HashMap<Integer, Integer> answers;
-
-    public void setPosts(ArrayList<Post> posts) {
-        this.posts = posts;
-    }
 
     public HashMap<Integer, Integer> getAnswers() {
 
@@ -30,8 +40,12 @@ public class ThreadPresenter extends MvpPresenter<ThreadView> {
 
             for (int j = 0; j < posts.size(); j++) {
 
-                if (Html.fromHtml(posts.get(j).getComment()).toString().contains(String.valueOf(posts.get(i).getNum()))) {
+                String comment =  Html.fromHtml(posts.get(j).getComment()).toString();
+                String number = String.valueOf(posts.get(i).getNum());
 
+                if (comment.contains(number)) {
+
+                    answers.put(posts.get(i).getNum(), posts.get(j).getNum());
                 }
 
             }
@@ -39,6 +53,33 @@ public class ThreadPresenter extends MvpPresenter<ThreadView> {
         }
 
         return answers;
+    }
+
+    public void getPosts(int threadNumber) {
+        String board = "b";
+        API.getInstance()
+                .getPostsRX(board, threadNumber, FIRST)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(() -> getViewState().onLoadingStart())
+                .doOnTerminate(() -> getViewState().onLoadingEnd())
+                .subscribe(new Observer<ArrayList<Post>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                       getViewState().onError(e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(ArrayList<Post> posts) {
+                        getViewState().onPostsLoaded(posts);
+
+                    }
+                });
     }
 
     public void searchAnswers() {

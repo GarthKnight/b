@@ -62,12 +62,7 @@ public abstract class BaseRVAdapterWithImages<VH extends VHImages> extends Recyc
                 holder.textViews.get(i).setVisibility(VISIBLE);
                 holder.textViews.get(i).setText(getFiles(position).get(i).getName());
 
-                holder.imageViews.get(i).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onImageClick(v, pFinal, iFinal);
-                    }
-                });
+                holder.imageViews.get(i).setOnClickListener(v -> onImageClick(v, pFinal, iFinal));
             } else {
                 holder.imageViews.get(i).setImageDrawable(null);
                 holder.imageViews.get(i).setVisibility(GONE);

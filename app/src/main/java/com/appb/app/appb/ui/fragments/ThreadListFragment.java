@@ -52,8 +52,6 @@ public class ThreadListFragment extends BaseFragment {
     private ThreadListAdapter threadListAdapter;
     private ArrayList<Thread> threads = new ArrayList<>();
 
-    @BindView(R.id.btnTest)
-    Button btnTest;
     @BindView(R.id.rvThreads)
     RecyclerView rvThreads;
     @BindView(R.id.progressBarLoading)
@@ -82,8 +80,6 @@ public class ThreadListFragment extends BaseFragment {
         if (threads.size() == 0) {
             loadThreadsRX();
         }
-
-        showFragment(new TestFragment(), true);
     }
 
     public void initRV() {
