@@ -4,27 +4,22 @@ import android.text.Html;
 
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Post;
-import com.appb.app.appb.mvp.views.ThreadView;
-import com.appb.app.appb.ui.fragments.PostListFragments;
+import com.appb.app.appb.mvp.views.PostListView;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by 1 on 22.04.2017.
  */
 @InjectViewState
-public class ThreadPresenter extends MvpPresenter<ThreadView> {
+public class PostListPresenter extends MvpPresenter<PostListView> {
 
 
     private static final int FIRST = 1;

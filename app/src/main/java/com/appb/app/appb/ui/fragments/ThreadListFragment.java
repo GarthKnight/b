@@ -17,8 +17,11 @@ import com.appb.app.appb.data.BoardPage;
 import com.appb.app.appb.data.File;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.data.Thread;
+import com.appb.app.appb.mvp.presenters.ThreadListPresenter;
+import com.appb.app.appb.mvp.views.ThreadListView;
 import com.appb.app.appb.ui.activities.PicViewerActivity;
 import com.appb.app.appb.ui.adapters.ThreadListAdapter;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.ArrayList;
 
@@ -38,7 +41,7 @@ import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
  * Created by 1 on 10.03.2017.
  */
 
-public class ThreadListFragment extends BaseFragment {
+public class ThreadListFragment extends BaseFragment implements ThreadListView {
 
     private static final String THREADS = "threads";
     private static final int FIRST = 0;
@@ -56,6 +59,9 @@ public class ThreadListFragment extends BaseFragment {
     RecyclerView rvThreads;
     @BindView(R.id.progressBarLoading)
     ProgressBar progressBarLoading;
+
+    @InjectPresenter
+    ThreadListPresenter presenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,6 +88,8 @@ public class ThreadListFragment extends BaseFragment {
         }
     }
 
+
+
     public void initRV() {
         rvThreads.setHasFixedSize(true);
         llm = new LinearLayoutManager(getContext());
@@ -105,65 +113,6 @@ public class ThreadListFragment extends BaseFragment {
         rvThreads.setAdapter(threadListAdapter);
     }
 
-    public void loadThreadsRX(){
-        mIsLoadingData = true;
-        API.getInstance().getThreadsRX(currentPage)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<BoardPage>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        showError(e.getMessage());
-                        mIsLoadingData = false;
-                    }
-
-                    @Override
-                    public void onNext(BoardPage boardPage) {
-                        mIsLoadingData = false;
-                        progressBarLoading.setVisibility(View.GONE);
-                        if (boardPage != null) {
-                            processThreadCallResponse(boardPage.getThreads());
-                        }
-                    }
-                });
-    }
-
-    public void loadThreads() {
-        mIsLoadingData = true;
-        API.getInstance().getThreads(currentPage, new Callback<BoardPage>() {
-            @Override
-            public void onResponse(Call<BoardPage> call, Response<BoardPage> response) {
-                mIsLoadingData = false;
-                progressBarLoading.setVisibility(View.GONE);
-                if (response.body().getThreads() != null) {
-                    processThreadCallResponse(response.body().getThreads());
-                }
-            }
-
-            @Override
-
-            public void onFailure(Call<BoardPage> call, Throwable t) {
-                showError(t.getMessage());
-                mIsLoadingData = false;
-            }
-        });
-    }
-
-    private void processThreadCallResponse(ArrayList<Thread> threads) {
-        this.threads.addAll(threads);
-        log("On Response thread size: " + threads.size());
-        threadListAdapter.notifyDataSetChanged();
-        currentPage++;
-        if (threads.size() == THREAD_MAX_COUNT) {
-            hasNextPage = true;
-        }
-    }
-
     private void openPicViewerActivity(ArrayList<File> files, int imageIndex) {
         Intent intent = new Intent(getContext(), PicViewerActivity.class);
         intent.putExtra(FILES, files);
@@ -171,10 +120,15 @@ public class ThreadListFragment extends BaseFragment {
         startActivity(intent);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(THREADS, threads);
+    private Post getFirstPostForThread(int position) {
+        return threads.get(position).getPosts().get(FIRST);
+    }
+
+    public void loadThreadsRX(){
+        mIsLoadingData = true;
+        currentPage++;
+        presenter.getThreads(currentPage);
+
     }
 
     private RecyclerView.OnScrollListener listScrollListener = new RecyclerView.OnScrollListener() {
@@ -188,8 +142,6 @@ public class ThreadListFragment extends BaseFragment {
                 int visibleItemCount = llm.getChildCount();
                 int totalItemCount = llm.getItemCount();
                 int pastVisibleItems = llm.findFirstVisibleItemPosition();
-                log("pastVisibleItems : " + pastVisibleItems + ", visibleItemCount : " + visibleItemCount +
-                        ", totalItemCount : " + totalItemCount);
 
                 if (!mIsLoadingData) {
                     if ((visibleItemCount + pastVisibleItems) >= totalItemCount && hasNextPage) {
@@ -203,8 +155,41 @@ public class ThreadListFragment extends BaseFragment {
 
         }
     };
+    
+    @Override
+    public void onThreadsLoaded(ArrayList<Thread> _threads, Boolean isDataLoading) {
+        threads.clear();
+        threads.addAll(_threads);
+        threadListAdapter.notifyDataSetChanged();
 
-    private Post getFirstPostForThread(int position) {
-        return threads.get(position).getPosts().get(FIRST);
+        if (threads.size() == THREAD_MAX_COUNT) {
+            hasNextPage = true;
+        }
+    }
+
+    @Override
+    public void onError(String error, boolean isLoadingData) {
+
+    }
+
+    @Override
+    public void onLoadingStart() {
+
+    }
+
+    @Override
+    public void onLoadingEnd() {
+
+    }
+
+    @Override
+    public void setProgressBarLoading() {
+        progressBarLoading.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(THREADS, threads);
     }
 }

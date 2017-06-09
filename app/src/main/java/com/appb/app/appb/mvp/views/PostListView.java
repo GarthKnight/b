@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by 1 on 22.04.2017.
  */
 
-public interface ThreadView extends MvpView {
+public interface PostListView extends MvpView {
 
     void openAnswerDialog(int postNumber);
 

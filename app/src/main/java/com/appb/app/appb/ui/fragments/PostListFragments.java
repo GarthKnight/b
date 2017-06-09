@@ -10,11 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.File;
 import com.appb.app.appb.data.Post;
-import com.appb.app.appb.mvp.presenters.ThreadPresenter;
-import com.appb.app.appb.mvp.views.ThreadView;
+import com.appb.app.appb.mvp.presenters.PostListPresenter;
+import com.appb.app.appb.mvp.views.PostListView;
 import com.appb.app.appb.ui.activities.PicViewerActivity;
 import com.appb.app.appb.ui.adapters.PostsAdapter;
 import com.appb.app.appb.ui.dialogs.AnswerDialog;
@@ -23,14 +22,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import rx.Observer;
-import rx.Scheduler;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.schedulers.Schedulers;
 
 import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
 import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
@@ -39,14 +30,14 @@ import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
  * Created by 1 on 20.03.2017.
  */
 
-public class PostListFragments extends BaseFragment implements ThreadView{
+public class PostListFragments extends BaseFragment implements PostListView {
 
     private static final String POSTS = "posts";
     private static final String THREAD_NUMBER = "num";
     private static final int FIRST = 1;
 
     @InjectPresenter
-    ThreadPresenter presenter;
+    PostListPresenter presenter;
 
     @BindView(R.id.rvPosts) RecyclerView rvPosts;
 
