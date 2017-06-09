@@ -24,35 +24,11 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
 
     private static final int FIRST = 1;
 
-    ArrayList<Post> posts;
-    HashMap<Integer, Integer> answers;
-
-    public HashMap<Integer, Integer> getAnswers() {
-
-        answers = new HashMap<>();
-
-        for (int i = 0; i < posts.size(); i++) {
-
-            for (int j = 0; j < posts.size(); j++) {
-
-                String comment =  Html.fromHtml(posts.get(j).getComment()).toString();
-                String number = String.valueOf(posts.get(i).getNum());
-
-                if (comment.contains(number)) {
-
-                    answers.put(posts.get(i).getNum(), posts.get(j).getNum());
-                }
-
-            }
-
-        }
-
-        return answers;
-    }
+    private ArrayList<Post> posts;
 
     public void getPosts(int threadNumber) {
-        String board = "b";
 
+        String board = "b";
 
         API.getInstance()
                 .getPostsRX(board, threadNumber, FIRST)
@@ -72,14 +48,33 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
                     }
 
                     @Override
-                    public void onNext(ArrayList<Post> posts) {
+                    public void onNext(ArrayList<Post> _posts) {
+                        posts = _posts;
                         getViewState().onPostsLoaded(posts);
-
                     }
                 });
     }
 
-    public void searchAnswers() {
+    public void getAnswers() {
+        HashMap<Integer, Integer> answers;
 
+        answers = new HashMap<>();
+
+        for (int i = 0; i < posts.size(); i++) {
+
+            for (int j = 0; j < posts.size(); j++) {
+
+                String comment =  Html.fromHtml(posts.get(j).getComment()).toString();
+                String number = String.valueOf(posts.get(i).getNum());
+
+                if (comment.contains(number)) {
+
+                    answers.put(posts.get(i).getNum(), posts.get(j).getNum());
+                }
+
+            }
+
+        }
+        getViewState().getAnswers(answers);
     }
 }

@@ -20,6 +20,7 @@ import com.appb.app.appb.ui.dialogs.AnswerDialog;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 
@@ -35,6 +36,8 @@ public class PostListFragments extends BaseFragment implements PostListView {
     private static final String POSTS = "posts";
     private static final String THREAD_NUMBER = "num";
     private static final int FIRST = 1;
+
+    public HashMap<Integer, Integer> answers;
 
     @InjectPresenter
     PostListPresenter presenter;
@@ -67,18 +70,20 @@ public class PostListFragments extends BaseFragment implements PostListView {
         if (posts.size() == 0) {
             loadPosts();
         }
+        getAnswers();
 
     }
 
-    private void loadPostsRX(){
 
-    }
 
     private void loadPosts() {
         int threadNumber = getArguments().getInt(THREAD_NUMBER);
         presenter.getPosts(threadNumber);
     }
 
+    private void getAnswers(){
+        presenter.getAnswers();
+    }
 
     public void initAdapter() {
         postsAdapter = new PostsAdapter(posts, getContext()) {
@@ -123,8 +128,8 @@ public class PostListFragments extends BaseFragment implements PostListView {
     }
 
     @Override
-    public void openAnswerDialog(int postNumber) {
-        presenter.getAnswers();
+    public void getAnswers(HashMap<Integer, Integer> _answers) {
+        answers = _answers;
     }
 
     @Override

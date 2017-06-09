@@ -4,6 +4,7 @@ import com.appb.app.appb.data.Post;
 import com.arellomobile.mvp.MvpView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by 1 on 22.04.2017.
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 
 public interface PostListView extends MvpView {
 
-    void openAnswerDialog(int postNumber);
+    void getAnswers(HashMap<Integer, Integer> answers);
 
     void onPostsLoaded(ArrayList<Post> posts);
 
