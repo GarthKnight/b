@@ -57,6 +57,8 @@ public class ThreadPresenter extends MvpPresenter<ThreadView> {
 
     public void getPosts(int threadNumber) {
         String board = "b";
+
+
         API.getInstance()
                 .getPostsRX(board, threadNumber, FIRST)
                 .subscribeOn(Schedulers.newThread())
