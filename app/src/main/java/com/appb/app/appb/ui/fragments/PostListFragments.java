@@ -84,18 +84,7 @@ public class PostListFragments extends BaseFragment implements PostListView {
     }
 
     private void getAnswers(){
-        Observable.create(new Observable.OnSubscribe<HashMap>() {
-            @Override
-            public void call(Subscriber<? super HashMap> subscriber) {
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                });
-            }
-        });
+        presenter.getAnswers();
     }
 
     public void initAdapter() {

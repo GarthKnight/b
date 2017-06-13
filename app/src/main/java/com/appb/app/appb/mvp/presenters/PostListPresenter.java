@@ -11,7 +11,9 @@ import com.arellomobile.mvp.MvpPresenter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -56,25 +58,52 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
     }
 
     public void getAnswers() {
-        HashMap<Integer, Integer> answers;
 
-        answers = new HashMap<>();
+        setAnswers()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<HashMap<Integer, Integer>>() {
+                    @Override
+                    public void onCompleted() {
 
-        for (int i = 0; i < posts.size(); i++) {
+                    }
 
-            for (int j = 0; j < posts.size(); j++) {
+                    @Override
+                    public void onError(Throwable e) {
 
-                String comment =  Html.fromHtml(posts.get(j).getComment()).toString();
-                String number = String.valueOf(posts.get(i).getNum());
+                    }
 
-                if (comment.contains(number)) {
+                    @Override
+                    public void onNext(HashMap<Integer, Integer> _answers) {
+                        getViewState().getAnswers(_answers);
+                    }
+                });
+    }
 
-                    answers.put(posts.get(i).getNum(), posts.get(j).getNum());
+    public Observable<HashMap<Integer,Integer>> setAnswers(){
+        return Observable.create(subscriber -> new Thread(() -> {
+
+            HashMap<Integer, Integer> answers;
+
+            answers = new HashMap<>();
+
+            for (int i = 0; i < posts.size(); i++) {
+
+                for (int j = 0; j < posts.size(); j++) {
+
+                    String comment =  Html.fromHtml(posts.get(j).getComment()).toString();
+                    String number = String.valueOf(posts.get(i).getNum());
+
+                    if (comment.contains(number)) {
+
+                        answers.put(posts.get(i).getNum(), posts.get(j).getNum());
+                    }
+
                 }
 
             }
 
-        }
-        getViewState().getAnswers(answers);
+            subscriber.onNext(answers);
+        }));
     }
 }
