@@ -129,6 +129,10 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
         currentPage++;
         presenter.getThreads(currentPage);
 
+        if (threads.size() == THREAD_MAX_COUNT) {
+            hasNextPage = true;
+        }
+
     }
 
     private RecyclerView.OnScrollListener listScrollListener = new RecyclerView.OnScrollListener() {
@@ -157,19 +161,16 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
     };
     
     @Override
-    public void onThreadsLoaded(ArrayList<Thread> _threads, Boolean isDataLoading) {
+    public void onThreadsLoaded(ArrayList<Thread> _threads) {
         threads.clear();
         threads.addAll(_threads);
         threadListAdapter.notifyDataSetChanged();
-
-        if (threads.size() == THREAD_MAX_COUNT) {
-            hasNextPage = true;
-        }
+        mIsLoadingData = false;
     }
 
     @Override
-    public void onError(String error, boolean isLoadingData) {
-
+    public void onError(String error) {
+        mIsLoadingData = false;
     }
 
     @Override

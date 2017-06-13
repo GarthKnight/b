@@ -3,7 +3,6 @@ package com.appb.app.appb.ui.activities;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ScaleGestureDetectorCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +16,8 @@ import com.appb.app.appb.R;
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Board;
 import com.appb.app.appb.data.Boards;
+import com.appb.app.appb.mvp.views.BoardlistView;
+import com.appb.app.appb.mvp.views.PostListView;
 import com.appb.app.appb.ui.adapters.BoardListAdapter;
 import com.appb.app.appb.ui.fragments.ThreadListFragment;
 
@@ -27,12 +28,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import rx.Observer;
-import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class StartActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, BoardlistView {
 
     @BindView(R.id.rvBoards)
     RecyclerView rvBoard;
@@ -61,13 +61,12 @@ public class StartActivity extends BaseActivity
 
     @Override
     public void init() {
-        log("BoardListFragment: " + "init");
         loadBoardsRX();
     }
 
     private void loadBoardsRX(){
         API.getInstance()
-                .getListsRX()
+                .getBoardsRX()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Boards>() {
@@ -86,21 +85,6 @@ public class StartActivity extends BaseActivity
                         initRV(boards.getDifferent());
                     }
                 });
-    }
-
-    private void loadBoards() {
-        API.getInstance().getLists(new Callback<Boards>() {
-            @Override
-            public void onResponse(Call<Boards> call, Response<Boards> response) {
-                log("BoardListFragment: " + "onResponse");
-                initRV(response.body().getDifferent());
-            }
-
-            @Override
-            public void onFailure(Call<Boards> call, Throwable t) {
-                log("onFailure: " + t.toString());
-            }
-        });
     }
 
 
@@ -171,6 +155,18 @@ public class StartActivity extends BaseActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
+    }
+
+    @Override
+    public void onBoardsLoaded(ArrayList<Board> _boards) {
+        boards = _boards;
+        initRV(boards);
+    }
+
+    @Override
+    public void onError(String error) {
+        log("onFailure: " + error);
 
     }
 }

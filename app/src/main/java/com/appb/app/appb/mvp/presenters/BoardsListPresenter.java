@@ -1,8 +1,8 @@
 package com.appb.app.appb.mvp.presenters;
 
 import com.appb.app.appb.api.API;
-import com.appb.app.appb.data.BoardPage;
-import com.appb.app.appb.mvp.views.ThreadListView;
+import com.appb.app.appb.data.Boards;
+import com.appb.app.appb.mvp.views.BoardlistView;
 import com.arellomobile.mvp.MvpPresenter;
 
 import rx.Observer;
@@ -10,24 +10,20 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by Logvinov.sv on 09.06.2017.
+ * Created by Logvinov.sv on 13.06.2017.
  */
 
-public class ThreadListPresenter extends MvpPresenter<ThreadListView> {
+public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
 
-
-
-    public void getThreads(int currentPage) {
-
-
-        API.getInstance().getThreadsRX(currentPage)
+    public void getBoards(){
+        API.getInstance()
+                .getBoardsRX()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<BoardPage>() {
+                .subscribe(new Observer<Boards>() {
                     @Override
                     public void onCompleted() {
-                        getViewState().onLoadingStart();
-                        getViewState().onLoadingEnd();
+
                     }
 
                     @Override
@@ -36,11 +32,9 @@ public class ThreadListPresenter extends MvpPresenter<ThreadListView> {
                     }
 
                     @Override
-                    public void onNext(BoardPage boardPage) {
-                        getViewState().setProgressBarLoading();
-                        getViewState().onThreadsLoaded(boardPage.getThreads());
+                    public void onNext(Boards boards) {
+                        getViewState().onBoardsLoaded(boards.getDifferent());
                     }
                 });
     }
-
 }

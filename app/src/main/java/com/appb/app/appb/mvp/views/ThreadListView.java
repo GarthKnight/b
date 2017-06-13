@@ -12,9 +12,9 @@ import java.util.ArrayList;
 
 public interface ThreadListView extends MvpView {
 
-    void onThreadsLoaded(ArrayList<Thread> threads, Boolean isDataLoading);
+    void onThreadsLoaded(ArrayList<Thread> threads);
 
-    void  onError(String error, boolean isLoadingData);
+    void  onError(String error);
 
     void onLoadingStart();
 

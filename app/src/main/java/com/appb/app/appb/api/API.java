@@ -77,7 +77,7 @@ public class API {
         serviceBoards.posts("get_thread", boardName, threadNumber, pathNum).enqueue(callback);
     }
 
-    public Observable<Boards> getListsRX() {
+    public Observable<Boards> getBoardsRX() {
         return serviceBoards.boardsRX();
     }
 
