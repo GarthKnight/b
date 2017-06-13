@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.BindView;
+import rx.Observable;
+import rx.Subscriber;
 
 import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
 import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
@@ -82,7 +84,18 @@ public class PostListFragments extends BaseFragment implements PostListView {
     }
 
     private void getAnswers(){
-        presenter.getAnswers();
+        Observable.create(new Observable.OnSubscribe<HashMap>() {
+            @Override
+            public void call(Subscriber<? super HashMap> subscriber) {
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+            }
+        });
     }
 
     public void initAdapter() {
