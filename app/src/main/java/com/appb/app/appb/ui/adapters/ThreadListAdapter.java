@@ -41,12 +41,7 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
                 threads.get(position).getPosts().get(0).getNum());
 
         Spanned comment = Html.fromHtml(threads.get(position).getPosts().get(0).getComment());
-        holder.tvCommentThread.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCommentClick(v, holder.getAdapterPosition());
-            }
-        });
+        holder.tvCommentThread.setOnClickListener(v -> onCommentClick(v, holder.getAdapterPosition()));
         holder.tvDateThread.setText(threads.get(position).getPosts().get(0).getDate());
         holder.tvThreadNumber.setText(threadNumber);
         holder.tvCommentThread.setText(comment);

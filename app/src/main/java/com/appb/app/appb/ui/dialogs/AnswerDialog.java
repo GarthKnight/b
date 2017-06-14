@@ -97,19 +97,17 @@ public class AnswerDialog extends Dialog {
         } else {
 
             tvTextComment.setSpannableText(text);
-            tvTextComment.setLinkClickListener(new TextViewWithClickableSpan.LinkClickListener() {
-                @Override
-                public void onLinkClick(int number) {
-                    for (int i = 0; i < posts.size(); i++) {
-                        if (posts.get(i).getNum() == number) {
-                            new AnswerDialog(getContext(), posts, i) {
-                                @Override
-                                public void onItemClick(View v, int position, int pos) {
-                                    startPicViewerActivity(position, pos);
-                                }
-                            }.show();
-                            break;
-                        }
+            tvTextComment.setLinkClickListener(number -> {
+
+                for (int i = 0; i < posts.size(); i++) {
+                    if (posts.get(i).getNum() == number) {
+                        new AnswerDialog(getContext(), posts, i) {
+                            @Override
+                            public void onItemClick(View v, int position, int pos) {
+                                startPicViewerActivity(position, pos);
+                            }
+                        }.show();
+                        break;
                     }
                 }
             });
@@ -124,12 +122,9 @@ public class AnswerDialog extends Dialog {
             Glide.with(context).load(path).asBitmap().into(imageViews.get(i));
             imageName.get(i).setText(posts.get(index).getFiles().get(i).getName());
 
-            imageViews.get(i).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClick(v, pFinal, iFinal);
-                    Log.d("yoba", "de vidos");
-                }
+            imageViews.get(i).setOnClickListener(v -> {
+                onItemClick(v, pFinal, iFinal);
+                Log.d("yoba", "de vidos");
             });
 
         }

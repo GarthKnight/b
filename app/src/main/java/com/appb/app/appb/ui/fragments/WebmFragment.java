@@ -61,28 +61,24 @@ public class WebmFragment extends BaseFragment {
         Glide.with(getContext()).load(getArguments().getString(THUMBNAIL)).asBitmap().into(fivPlay);
         bvpWebm.setVisibility(GONE);
         Log.d("yoba", "init: " + R.drawable.ic_play1);
-        btnPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bvpWebm.setVisibility(View.VISIBLE);
-                fivPlay.setVisibility(GONE);
-                btnPlay.setVisibility(GONE);
-                bvpWebm.setCallback(betterVideoCallback);
-                bvpWebm.setSource(Uri.parse(getArguments().getString(PATH)));
-                bvpWebm.setLoop(true);
-            }
+        btnPlay.setOnClickListener(v -> {
+
+            bvpWebm.setVisibility(View.VISIBLE);
+            fivPlay.setVisibility(GONE);
+            btnPlay.setVisibility(GONE);
+            bvpWebm.setCallback(betterVideoCallback);
+            bvpWebm.setSource(Uri.parse(getArguments().getString(PATH)));
+            bvpWebm.setLoop(true);
         });
 
-        fivPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bvpWebm.setVisibility(View.VISIBLE);
-                fivPlay.setVisibility(GONE);
-                btnPlay.setVisibility(GONE);
-                bvpWebm.setCallback(betterVideoCallback);
-                bvpWebm.setSource(Uri.parse(getArguments().getString(PATH)));
-                bvpWebm.setLoop(true);
-            }
+        fivPlay.setOnClickListener(v -> {
+
+            bvpWebm.setVisibility(View.VISIBLE);
+            fivPlay.setVisibility(GONE);
+            btnPlay.setVisibility(GONE);
+            bvpWebm.setCallback(betterVideoCallback);
+            bvpWebm.setSource(Uri.parse(getArguments().getString(PATH)));
+            bvpWebm.setLoop(true);
         });
     }
 

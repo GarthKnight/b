@@ -62,14 +62,11 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
         } else {
             vh.tvTextComment.setVisibility(VISIBLE);
             vh.tvTextComment.setSpannableText(Html.fromHtml(postText));
-            vh.tvTextComment.setLinkClickListener(new TextViewWithClickableSpan.LinkClickListener() {
-                @Override
-                public void onLinkClick(int number) {
-                    for (int i = 0; i < posts.size(); i++) {
-                        if (posts.get(i).getNum() == number) {
-                            onAnswerClick(posts, i);
-                            break;
-                        }
+            vh.tvTextComment.setLinkClickListener(number -> {
+                for (int i = 0; i < posts.size(); i++) {
+                    if (posts.get(i).getNum() == number) {
+                        onAnswerClick(posts, i);
+                        break;
                     }
                 }
             });

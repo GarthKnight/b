@@ -37,21 +37,22 @@ public class PostListFragments extends BaseFragment implements PostListView {
 
     private static final String POSTS = "posts";
     private static final String THREAD_NUMBER = "num";
-    private static final int FIRST = 1;
 
+    private PostsAdapter postsAdapter;
+    private ArrayList<Post> posts = new ArrayList<>();
     public HashMap<Integer, Integer> answers;
+
+    @BindView(R.id.rvPosts)
+    RecyclerView rvPosts;
 
     @InjectPresenter
     PostListPresenter presenter;
 
-    @BindView(R.id.rvPosts) RecyclerView rvPosts;
-
-    private PostsAdapter postsAdapter;
-    private ArrayList<Post> posts = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (savedInstanceState != null) {
             posts = savedInstanceState.getParcelableArrayList(POSTS);
         }
@@ -69,13 +70,14 @@ public class PostListFragments extends BaseFragment implements PostListView {
     public void init() {
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         initAdapter();
+
         if (posts.size() == 0) {
             loadPosts();
         }
+
         getAnswers();
 
     }
-
 
 
     private void loadPosts() {
@@ -83,12 +85,13 @@ public class PostListFragments extends BaseFragment implements PostListView {
         presenter.getPosts(threadNumber);
     }
 
-    private void getAnswers(){
+    private void getAnswers() {
         presenter.getAnswers();
     }
 
     public void initAdapter() {
         postsAdapter = new PostsAdapter(posts, getContext()) {
+
             @Override
             public void onImageClick(View v, int position, int pos) {
                 startPicViewerActivity(posts.get(position).getFiles(), pos);
@@ -105,6 +108,7 @@ public class PostListFragments extends BaseFragment implements PostListView {
                 answerDialog.show();
             }
         };
+
         rvPosts.setAdapter(postsAdapter);
     }
 
