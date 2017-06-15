@@ -33,23 +33,23 @@ public abstract class BaseRVAdapterWithImages<VH extends VHImages> extends Recyc
         VHImages holder = ((VHImages) vh);
         final int filesCount = getFiles(position).size();
         final int pFinal = position;
-        if (filesCount < 1) {
-            holder.llPicLine1.setVisibility(GONE);
-            holder.llPicLine2.setVisibility(GONE);
-            holder.llPicLine3.setVisibility(GONE);
-        } else if (filesCount > 0 && filesCount < 4) {
-            holder.llPicLine1.setVisibility(VISIBLE);
-            holder.llPicLine2.setVisibility(GONE);
-            holder.llPicLine3.setVisibility(GONE);
-        } else if (filesCount > 3 && filesCount < 7) {
-            holder.llPicLine1.setVisibility(VISIBLE);
-            holder.llPicLine2.setVisibility(VISIBLE);
-            holder.llPicLine3.setVisibility(GONE);
-        } else {
-            holder.llPicLine1.setVisibility(VISIBLE);
-            holder.llPicLine2.setVisibility(VISIBLE);
-            holder.llPicLine3.setVisibility(VISIBLE);
-        }
+//        if (filesCount < 1) {
+//            holder.llPicLine1.setVisibility(GONE);
+//            holder.llPicLine2.setVisibility(GONE);
+//            holder.llPicLine3.setVisibility(GONE);
+//        } else if (filesCount > 0 && filesCount < 4) {
+//            holder.llPicLine1.setVisibility(VISIBLE);
+//            holder.llPicLine2.setVisibility(GONE);
+//            holder.llPicLine3.setVisibility(GONE);
+//        } else if (filesCount > 3 && filesCount < 7) {
+//            holder.llPicLine1.setVisibility(VISIBLE);
+//            holder.llPicLine2.setVisibility(VISIBLE);
+//            holder.llPicLine3.setVisibility(GONE);
+//        } else {
+//            holder.llPicLine1.setVisibility(VISIBLE);
+//            holder.llPicLine2.setVisibility(VISIBLE);
+//            holder.llPicLine3.setVisibility(VISIBLE);
+//        }
 
         Log.d("yoba", "onBindViewHolder: pos: " + position + " filescount: " + filesCount);
         for (int i = 0; i < 9; i++) {

@@ -58,7 +58,7 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
 
         thumbnailsAdapter = new ThumbnailsAdapter(files);
         holder.rvThumbnails.setAdapter(thumbnailsAdapter);
-        holder.rvThumbnails.setLayoutManager(new LinearLayoutManager(context));
+        holder.rvThumbnails.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
     }
 
 
