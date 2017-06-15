@@ -66,7 +66,9 @@ public class StartActivity extends BaseActivity
 
     @Override
     public void init() {
-        loadBoardsRX();
+        if (boards.size() == 0){
+            loadBoardsRX();
+        }
     }
 
     private void loadBoardsRX(){

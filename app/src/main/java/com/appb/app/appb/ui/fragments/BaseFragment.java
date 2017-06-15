@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.appb.app.appb.R;
+import com.arellomobile.mvp.MvpAppCompatFragment;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -16,7 +17,7 @@ import butterknife.Unbinder;
  * Created by 1 on 06.03.2017.
  */
 
-public class BaseFragment extends Fragment {
+public class BaseFragment extends MvpAppCompatFragment {
 
     private Unbinder unbinder;
 

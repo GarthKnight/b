@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.appb.app.appb.R;
+import com.arellomobile.mvp.MvpAppCompatActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -20,7 +21,7 @@ import butterknife.Unbinder;
  * Created by 1 on 06.03.2017.
  */
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends MvpAppCompatActivity {
 
     private static final String TAG = "BaseActivity";
     public Unbinder unbinder;
