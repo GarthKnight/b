@@ -1,5 +1,8 @@
 package com.appb.app.appb.ui.adapters;
 
+import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -22,9 +25,12 @@ import butterknife.BindView;
 public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter.VHThread> {
 
     ArrayList<Thread> threads;
+    ThumbnailsAdapter thumbnailsAdapter;
+    Context context;
 
-    public ThreadListAdapter(ArrayList<Thread> threads) {
+    public ThreadListAdapter(ArrayList<Thread> threads, Context context) {
         this.threads = threads;
+        this.context = context;
 
     }
 
@@ -46,7 +52,15 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
         holder.tvThreadNumber.setText(threadNumber);
         holder.tvCommentThread.setText(comment);
         holder.tvThreadCounter.setText("#" + position);
+
+
+        ArrayList<File> files = threads.get(position).getPosts().get(0).getFiles();
+
+        thumbnailsAdapter = new ThumbnailsAdapter(files);
+        holder.rvThumbnails.setAdapter(thumbnailsAdapter);
+        holder.rvThumbnails.setLayoutManager(new LinearLayoutManager(context));
     }
+
 
     @Override
     public ArrayList<File> getFiles(int pos) {
@@ -73,6 +87,8 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
         TextView tvCommentThread;
         @BindView(R.id.tvThreadCounter)
         TextView tvThreadCounter;
+        @BindView(R.id.rvThumbnails)
+        RecyclerView rvThumbnails;
 
 
         public VHThread(View v) {

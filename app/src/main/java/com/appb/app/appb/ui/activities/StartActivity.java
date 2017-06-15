@@ -16,10 +16,12 @@ import com.appb.app.appb.R;
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Board;
 import com.appb.app.appb.data.Boards;
+import com.appb.app.appb.mvp.presenters.BoardsListPresenter;
 import com.appb.app.appb.mvp.views.BoardlistView;
 import com.appb.app.appb.mvp.views.PostListView;
 import com.appb.app.appb.ui.adapters.BoardListAdapter;
 import com.appb.app.appb.ui.fragments.ThreadListFragment;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.ArrayList;
 
@@ -38,6 +40,9 @@ public class StartActivity extends BaseActivity
     RecyclerView rvBoard;
     BoardListAdapter boardListAdapter;
     ArrayList<Board> boards;
+
+    @InjectPresenter
+    BoardsListPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,26 +70,7 @@ public class StartActivity extends BaseActivity
     }
 
     private void loadBoardsRX(){
-        API.getInstance()
-                .getBoardsRX()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Boards>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        log("onFailure: " + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(Boards boards) {
-                        initRV(boards.getDifferent());
-                    }
-                });
+        presenter.getBoards();
     }
 
 

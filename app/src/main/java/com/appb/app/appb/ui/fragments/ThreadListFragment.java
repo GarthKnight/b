@@ -83,9 +83,11 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
     public void init() {
         initAdapter();
         initRV();
+
         if (threads.size() == 0) {
             loadThreadsRX();
         }
+
     }
 
 
@@ -98,7 +100,7 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
     }
 
     private void initAdapter() {
-        threadListAdapter = new ThreadListAdapter(threads) {
+        threadListAdapter = new ThreadListAdapter(threads, getContext()) {
             @Override
             public void onImageClick(View v, int position, int pos) {
                 openPicViewerActivity(getFirstPostForThread(position).getFiles(), pos);
