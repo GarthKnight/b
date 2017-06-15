@@ -3,6 +3,7 @@ package com.appb.app.appb.mvp.presenters;
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Boards;
 import com.appb.app.appb.mvp.views.BoardlistView;
+import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import rx.Observer;
@@ -13,6 +14,7 @@ import rx.schedulers.Schedulers;
  * Created by Logvinov.sv on 13.06.2017.
  */
 
+@InjectViewState
 public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
 
     public void getBoards(){

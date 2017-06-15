@@ -13,12 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Board;
-import com.appb.app.appb.data.Boards;
 import com.appb.app.appb.mvp.presenters.BoardsListPresenter;
 import com.appb.app.appb.mvp.views.BoardlistView;
-import com.appb.app.appb.mvp.views.PostListView;
 import com.appb.app.appb.ui.adapters.BoardListAdapter;
 import com.appb.app.appb.ui.fragments.ThreadListFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -26,12 +23,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class StartActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, BoardlistView {
@@ -39,7 +30,7 @@ public class StartActivity extends BaseActivity
     @BindView(R.id.rvBoards)
     RecyclerView rvBoard;
     BoardListAdapter boardListAdapter;
-    ArrayList<Board> boards;
+    ArrayList<Board> boards = new ArrayList<>();
 
     @InjectPresenter
     BoardsListPresenter presenter;
