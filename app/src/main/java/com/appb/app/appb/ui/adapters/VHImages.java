@@ -20,17 +20,8 @@ import butterknife.ButterKnife;
 
 public class VHImages extends RecyclerView.ViewHolder {
 
-    @BindViews({R.id.ivPic1, R.id.ivPic2, R.id.ivPic3, R.id.ivPic4, R.id.ivPic5, R.id.ivPic6, R.id.ivPic7, R.id.ivPic8, R.id.ivPic9,})
-    List<ImageView> imageViews;
-    @BindViews({R.id.tvPic1, R.id.tvPic2, R.id.tvPic3, R.id.tvPic4, R.id.tvPic5, R.id.tvPic6, R.id.tvPic7, R.id.tvPic8, R.id.tvPic9,})
-    List<TextView> textViews;
-
-    @BindView(R.id.llPicLine1)
-    LinearLayout llPicLine1;
-    @BindView(R.id.llPicLine2)
-    LinearLayout llPicLine2;
-    @BindView(R.id.llPicLine3)
-    LinearLayout llPicLine3;
+    @BindView(R.id.rvThumbnails)
+    RecyclerView rvThumbnails;
 
     public VHImages(View v) {
         super(v);

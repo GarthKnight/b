@@ -39,6 +39,7 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
     private static final String ARROWS = ">>";
     Context context;
 
+
     public PostsAdapter(ArrayList<Post> posts, Context context) {
         this.posts = posts;
         this.context = context;
@@ -171,12 +172,6 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
         return realPostsFromAnswers;
     }
 
-    private void startPicViewerActivity(int position, int pos) {
-        Intent intent = new Intent(context, PicViewerActivity.class);
-        intent.putExtra(FILES, posts.get(position).getFiles());
-        intent.putExtra(POS, pos);
-        context.startActivity(intent);
-    }
 
     @Override
     public int getItemCount() {

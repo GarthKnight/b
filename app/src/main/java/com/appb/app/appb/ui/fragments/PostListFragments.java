@@ -93,8 +93,9 @@ public class PostListFragments extends BaseFragment implements PostListView {
         postsAdapter = new PostsAdapter(posts, getContext()) {
 
             @Override
-            public void onImageClick(View v, int position, int pos) {
-                startPicViewerActivity(posts.get(position).getFiles(), pos);
+            public void onThumbnailClick(int position, ArrayList<File> files) {
+                super.onThumbnailClick(position, files);
+                startPicViewerActivity(files, position);
             }
 
             @Override

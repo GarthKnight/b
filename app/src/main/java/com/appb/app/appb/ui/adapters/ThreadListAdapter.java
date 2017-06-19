@@ -25,13 +25,9 @@ import butterknife.BindView;
 public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter.VHThread> {
 
     ArrayList<Thread> threads;
-    ThumbnailsAdapter thumbnailsAdapter;
-    Context context;
 
-    public ThreadListAdapter(ArrayList<Thread> threads, Context context) {
+    public ThreadListAdapter(ArrayList<Thread> threads) {
         this.threads = threads;
-        this.context = context;
-
     }
 
     @Override
@@ -53,12 +49,6 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
         holder.tvCommentThread.setText(comment);
         holder.tvThreadCounter.setText("#" + position);
 
-
-        ArrayList<File> files = threads.get(position).getPosts().get(0).getFiles();
-
-        thumbnailsAdapter = new ThumbnailsAdapter(files);
-        holder.rvThumbnails.setAdapter(thumbnailsAdapter);
-        holder.rvThumbnails.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
     }
 
 
@@ -66,6 +56,8 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
     public ArrayList<File> getFiles(int pos) {
         return threads.get(pos).getPosts().get(0).getFiles();
     }
+
+
 
     public void onCommentClick(View v, int pos) {
 
@@ -87,8 +79,7 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
         TextView tvCommentThread;
         @BindView(R.id.tvThreadCounter)
         TextView tvThreadCounter;
-        @BindView(R.id.rvThumbnails)
-        RecyclerView rvThumbnails;
+
 
 
         public VHThread(View v) {

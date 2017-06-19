@@ -100,10 +100,12 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
     }
 
     private void initAdapter() {
-        threadListAdapter = new ThreadListAdapter(threads, getContext()) {
+        threadListAdapter = new ThreadListAdapter(threads) {
+
             @Override
-            public void onImageClick(View v, int position, int pos) {
-                openPicViewerActivity(getFirstPostForThread(position).getFiles(), pos);
+            public void onThumbnailClick(int position, ArrayList<File> files) {
+                super.onThumbnailClick(position, files);
+                openPicViewerActivity(files, position);
             }
 
             //может быть тебе пора?
