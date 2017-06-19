@@ -130,12 +130,9 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
 
     public void loadThreadsRX(){
         mIsLoadingData = true;
-        currentPage++;
         presenter.getThreads(currentPage);
 
-        if (threads.size() == THREAD_MAX_COUNT) {
-            hasNextPage = true;
-        }
+
 
     }
 
@@ -166,10 +163,13 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
     
     @Override
     public void onThreadsLoaded(ArrayList<Thread> _threads) {
-        threads.clear();
+        mIsLoadingData = false;
         threads.addAll(_threads);
         threadListAdapter.notifyDataSetChanged();
-        mIsLoadingData = false;
+        currentPage++;
+        if (threads.size() == THREAD_MAX_COUNT) {
+            hasNextPage = true;
+        }
     }
 
     @Override
