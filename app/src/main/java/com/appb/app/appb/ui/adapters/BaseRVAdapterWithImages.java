@@ -23,7 +23,7 @@ import static android.view.View.VISIBLE;
 public abstract class BaseRVAdapterWithImages<VH extends VHImages> extends RecyclerView.Adapter<VH> {
 
     static final String NUMBER_SYMBOL = "№";
-    ThumbnailsAdapter thumbnailsAdapter;
+    private ThumbnailsAdapter thumbnailsAdapter;
 
 
     @Override
@@ -33,25 +33,25 @@ public abstract class BaseRVAdapterWithImages<VH extends VHImages> extends Recyc
 
     @Override
     public void onBindViewHolder(VH vh, int position) {
-        VHImages holder = ((VHImages) vh);
         ArrayList<File> files = getFiles(position);
 
         if (files.size() > 0){
-            holder.rvThumbnails.setVisibility(VISIBLE);
+            vh.rvThumbnails.setVisibility(VISIBLE);
         } else {
-            holder.rvThumbnails.setVisibility(GONE);
+            vh.rvThumbnails.setVisibility(GONE);
         }
 
-        Context context = holder.rvThumbnails.getContext();
-        thumbnailsAdapter = new ThumbnailsAdapter(getFiles(position)){
+        Context context = vh.rvThumbnails.getContext();
+        thumbnailsAdapter = new ThumbnailsAdapter(getFiles(vh.getAdapterPosition())){
             @Override
             public void onPictureClick(int position) {
                 super.onPictureClick(position);
                 onThumbnailClick(position, files);
             }
         };
-        holder.rvThumbnails.setAdapter(thumbnailsAdapter);
-        holder.rvThumbnails.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        vh.rvThumbnails.setAdapter(thumbnailsAdapter);
+        vh.rvThumbnails.setLayoutManager(new LinearLayoutManager(context,
+                LinearLayoutManager.HORIZONTAL, false));
 
     }
 

@@ -40,7 +40,7 @@ public class PostListFragments extends BaseFragment implements PostListView {
 
     private PostsAdapter postsAdapter;
     private ArrayList<Post> posts = new ArrayList<>();
-    public HashMap<Integer, Integer> answers;
+    public HashMap<Integer, ArrayList<Integer>> answers;
 
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
@@ -90,7 +90,7 @@ public class PostListFragments extends BaseFragment implements PostListView {
     }
 
     public void initAdapter() {
-        postsAdapter = new PostsAdapter(posts, getContext()) {
+        postsAdapter = new PostsAdapter(posts, answers) {
 
             @Override
             public void onThumbnailClick(int position, ArrayList<File> files) {
@@ -100,12 +100,7 @@ public class PostListFragments extends BaseFragment implements PostListView {
 
             @Override
             public void onAnswerClick(ArrayList<Post> postsAnswer, int index) {
-                AnswerDialog answerDialog = new AnswerDialog((getContext()), postsAnswer, index) {
-                    @Override
-                    public void onItemClick(View v, int position, int pos) {
-                        startPicViewerActivity(posts.get(position).getFiles(), pos);
-                    }
-                };
+                AnswerDialog answerDialog = new AnswerDialog((getContext()), postsAnswer, index);
                 answerDialog.show();
             }
         };
@@ -135,7 +130,7 @@ public class PostListFragments extends BaseFragment implements PostListView {
     }
 
     @Override
-    public void getAnswers(HashMap<Integer, Integer> _answers) {
+    public void getAnswers(HashMap<Integer, ArrayList<Integer>> _answers) {
         answers = _answers;
     }
 

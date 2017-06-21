@@ -1,7 +1,5 @@
 package com.appb.app.appb.ui.adapters;
 
-import android.content.Context;
-import android.content.Intent;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,19 +12,17 @@ import com.appb.app.appb.R;
 import com.appb.app.appb.custom.TextViewWithClickableSpan;
 import com.appb.app.appb.data.File;
 import com.appb.app.appb.data.Post;
-import com.appb.app.appb.ui.activities.PicViewerActivity;
 import com.appb.app.appb.ui.dialogs.AnswerDialog;
 import com.appb.app.appb.ui.dialogs.AnswersForPostDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
-import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
 
 /**
  * Created by 1 on 31.03.2017.
@@ -35,14 +31,14 @@ import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
 public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
 
     private ArrayList<Post> posts;
-    private String answers = "";
+    private String answersText = "";
     private static final String ARROWS = ">>";
-    Context context;
+    HashMap<Integer, ArrayList<Integer>> answers;
 
 
-    public PostsAdapter(ArrayList<Post> posts, Context context) {
+    protected PostsAdapter(ArrayList<Post> posts, HashMap<Integer, ArrayList<Integer>> answers) {
         this.posts = posts;
-        this.context = context;
+        this.answers = answers;
     }
 
     @Override
@@ -55,7 +51,8 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
     public void onBindViewHolder(VHPost vh, int position) {
         super.onBindViewHolder(vh, position);
 
-        answers = "";
+        answersText = "";
+        vh.tvAnswers.setVisibility(VISIBLE);
 
         String postText = posts.get(position).getComment();
         if (TextUtils.isEmpty(postText)) {
@@ -84,6 +81,40 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
 
     }
 
+    private void setAnswers(TextViewWithClickableSpan tvAnswers, int position) {
+
+        ArrayList<Integer> realAnswers = answers.get(posts.get(position).getNum());
+
+        if (realAnswers.size() > 0) {
+            tvAnswers.setVisibility(VISIBLE);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(answersText);
+            for (int i = 0; i < realAnswers.size(); i++) {
+                stringBuilder.append(ARROWS).append(realAnswers.get(i))
+                        .append(i == realAnswers.size() - 1 ? "" : ", ");
+            }
+            answersText = stringBuilder.toString();
+            tvAnswers.setSpannableText(answersText);
+
+            tvAnswers.setLinkClickListener(number -> {
+                for (int i = 0; i < posts.size(); i++) {
+                    if (posts.get(i).getNum() == number) {
+                        new AnswerDialog(tvAnswers.getContext(), posts, i).show();
+                        break;
+                    }
+                }
+
+            });
+
+        }
+
+
+    }
+
+    public void onPictureClick(int position, ArrayList<File> files) {
+
+    }
+//
 //    private void checkAnswers(TextViewWithClickableSpan tvAnswers, int position) {
 //        final ArrayList<Integer> realPosts = getRealPostsFromAnswers(position);
 //        if (realPosts.size() != 0) {
@@ -104,14 +135,14 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
 //
 //        tvAnswers.setVisibility(VISIBLE);
 //        StringBuilder stringBuilder = new StringBuilder();
-//        stringBuilder.append(answers);
+//        stringBuilder.append(answersText);
 //        for (int i = 0; i < realPosts.size(); i++) {
 //
 //            stringBuilder.append(ARROWS).append(posts.get(realPosts.get(i)).getNum())
 //                    .append(i == realPosts.size() - 1 ? "" : ", ");
 //        }
-//        answers = stringBuilder.toString();
-//        tvAnswers.setSpannableText(answers);
+//        answersText = stringBuilder.toString();
+//        tvAnswers.setSpannableText(answersText);
 //
 //
 //        tvAnswers.setLinkClickListener(new TextViewWithClickableSpan.LinkClickListener() {
@@ -183,7 +214,7 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
         return posts.get(pos).getFiles();
     }
 
-    public class VHPost extends VHImages {
+    class VHPost extends VHImages {
 
         @BindView(R.id.tvCommentDate)
         TextView tvCommentDate;
@@ -196,7 +227,7 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
         @BindView(R.id.tvPosition)
         TextView tvPosition;
 
-        public VHPost(View v) {
+        VHPost(View v) {
             super(v);
             ButterKnife.bind(this, v);
         }

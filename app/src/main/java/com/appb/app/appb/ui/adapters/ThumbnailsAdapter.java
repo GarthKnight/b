@@ -41,12 +41,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.VH
         String path = API.URL + files.get(position).getThumbnail();
         Context context = holder.ivThumbnail.getContext();
         Glide.with(context).load(path).asBitmap().into(holder.ivThumbnail);
-        holder.ivThumbnail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPictureClick(position);
-            }
-        });
+        holder.ivThumbnail.setOnClickListener(v -> onPictureClick(position));
     }
 
     public void onPictureClick(int position){

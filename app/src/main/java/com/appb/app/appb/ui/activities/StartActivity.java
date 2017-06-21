@@ -1,5 +1,7 @@
 package com.appb.app.appb.ui.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +16,7 @@ import android.view.View;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.data.Board;
+import com.appb.app.appb.data.File;
 import com.appb.app.appb.mvp.presenters.BoardsListPresenter;
 import com.appb.app.appb.mvp.views.BoardlistView;
 import com.appb.app.appb.ui.adapters.BoardListAdapter;
@@ -23,6 +26,9 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+
+import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
+import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
 
 public class StartActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, BoardlistView {
@@ -147,5 +153,12 @@ public class StartActivity extends BaseActivity
     public void onError(String error) {
         log("onFailure: " + error);
 
+    }
+
+    public static void openImages(Context c, ArrayList<File> files, int pos) {
+        Intent intent = new Intent(c, PicViewerActivity.class);
+        intent.putExtra(FILES, files);
+        intent.putExtra(POS, pos);
+        c.startActivity(intent);
     }
 }

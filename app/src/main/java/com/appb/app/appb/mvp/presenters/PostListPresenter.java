@@ -62,7 +62,7 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
         setAnswers()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<HashMap<Integer, Integer>>() {
+                .subscribe(new Observer<HashMap<Integer, ArrayList<Integer>>>() {
                     @Override
                     public void onCompleted() {
 
@@ -74,20 +74,23 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
                     }
 
                     @Override
-                    public void onNext(HashMap<Integer, Integer> _answers) {
+                    public void onNext(HashMap<Integer, ArrayList<Integer>> _answers) {
                         getViewState().getAnswers(_answers);
                     }
                 });
     }
 
-    public Observable<HashMap<Integer,Integer>> setAnswers(){
+    private Observable<HashMap<Integer,ArrayList<Integer>>> setAnswers(){
         return Observable.create(subscriber -> new Thread(() -> {
 
-            HashMap<Integer, Integer> answers;
+            HashMap<Integer, ArrayList<Integer>> answers;
 
             answers = new HashMap<>();
 
+
             for (int i = 0; i < posts.size(); i++) {
+
+                ArrayList<Integer> postNumbers = new ArrayList<>();
 
                 for (int j = 0; j < posts.size(); j++) {
 
@@ -95,15 +98,18 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
                     String number = String.valueOf(posts.get(i).getNum());
 
                     if (comment.contains(number)) {
-
-                        answers.put(posts.get(i).getNum(), posts.get(j).getNum());
+                        postNumbers.add(Integer.valueOf(number));
                     }
 
                 }
 
+                if (postNumbers.size() > 0){
+                    answers.put(posts.get(i).getNum(), postNumbers);
+                }
             }
 
             subscriber.onNext(answers);
+
         }));
     }
 }
