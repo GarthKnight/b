@@ -36,7 +36,7 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.VH> 
     @Override
     public void onBindViewHolder(VH holder, int position) {
         holder.tvBoardName.setText(boards.get(position).getName());
-        holder.tvBoardName.setOnClickListener(v -> onBoardClick(boards.get(position).getName()));
+        holder.tvBoardName.setOnClickListener(v -> onBoardClick(boards.get(position).getId()));
     }
 
     public void onBoardClick(String board){}
