@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.data.Board;
@@ -75,12 +74,13 @@ public class StartActivity extends BaseActivity
 
     private void initRV(ArrayList<Board> different) {
         rvBoard.setLayoutManager(new LinearLayoutManager(this));
-        boardListAdapter = new BoardListAdapter(different, new View.OnClickListener() {
+        boardListAdapter = new BoardListAdapter(different){
             @Override
-            public void onClick(View v) {
-                addFragment(new ThreadListFragment(), true);
+            public void onBoardClick(String board) {
+                super.onBoardClick(board);
+               addFragment(ThreadListFragment.create(board), true);
             }
-        });
+        };
         rvBoard.setAdapter(boardListAdapter);
     }
 

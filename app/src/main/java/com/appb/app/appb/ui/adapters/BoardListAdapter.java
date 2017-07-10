@@ -21,25 +21,25 @@ import butterknife.ButterKnife;
 public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.VH> {
 
     private ArrayList<Board> boards;
-    private View.OnClickListener threadOnClickListener;
 
 
-    public BoardListAdapter(ArrayList<Board> boards, View.OnClickListener threadOnClickListener){
+    public BoardListAdapter(ArrayList<Board> boards){
         this.boards = boards;
-        this.threadOnClickListener = threadOnClickListener;
     }
 
     @Override
     public BoardListAdapter.VH onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_board, parent, false);
-        v.setOnClickListener(threadOnClickListener);
         return new VH(v);
     }
 
     @Override
     public void onBindViewHolder(VH holder, int position) {
         holder.tvBoardName.setText(boards.get(position).getName());
+        holder.tvBoardName.setOnClickListener(v -> onBoardClick(boards.get(position).getName()));
     }
+
+    public void onBoardClick(String board){}
 
     @Override
     public int getItemCount() {

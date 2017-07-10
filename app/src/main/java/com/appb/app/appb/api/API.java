@@ -64,26 +64,15 @@ public class API {
 
     }
 
-    public void getLists(Callback<Boards> callback) {
-        serviceBoards.boards().enqueue(callback);
-    }
 
-    public void getThreads(int index, Callback<BoardPage> callback) {
-        String page = index == 1 ? "index" : String.valueOf(index);
-        serviceBoards.threads(page).enqueue(callback);
-    }
-
-    public void getPosts(String boardName, int threadNumber, int pathNum, Callback<ArrayList<Post>> callback) {
-        serviceBoards.posts("get_thread", boardName, threadNumber, pathNum).enqueue(callback);
-    }
 
     public Observable<Boards> getBoardsRX() {
         return serviceBoards.boardsRX();
     }
 
-    public Observable<BoardPage> getThreadsRX(int index) {
+    public Observable<BoardPage> getThreadsRX(int index, String board) {
         String page = index == 1 ? "index" : String.valueOf(index);
-        return serviceBoards.threadsRX(page);
+        return serviceBoards.threadsRX(board, page);
     }
 
     public Observable<ArrayList<Post>> getPostsRX(String boardName, int threadNumber, int pathNum) {
@@ -93,22 +82,10 @@ public class API {
 
 
     public interface DvachService {
-        @GET("makaba/mobile.fcgi?task=get_boards")
-        Call<Boards> boards();
 
-        @GET("b/{index}.json")
-        Call<BoardPage> threads(@Path("index") String index);
-
-        @GET("/makaba/mobile.fcgi")
-        Call<ArrayList<Post>> posts(@Query("task") String thread,
-                                    @Query("board") String boardName,
-                                    @Query("thread") int threadNumber,
-                                    @Query("post") int pathNum);
-
-
-
-        @GET("b/{index}.json")
-        Observable<BoardPage> threadsRX(@Path("index") String index);
+        @GET("{board}/{index}.json")
+        Observable<BoardPage> threadsRX(@Path("board") String board,
+                                        @Path("index") String index);
 
         @GET("makaba/mobile.fcgi?task=get_boards")
         Observable<Boards> boardsRX();

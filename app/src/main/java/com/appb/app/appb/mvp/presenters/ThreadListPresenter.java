@@ -19,10 +19,10 @@ public class ThreadListPresenter extends MvpPresenter<ThreadListView> {
 
 
 
-    public void getThreads(int currentPage) {
+    public void getThreads(int currentPage, String board) {
 
 
-        API.getInstance().getThreadsRX(currentPage)
+        API.getInstance().getThreadsRX(currentPage, board)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<BoardPage>() {

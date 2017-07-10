@@ -28,9 +28,7 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
 
     private ArrayList<Post> posts;
 
-    public void getPosts(int threadNumber) {
-
-        String board = "b";
+    public void getPosts(int threadNumber, String board) {
 
         API.getInstance()
                 .getPostsRX(board, threadNumber, FIRST)

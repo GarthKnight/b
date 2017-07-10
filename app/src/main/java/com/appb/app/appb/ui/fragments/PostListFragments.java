@@ -37,6 +37,7 @@ public class PostListFragments extends BaseFragment implements PostListView {
 
     private static final String POSTS = "posts";
     private static final String THREAD_NUMBER = "num";
+    private static final String BOARD = "board";
 
     private PostsAdapter postsAdapter;
     private ArrayList<Post> posts = new ArrayList<>();
@@ -82,7 +83,8 @@ public class PostListFragments extends BaseFragment implements PostListView {
 
     private void loadPosts() {
         int threadNumber = getArguments().getInt(THREAD_NUMBER);
-        presenter.getPosts(threadNumber);
+        String board = getArguments().getString(BOARD);
+        presenter.getPosts(threadNumber, board);
     }
 
     private void getAnswers() {
@@ -121,9 +123,10 @@ public class PostListFragments extends BaseFragment implements PostListView {
         outState.putParcelableArrayList(POSTS, posts);
     }
 
-    public static PostListFragments newInstance(int num) {
+    public static PostListFragments create(int num, String board) {
         Bundle args = new Bundle();
         args.putInt(THREAD_NUMBER, num);
+        args.putString(BOARD, board);
         PostListFragments fragment = new PostListFragments();
         fragment.setArguments(args);
         return fragment;

@@ -8,12 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.api.API;
-import com.appb.app.appb.data.BoardPage;
 import com.appb.app.appb.data.File;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.data.Thread;
@@ -26,13 +23,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import rx.Observer;
-import rx.Scheduler;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
 import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
@@ -46,8 +36,10 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
     private static final String THREADS = "threads";
     private static final int FIRST = 0;
     private static final int THREAD_MAX_COUNT = 22;
+    private static final String BOARD = "board";
 
     private int currentPage = 1;
+    private String board = "b";
     private boolean mIsLoadingData = false;
     private boolean hasNextPage;
 
@@ -63,9 +55,19 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
     @InjectPresenter
     ThreadListPresenter presenter;
 
+
+    public static ThreadListFragment create(String board) {
+        Bundle args = new Bundle();
+        args.putString(BOARD, board);
+        ThreadListFragment fragment = new ThreadListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        board = getArguments().getString(BOARD);
         if (savedInstanceState != null) {
             threads = savedInstanceState.getParcelableArrayList(THREADS);
         }
@@ -111,7 +113,7 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
             //может быть тебе пора?
             @Override
             public void onCommentClick(View v, int pos) {
-                showFragment(PostListFragments.newInstance(getFirstPostForThread(pos).getNum()), true);
+                showFragment(PostListFragments.create(getFirstPostForThread(pos).getNum(), board), true);
             }
         };
         rvThreads.setAdapter(threadListAdapter);
@@ -130,7 +132,7 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
 
     public void loadThreadsRX(){
         mIsLoadingData = true;
-        presenter.getThreads(currentPage);
+        presenter.getThreads(currentPage, board);
 
 
 

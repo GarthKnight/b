@@ -31,4 +31,8 @@ public class Board {
     public String getName() {
         return name;
     }
+    public String getId() {
+        return id;
+    }
+
 }
