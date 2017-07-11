@@ -36,6 +36,7 @@ public class StartActivity extends BaseActivity
     RecyclerView rvBoard;
     BoardListAdapter boardListAdapter;
     ArrayList<Board> boards = new ArrayList<>();
+    ArrayList<String> boardsNames = new ArrayList<>();
 
     @InjectPresenter
     BoardsListPresenter presenter;
@@ -65,6 +66,7 @@ public class StartActivity extends BaseActivity
         if (boards.size() == 0){
             loadBoardsRX();
         }
+        getBoardsNames();
     }
 
     private void loadBoardsRX(){
@@ -82,6 +84,10 @@ public class StartActivity extends BaseActivity
             }
         };
         rvBoard.setAdapter(boardListAdapter);
+    }
+
+    public void getBoardsNames(){
+        presenter.getBoardsNames();
     }
 
 
@@ -147,6 +153,11 @@ public class StartActivity extends BaseActivity
     public void onBoardsLoaded(ArrayList<Board> _boards) {
         boards = _boards;
         initRV(boards);
+    }
+
+    @Override
+    public void getBoardsNames(ArrayList<String> _boardsNames) {
+        boardsNames = _boardsNames;
     }
 
     @Override

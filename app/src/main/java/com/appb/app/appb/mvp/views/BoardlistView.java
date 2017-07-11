@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public interface BoardlistView extends MvpView {
 
     void onBoardsLoaded(ArrayList<Board> boards);
-
+    void getBoardsNames(ArrayList<String> boardsNames);
     void  onError(String error);
 
 }

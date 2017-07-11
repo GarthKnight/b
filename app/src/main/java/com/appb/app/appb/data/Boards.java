@@ -19,14 +19,6 @@ public class Boards {
         return different;
     }
 
-    public ArrayList<Board> getBordsByIndex(){
-        ArrayList<Board> newBoards = new ArrayList<>();
-        for (int i = 0; i < different.size(); i++){
-            if (different.get(i).id.toLowerCase().contains(B) ){
-                newBoards.add(different.get(i));
-            }
-        }
-        return newBoards;
-    }
+
 
 }
