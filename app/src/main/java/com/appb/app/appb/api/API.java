@@ -1,5 +1,6 @@
 package com.appb.app.appb.api;
 
+import com.appb.app.appb.data.Board;
 import com.appb.app.appb.data.BoardPage;
 import com.appb.app.appb.data.Boards;
 import com.appb.app.appb.data.Post;
@@ -10,8 +11,6 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -66,8 +65,13 @@ public class API {
 
 
 
-    public Observable<Boards> getBoardsRX() {
-        return serviceBoards.boardsRX();
+    public Observable<ArrayList<Board>> getBoards() {
+        return serviceBoards.boards();
+    }
+
+
+    public Observable<Boards> getDifferentBoardsRX() {
+        return serviceBoards.differentBoardsRX();
     }
 
     public Observable<BoardPage> getThreadsRX(int index, String board) {
@@ -83,12 +87,15 @@ public class API {
 
     public interface DvachService {
 
+        @GET("/boards.json")
+        Observable<ArrayList<Board>> boards();
+
         @GET("{board}/{index}.json")
         Observable<BoardPage> threadsRX(@Path("board") String board,
                                         @Path("index") String index);
 
         @GET("makaba/mobile.fcgi?task=get_boards")
-        Observable<Boards> boardsRX();
+        Observable<Boards> differentBoardsRX();
 
         @GET("/makaba/mobile.fcgi")
         Observable<ArrayList<Post>> postsRX(@Query("task") String thread,

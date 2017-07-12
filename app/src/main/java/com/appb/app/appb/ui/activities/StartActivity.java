@@ -150,7 +150,7 @@ public class StartActivity extends BaseActivity
     }
 
     @Override
-    public void onBoardsLoaded(ArrayList<Board> _boards) {
+    public void onDifferentBoardsLoaded(ArrayList<Board> _boards) {
         boards = _boards;
         initRV(boards);
     }

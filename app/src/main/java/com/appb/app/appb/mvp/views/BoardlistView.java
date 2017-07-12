@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public interface BoardlistView extends MvpView {
 
+    void onDifferentBoardsLoaded(ArrayList<Board> boards);
     void onBoardsLoaded(ArrayList<Board> boards);
     void getBoardsNames(ArrayList<String> boardsNames);
     void  onError(String error);

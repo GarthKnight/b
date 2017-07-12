@@ -20,11 +20,35 @@ import rx.schedulers.Schedulers;
 @InjectViewState
 public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
 
-    ArrayList<Board> boards = new ArrayList<>();
+    private ArrayList<Board> differentBoards = new ArrayList<>();
+    private ArrayList<Board> boards = new ArrayList<>();
 
     public void getBoards(){
+
         API.getInstance()
-                .getBoardsRX()
+                .getBoards()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ArrayList<Board>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(ArrayList<Board> _boards) {
+                        boards = _boards;
+                        getViewState().onBoardsLoaded(boards);
+                    }
+                });
+
+        API.getInstance()
+                .getDifferentBoardsRX()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Boards>() {
@@ -40,15 +64,15 @@ public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
 
                     @Override
                     public void onNext(Boards _boards) {
-                        boards = _boards.getDifferent();
-                        getViewState().onBoardsLoaded(boards);
+                        differentBoards = _boards.getDifferent();
+                        getViewState().onDifferentBoardsLoaded(differentBoards);
                     }
                 });
     }
 
     public void getBoardsNames(){
         ArrayList<String> boardsNames = new ArrayList<>();
-        for (Board board : boards){
+        for (Board board : differentBoards){
             boardsNames.add(board.getId());
         }
         getViewState().getBoardsNames(boardsNames);
