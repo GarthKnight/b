@@ -34,6 +34,12 @@ public class StartActivity extends BaseActivity
 
     @BindView(R.id.rvBoards)
     RecyclerView rvBoard;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
     BoardListAdapter boardListAdapter;
     ArrayList<Board> boards = new ArrayList<>();
     ArrayList<String> boardsNames = new ArrayList<>();
@@ -45,18 +51,11 @@ public class StartActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        log("Start Activity onCreate");
         bindUI(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -153,6 +152,11 @@ public class StartActivity extends BaseActivity
     public void onDifferentBoardsLoaded(ArrayList<Board> _boards) {
         boards = _boards;
         initRV(boards);
+    }
+
+    @Override
+    public void onBoardsLoaded(ArrayList<Board> boards) {
+
     }
 
     @Override
