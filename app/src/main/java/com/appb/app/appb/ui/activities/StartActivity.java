@@ -1,51 +1,30 @@
 package com.appb.app.appb.ui.activities;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.data.Board;
-import com.appb.app.appb.data.File;
-import com.appb.app.appb.mvp.presenters.BoardsListPresenter;
-import com.appb.app.appb.mvp.views.BoardlistView;
-import com.appb.app.appb.ui.adapters.BoardListAdapter;
-import com.appb.app.appb.ui.fragments.ThreadListFragment;
-import com.arellomobile.mvp.presenter.InjectPresenter;
-
-import java.util.ArrayList;
+import com.appb.app.appb.ui.fragments.BoardsCategoriesListFragment;
+import com.appb.app.appb.ui.fragments.BoardsPagerFragment;
 
 import butterknife.BindView;
 
-import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
-import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
-
 public class StartActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, BoardlistView {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-    @BindView(R.id.rvBoards)
-    RecyclerView rvBoard;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
-    BoardListAdapter boardListAdapter;
-    ArrayList<Board> boards = new ArrayList<>();
-    ArrayList<String> boardsNames = new ArrayList<>();
 
-    @InjectPresenter
-    BoardsListPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,36 +36,7 @@ public class StartActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-    }
-
-
-    @Override
-    public void init() {
-        if (boards.size() == 0){
-            loadBoardsRX();
-        }
-        getBoardsNames();
-    }
-
-    private void loadBoardsRX(){
-        presenter.getBoards();
-    }
-
-
-    private void initRV(ArrayList<Board> different) {
-        rvBoard.setLayoutManager(new LinearLayoutManager(this));
-        boardListAdapter = new BoardListAdapter(different){
-            @Override
-            public void onBoardClick(String board) {
-                super.onBoardClick(board);
-               addFragment(ThreadListFragment.create(board), true);
-            }
-        };
-        rvBoard.setAdapter(boardListAdapter);
-    }
-
-    public void getBoardsNames(){
-        presenter.getBoardsNames();
+        addFragment(new BoardsPagerFragment(), false);
     }
 
 
@@ -148,32 +98,4 @@ public class StartActivity extends BaseActivity
 
     }
 
-    @Override
-    public void onDifferentBoardsLoaded(ArrayList<Board> _boards) {
-        boards = _boards;
-        initRV(boards);
-    }
-
-    @Override
-    public void onBoardsLoaded(ArrayList<Board> boards) {
-
-    }
-
-    @Override
-    public void getBoardsNames(ArrayList<String> _boardsNames) {
-        boardsNames = _boardsNames;
-    }
-
-    @Override
-    public void onError(String error) {
-        log("onFailure: " + error);
-
-    }
-
-    public static void openImages(Context c, ArrayList<File> files, int pos) {
-        Intent intent = new Intent(c, PicViewerActivity.class);
-        intent.putExtra(FILES, files);
-        intent.putExtra(POS, pos);
-        c.startActivity(intent);
-    }
 }

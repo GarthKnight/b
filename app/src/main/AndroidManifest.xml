@@ -12,36 +12,35 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activities.StartActivity"
+            android:configChanges="orientation"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation">
-
-        </activity>
-
-        <activity
-            android:name=".ui.activities.BoardsPagerActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation">
-
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.activities.BoardsPagerActivity"
+            android:configChanges="orientation"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+
 
         </activity>
 
-        <activity android:name=".ui.activities.PicViewerActivity"
+        <activity
+            android:name=".ui.activities.PicViewerActivity"
+            android:configChanges="orientation|screenSize"
             android:parentActivityName=".ui.activities.StartActivity"
-            android:theme="@style/Theme.Swipe.Back"
-            android:configChanges="orientation|screenSize">
+            android:theme="@style/Theme.Swipe.Back">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.StartActivity" />
         </activity>
-
 
 
     </application>
