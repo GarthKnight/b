@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.appb.app.appb.R;
+import com.appb.app.appb.ui.activities.BaseActivity;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 
 import butterknife.ButterKnife;
@@ -43,11 +44,7 @@ public class BaseFragment extends MvpAppCompatFragment {
     }
 
     public void showFragment(Fragment fragment, boolean addToBack) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
-        transaction.replace(R.id.container, fragment);
-        if (addToBack) transaction.addToBackStack(null);
-        transaction.commitAllowingStateLoss();
+        ((BaseActivity) getActivity()).showFragment(fragment, addToBack);
     }
 
     public void log(String log) {

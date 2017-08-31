@@ -11,4 +11,11 @@
     <color name="black_p50">#7f000000</color>
     <color name="black_overlay">#66000000</color>
     <color name="colorVideoAccent">#f98b01</color>
+
+    <color name="mainGray">#f7f7f7</color>
+    <color name="subGray">#727272</color>
+    <color name="lightGray">#A5A5A5</color>
+    <color name="white">#ffffff</color>
+
+
 </resources>

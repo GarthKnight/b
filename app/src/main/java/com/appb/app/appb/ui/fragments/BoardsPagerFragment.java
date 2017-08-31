@@ -37,6 +37,8 @@ public class BoardsPagerFragment extends BaseFragment {
     @Override
     public void init() {
         vpBoards.setAdapter(new BoardsPagerAdapter(getChildFragmentManager(), new String[]{"Мои доски", "Мои категории"}));
+        vpBoards.setPageMargin(6);
+        vpBoards.setPageMarginDrawable(getResources().getDrawable(R.color.subGray));
         tabView.setupWithViewPager(vpBoards);
     }
 }
