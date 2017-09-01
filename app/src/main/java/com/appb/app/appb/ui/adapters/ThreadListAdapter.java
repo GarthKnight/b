@@ -24,9 +24,9 @@ import butterknife.BindView;
 
 public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter.VHThread> {
 
-    ArrayList<Thread> threads;
+    private ArrayList<Thread> threads;
 
-    public ThreadListAdapter(ArrayList<Thread> threads) {
+    protected ThreadListAdapter(ArrayList<Thread> threads) {
         this.threads = threads;
     }
 
@@ -51,17 +51,12 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
 
     }
 
-
     @Override
     public ArrayList<File> getFiles(int pos) {
         return threads.get(pos).getPosts().get(0).getFiles();
     }
 
-
-
-    public void onCommentClick(View v, int pos) {
-
-    }
+    public void onCommentClick(View v, int pos) {}
 
     @Override
     public int getItemCount() {
@@ -69,7 +64,7 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
     }
 
 
-    public class VHThread extends VHImages {
+    class VHThread extends VHImages {
 
         @BindView(R.id.tvDateThread)
         TextView tvDateThread;
@@ -80,9 +75,7 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
         @BindView(R.id.tvThreadCounter)
         TextView tvThreadCounter;
 
-
-
-        public VHThread(View v) {
+        VHThread(View v) {
             super(v);
         }
     }

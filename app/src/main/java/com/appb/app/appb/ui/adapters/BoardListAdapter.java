@@ -23,7 +23,7 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.VH> 
     private ArrayList<Board> boards;
 
 
-    public BoardListAdapter(ArrayList<Board> boards){
+    protected BoardListAdapter(ArrayList<Board> boards){
         this.boards = boards;
     }
 
@@ -46,11 +46,11 @@ public class BoardListAdapter extends RecyclerView.Adapter<BoardListAdapter.VH> 
         return boards.size();
     }
 
-    public class VH extends RecyclerView.ViewHolder {
+    class VH extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tvBoardName) TextView tvBoardName;
 
-        public VH(View v) {
+        VH(View v) {
             super(v);
             ButterKnife.bind(this, v);
         }

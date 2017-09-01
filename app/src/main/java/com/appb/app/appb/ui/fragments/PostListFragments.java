@@ -1,5 +1,6 @@
 package com.appb.app.appb.ui.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.data.File;
@@ -45,6 +47,8 @@ public class PostListFragments extends BaseFragment implements PostListView {
 
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
+    @BindView(R.id.pbPosts)
+    ProgressBar pbPosts;
 
     @InjectPresenter
     PostListPresenter presenter;
@@ -142,6 +146,7 @@ public class PostListFragments extends BaseFragment implements PostListView {
         posts.clear();
         posts.addAll(_posts);
         postsAdapter.notifyDataSetChanged();
+        pbPosts.setVisibility(View.GONE);
     }
 
     @Override

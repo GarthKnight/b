@@ -2,8 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/grayBack">
+    android:background="@drawable/white_rect_with_grey_border"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    >
 
     <TextView
         android:id="@+id/tvCommentDate"
@@ -32,7 +35,7 @@
         android:layout_marginTop="12dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/right_thread"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:text="№000000000"
         android:textColor="@color/colorPrimary"
         />
@@ -76,14 +79,6 @@
         android:textSize="14sp"
         android:textColor="@color/colorPrimary"
         />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:src="@color/gray"
-        android:layout_below="@+id/tvAnswers"
-        android:layout_marginTop="10dp"/>
-
 
 
 
