@@ -11,13 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.data.Board;
+import com.appb.app.appb.data.Category;
+import com.appb.app.appb.data.Data;
 import com.appb.app.appb.data.File;
-import com.appb.app.appb.mvp.presenters.BoardsListPresenter;
-import com.appb.app.appb.mvp.views.BoardlistView;
 import com.appb.app.appb.ui.activities.PicViewerActivity;
-import com.appb.app.appb.ui.adapters.BoardListAdapter;
-import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.appb.app.appb.ui.adapters.ListAdapter;
 
 import java.util.ArrayList;
 
@@ -30,80 +28,37 @@ import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
  * Created by seishu on 15.07.17.
  */
 
-public class BoardsCategoriesListFragment extends BaseFragment implements BoardlistView {
+public class BoardsCategoriesListFragment extends BaseFragment {
 
-    @BindView(R.id.rvBoards)
-    RecyclerView rvBoard;
+    @BindView(R.id.rvList)
+    RecyclerView rvList;
 
-    BoardListAdapter boardListAdapter;
-    ArrayList<Board> boards = new ArrayList<>();
-    ArrayList<String> boardsNames = new ArrayList<>();
-
-    @InjectPresenter
-    BoardsListPresenter presenter;
+    ListAdapter adapter;
+    ArrayList<Category> categories = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_list, container, false);
         bindUI(v);
-        return v;    }
+        return v;
+    }
 
     @Override
     public void init() {
-        if (boards.size() == 0){
-            loadBoardsRX();
-        }
-        getBoardsNames();
+        categories = Data.getInstance().getCategories();
+        initRV();
     }
 
-    private void loadBoardsRX(){
-        presenter.getBoards();
-    }
-
-
-    private void initRV(ArrayList<Board> different) {
-        rvBoard.setLayoutManager(new LinearLayoutManager(getContext()));
-        boardListAdapter = new BoardListAdapter(different){
+    private void initRV() {
+        rvList.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new ListAdapter<Category>(categories) {
             @Override
-            public void onBoardClick(String board) {
-                super.onBoardClick(board);
-                showFragment(ThreadListFragment.create(board), true);
+            public void onItemClick(int pos) {
+                super.onItemClick(pos);
+                showFragment(BoardsListFragment.create(categories.get(pos).getBoards()), true);
             }
         };
-        rvBoard.setAdapter(boardListAdapter);
-    }
-
-    public void getBoardsNames(){
-        presenter.getBoardsNames();
-    }
-
-    @Override
-    public void onDifferentBoardsLoaded(ArrayList<Board> _boards) {
-        boards = _boards;
-        initRV(boards);
-    }
-
-    @Override
-    public void onBoardsLoaded(ArrayList<Board> boards) {
-
-    }
-
-    @Override
-    public void getBoardsNames(ArrayList<String> _boardsNames) {
-        boardsNames = _boardsNames;
-    }
-
-    @Override
-    public void onError(String error) {
-        log("onFailure: " + error);
-
-    }
-
-    public static void openImages(Context c, ArrayList<File> files, int pos) {
-        Intent intent = new Intent(c, PicViewerActivity.class);
-        intent.putExtra(FILES, files);
-        intent.putExtra(POS, pos);
-        c.startActivity(intent);
+        rvList.setAdapter(adapter);
     }
 }

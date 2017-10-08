@@ -2,6 +2,7 @@ package com.appb.app.appb.mvp.views;
 
 import com.appb.app.appb.data.Board;
 import com.appb.app.appb.data.Boards;
+import com.appb.app.appb.data.Category;
 import com.arellomobile.mvp.MvpView;
 
 import java.util.ArrayList;
@@ -11,10 +12,6 @@ import java.util.ArrayList;
  */
 
 public interface BoardlistView extends MvpView {
-
-    void onDifferentBoardsLoaded(ArrayList<Board> boards);
-    void onBoardsLoaded(ArrayList<Board> boards);
-    void getBoardsNames(ArrayList<String> boardsNames);
     void  onError(String error);
 
 }

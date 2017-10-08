@@ -22,12 +22,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.activities.BoardsPagerActivity"
-            android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+
 
         <activity
             android:name=".ui.activities.PicViewerActivity"

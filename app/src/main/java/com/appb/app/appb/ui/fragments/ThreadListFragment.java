@@ -36,10 +36,10 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
     private static final String THREADS = "threads";
     private static final int FIRST = 0;
     private static final int THREAD_MAX_COUNT = 22;
-    private static final String BOARD = "board";
+    private static final String BOARD_NAME = "boardName";
 
     private int currentPage = 1;
-    private String board = "b";
+    private String boardName = "b";
     private boolean mIsLoadingData = false;
     private boolean hasNextPage;
 
@@ -56,9 +56,9 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
     ThreadListPresenter presenter;
 
 
-    public static ThreadListFragment create(String board) {
+    public static ThreadListFragment create(String boardName) {
         Bundle args = new Bundle();
-        args.putString(BOARD, board);
+        args.putString(BOARD_NAME, boardName);
         ThreadListFragment fragment = new ThreadListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -67,7 +67,7 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        board = getArguments().getString(BOARD);
+        boardName = getArguments().getString(BOARD_NAME);
         if (savedInstanceState != null) {
             threads = savedInstanceState.getParcelableArrayList(THREADS);
         }
@@ -113,7 +113,7 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
             //может быть тебе пора?
             @Override
             public void onCommentClick(View v, int pos) {
-                showFragment(PostListFragments.create(getFirstPostForThread(pos).getNum(), board), true);
+                showFragment(PostListFragments.create(getFirstPostForThread(pos).getNum(), boardName), true);
             }
         };
         rvThreads.setAdapter(threadListAdapter);
@@ -132,7 +132,7 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
 
     public void loadThreadsRX(){
         mIsLoadingData = true;
-        presenter.getThreads(currentPage, board);
+        presenter.getThreads(currentPage, boardName);
 
 
 

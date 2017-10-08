@@ -1,7 +1,5 @@
 package com.appb.app.appb.ui.fragments;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,35 +10,41 @@ import android.view.ViewGroup;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.data.Board;
-import com.appb.app.appb.data.File;
-import com.appb.app.appb.mvp.presenters.BoardsListPresenter;
-import com.appb.app.appb.mvp.views.BoardlistView;
-import com.appb.app.appb.ui.activities.PicViewerActivity;
-import com.appb.app.appb.ui.adapters.BoardListAdapter;
-import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.appb.app.appb.ui.adapters.ListAdapter;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 
-import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
-import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
-
 /**
  * Created by seishu on 15.07.17.
  */
 
-public class BoardsListFragment extends BaseFragment implements BoardlistView {
+public class BoardsListFragment extends BaseFragment {
 
-    @BindView(R.id.rvBoards)
+    private static final String BOARDS = "boards";
+    @BindView(R.id.rvList)
     RecyclerView rvBoard;
 
-    BoardListAdapter boardListAdapter;
+    ListAdapter boardListAdapter;
     ArrayList<Board> boards = new ArrayList<>();
-    ArrayList<String> boardsNames = new ArrayList<>();
 
-    @InjectPresenter
-    BoardsListPresenter presenter;
+    public static BoardsListFragment create(ArrayList<Board> boards) {
+
+        Bundle args = new Bundle();
+        args.putParcelable(BOARDS, Parcels.wrap(boards));
+        BoardsListFragment fragment = new BoardsListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        boards = Parcels.unwrap(getArguments().getParcelable(BOARDS));
+    }
 
     @Nullable
     @Override
@@ -52,58 +56,23 @@ public class BoardsListFragment extends BaseFragment implements BoardlistView {
     @Override
     public void init() {
         if (boards.size() == 0){
-            loadBoardsRX();
+
         }
-        getBoardsNames();
+        initRV();
+
     }
 
-    private void loadBoardsRX(){
-        presenter.getBoards();
-    }
-
-
-    private void initRV(ArrayList<Board> different) {
+    private void initRV() {
         rvBoard.setLayoutManager(new LinearLayoutManager(getContext()));
-        boardListAdapter = new BoardListAdapter(different){
+        boardListAdapter = new ListAdapter<Board>(boards){
             @Override
-            public void onBoardClick(String board) {
-                super.onBoardClick(board);
-                showFragment(ThreadListFragment.create(board), true);
+            public void onItemClick(int pos) {
+                super.onItemClick(pos);
+                showFragment(ThreadListFragment.create(boards.get(pos).getName()), true);
             }
         };
         rvBoard.setAdapter(boardListAdapter);
     }
 
-    public void getBoardsNames(){
-        presenter.getBoardsNames();
-    }
 
-    @Override
-    public void onDifferentBoardsLoaded(ArrayList<Board> _boards) {
-        boards = _boards;
-        initRV(boards);
-    }
-
-    @Override
-    public void onBoardsLoaded(ArrayList<Board> boards) {
-
-    }
-
-    @Override
-    public void getBoardsNames(ArrayList<String> _boardsNames) {
-        boardsNames = _boardsNames;
-    }
-
-    @Override
-    public void onError(String error) {
-        log("onFailure: " + error);
-
-    }
-
-    public static void openImages(Context c, ArrayList<File> files, int pos) {
-        Intent intent = new Intent(c, PicViewerActivity.class);
-        intent.putExtra(FILES, files);
-        intent.putExtra(POS, pos);
-        c.startActivity(intent);
-    }
 }

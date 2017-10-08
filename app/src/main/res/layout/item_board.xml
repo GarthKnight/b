@@ -6,7 +6,7 @@
     android:background="@color/white">
 
     <TextView
-        android:id="@+id/tvBoardName"
+        android:id="@+id/tvName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -18,7 +18,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_below="@+id/tvBoardName"
+        android:layout_below="@+id/tvName"
         android:src="@color/subGray" />
 
 </RelativeLayout>

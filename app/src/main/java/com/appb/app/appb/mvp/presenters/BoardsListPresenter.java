@@ -3,11 +3,14 @@ package com.appb.app.appb.mvp.presenters;
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Board;
 import com.appb.app.appb.data.Boards;
+import com.appb.app.appb.data.Category;
+import com.appb.app.appb.data.Data;
 import com.appb.app.appb.mvp.views.BoardlistView;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -20,10 +23,9 @@ import rx.schedulers.Schedulers;
 @InjectViewState
 public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
 
-    private ArrayList<Board> differentBoards = new ArrayList<>();
-    private ArrayList<Board> boards = new ArrayList<>();
+    private ArrayList<Category> categories = new ArrayList<>();
 
-    public void getBoards(){
+    public void getData() {
 
         API.getInstance()
                 .getBoards()
@@ -41,40 +43,26 @@ public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
                     }
 
                     @Override
-                    public void onNext(ArrayList<Board> _boards) {
-                        boards = _boards;
-                        getViewState().onBoardsLoaded(boards);
-                    }
-                });
-
-        API.getInstance()
-                .getDifferentBoardsRX()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Boards>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getViewState().onError(e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(Boards _boards) {
-                        differentBoards = _boards.getDifferent();
-                        getViewState().onDifferentBoardsLoaded(differentBoards);
+                    public void onNext(ArrayList<Board> boards) {
+                        Data.getInstance().setBoards(boards);
+                        Data.getInstance().setCategories(getCategories(boards));
                     }
                 });
     }
 
-    public void getBoardsNames(){
-        ArrayList<String> boardsNames = new ArrayList<>();
-        for (Board board : differentBoards){
-            boardsNames.add(board.getId());
+    public ArrayList<Category> getCategories(ArrayList<Board> boards) {
+        boards.forEach(this::addBoardsToCategory);
+        return categories;
+    }
+
+    private void addBoardsToCategory(Board board) {
+        for (Category category : categories) {
+            if (Objects.equals(category.getItemName(), board.getCategoryName())) {
+                category.getBoards().add(board);
+            }
         }
-        getViewState().getBoardsNames(boardsNames);
+        ArrayList<Board> boards = new ArrayList<>();
+        boards.add(board);
+        categories.add(new Category(board.getCategoryName(), boards));
     }
 }
