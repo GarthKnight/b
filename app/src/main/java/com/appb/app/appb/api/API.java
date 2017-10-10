@@ -65,7 +65,7 @@ public class API {
 
 
 
-    public Observable<ArrayList<Board>> getBoards() {
+    public Observable<Boards> getBoards() {
         return serviceBoards.boards();
     }
 
@@ -88,7 +88,7 @@ public class API {
     public interface DvachService {
 
         @GET("/boards.json")
-        Observable<ArrayList<Board>> boards();
+        Observable<Boards> boards();
 
         @GET("{board}/{index}.json")
         Observable<BoardPage> threadsRX(@Path("board") String board,

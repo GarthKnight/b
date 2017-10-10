@@ -33,10 +33,11 @@ public class ListAdapter<T extends ListAdapterItem> extends RecyclerView.Adapter
     }
 
     @Override
-    public void onBindViewHolder(VH holder, int position) {
+    public void onBindViewHolder(ListAdapter.VH holder, int position) {
         holder.tvName.setText(boards.get(position).getItemName());
         holder.tvName.setOnClickListener(v -> onItemClick(position));
     }
+
 
     public void onItemClick(int position){}
 
@@ -46,7 +47,7 @@ public class ListAdapter<T extends ListAdapterItem> extends RecyclerView.Adapter
         return boards.size();
     }
 
-    class VH extends RecyclerView.ViewHolder {
+    static class VH extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tvName) TextView tvName;
 

@@ -1,6 +1,9 @@
 package com.appb.app.appb.data;
 
+import com.appb.app.appb.PrefUtils;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by seishu on 08.10.2017.
@@ -35,6 +38,20 @@ public class Data {
         this.categories = categories;
     }
 
+    public ArrayList<Board> getMyBoards(){
 
+        ArrayList<Board> myBoards = new ArrayList<>();
+        HashSet<String> boardIds = PrefUtils.getMyBoards();
+
+        for (String id : boardIds) {
+            for (Board board : boards) {
+                if (board.getId().equals(id)) {
+                    myBoards.add(board);
+                }
+            }
+        }
+
+        return myBoards;
+    }
 
 }

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.ui.fragments.BoardsCategoriesListFragment;
 import com.appb.app.appb.ui.fragments.BoardsPagerFragment;
 
 import butterknife.BindView;
@@ -28,7 +26,7 @@ public class StartActivity extends BaseActivity
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
-    @BindView(R.id.ibMenu)
+    @BindView(R.id.btnMenu)
     ImageButton ibMenu;
 
 
@@ -50,7 +48,7 @@ public class StartActivity extends BaseActivity
         }
     }
 
-    @OnClick(R.id.ibMenu)
+    @OnClick(R.id.btnMenu)
     public void onMenu(View v) {
         drawer.openDrawer(Gravity.LEFT, true);
     }

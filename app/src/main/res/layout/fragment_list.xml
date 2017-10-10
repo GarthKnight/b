@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ui.activities.StartActivity"
-    tools:showIn="@layout/app_bar_start"
+    tools:showIn="@layout/toolbar"
     android:background="@color/grayBack">
 
     <android.support.v7.widget.RecyclerView
@@ -16,5 +16,6 @@
         android:layout_height="match_parent"
         android:id="@+id/rvList"
         android:background="@color/grayBack"/>
+
 
 </RelativeLayout>

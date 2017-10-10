@@ -130,4 +130,5 @@ public class BaseActivity extends MvpAppCompatActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
+
 }

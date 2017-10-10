@@ -33,36 +33,40 @@
 
 
                 <ImageButton
-                    android:id="@+id/ibMenu"
+                    android:id="@+id/btnMenu"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
-                    android:src="@drawable/ic_menu"
                     android:background="@color/tranparent"
-                    android:layout_centerVertical="true" />
+                    android:src="@drawable/ic_menu" />
 
                 <TextView
                     android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textColor="@color/white"
                     android:layout_marginLeft="72dp"
                     android:gravity="center_vertical"
+                    android:text="@string/boards"
+                    android:textColor="@color/white"
                     android:textSize="21sp"
-                    android:textStyle="bold"
-                    android:text="@string/boards"/>
+                    android:textStyle="bold" />
+
+                <ToggleButton
+                    android:id="@+id/btnStar"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="12dp"
+                    android:background="@drawable/star_toggle_drawable"
+                    android:textOff=""
+                    android:textOn=""
+                    />
 
             </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
-
-    <!--<RelativeLayout-->
-    <!--android:id="@+id/container"-->
-    <!--android:layout_below="@+id/toolbarLayout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"/>-->
-
-
 </RelativeLayout>

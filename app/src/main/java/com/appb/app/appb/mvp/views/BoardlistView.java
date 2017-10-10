@@ -13,5 +13,6 @@ import java.util.ArrayList;
 
 public interface BoardlistView extends MvpView {
     void  onError(String error);
+    void onDataLoaded();
 
 }

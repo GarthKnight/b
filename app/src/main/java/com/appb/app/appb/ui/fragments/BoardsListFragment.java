@@ -68,7 +68,7 @@ public class BoardsListFragment extends BaseFragment {
             @Override
             public void onItemClick(int pos) {
                 super.onItemClick(pos);
-                showFragment(ThreadListFragment.create(boards.get(pos).getName()), true);
+                showFragment(ThreadListFragment.create(boards.get(pos).getId()), true);
             }
         };
         rvBoard.setAdapter(boardListAdapter);

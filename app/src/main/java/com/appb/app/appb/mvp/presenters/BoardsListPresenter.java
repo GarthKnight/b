@@ -31,7 +31,7 @@ public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
                 .getBoards()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ArrayList<Board>>() {
+                .subscribe(new Observer<Boards>() {
                     @Override
                     public void onCompleted() {
 
@@ -39,19 +39,23 @@ public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        getViewState().onError(e.getMessage());
                     }
 
                     @Override
-                    public void onNext(ArrayList<Board> boards) {
-                        Data.getInstance().setBoards(boards);
-                        Data.getInstance().setCategories(getCategories(boards));
+                    public void onNext(Boards boards) {
+                        Data.getInstance().setBoards(boards.getBoards());
+                        Data.getInstance().setCategories(getCategories(boards.getBoards()));
+                        getViewState().onDataLoaded();
                     }
                 });
     }
 
     public ArrayList<Category> getCategories(ArrayList<Board> boards) {
-        boards.forEach(this::addBoardsToCategory);
+        for (Board board : boards){
+            addBoardsToCategory(board);
+        }
+//        boards.forEach(this::addBoardsToCategory);
         return categories;
     }
 

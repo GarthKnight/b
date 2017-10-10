@@ -9,8 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.ToggleButton;
 
+import com.appb.app.appb.PrefUtils;
 import com.appb.app.appb.R;
+import com.appb.app.appb.data.Board;
 import com.appb.app.appb.data.File;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.data.Thread;
@@ -21,8 +24,10 @@ import com.appb.app.appb.ui.adapters.ThreadListAdapter;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
 import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
@@ -81,6 +86,19 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
         return v;
     }
 
+    @OnClick(R.id.btnStar)
+    public void onStarClick(View v) {
+        HashSet<String> set = PrefUtils.getMyBoards();
+        if (((ToggleButton) v).isChecked()) {
+            set.add(boardName);
+            PrefUtils.setMyBoards(set);
+        } else {
+            set.remove(boardName);
+            PrefUtils.setMyBoards(set);
+        }
+
+    }
+
     @Override
     public void init() {
         initAdapter();
@@ -91,7 +109,6 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
         }
 
     }
-
 
 
     public void initRV() {
@@ -130,12 +147,9 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
         return threads.get(position).getPosts().get(FIRST);
     }
 
-    public void loadThreadsRX(){
+    public void loadThreadsRX() {
         mIsLoadingData = true;
         presenter.getThreads(currentPage, boardName);
-
-
-
     }
 
     private RecyclerView.OnScrollListener listScrollListener = new RecyclerView.OnScrollListener() {
@@ -162,7 +176,7 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
 
         }
     };
-    
+
     @Override
     public void onThreadsLoaded(ArrayList<Thread> _threads) {
         mIsLoadingData = false;

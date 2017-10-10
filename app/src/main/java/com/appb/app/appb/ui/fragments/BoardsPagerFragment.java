@@ -44,14 +44,18 @@ public class BoardsPagerFragment extends BaseFragment implements BoardlistView {
     @Override
     public void init() {
         presenter.getData();
-        vpBoards.setAdapter(new BoardsPagerAdapter(getChildFragmentManager(), new String[]{"Мои доски", "Мои категории"}));
-        vpBoards.setPageMargin(6);
-        vpBoards.setPageMarginDrawable(getResources().getDrawable(R.color.subGray));
-        tabView.setupWithViewPager(vpBoards);
     }
 
     @Override
     public void onError(String error) {
         Log.d(TAG, "onError: " + error);
+    }
+
+    @Override
+    public void onDataLoaded() {
+        vpBoards.setAdapter(new BoardsPagerAdapter(getChildFragmentManager(), new String[]{"Мои доски", "Мои категории"}));
+        vpBoards.setPageMargin(6);
+        vpBoards.setPageMarginDrawable(getResources().getDrawable(R.color.subGray));
+        tabView.setupWithViewPager(vpBoards);
     }
 }

@@ -10,15 +10,10 @@ import java.util.ArrayList;
 
 public class Boards {
 
-    private static final String B = "b";
+    private ArrayList<Board> boards;
 
-    @SerializedName("Разное")
-    private ArrayList<Board> different;
-
-    public ArrayList<Board> getDifferent() {
-        return different;
+    public ArrayList<Board> getBoards() {
+        return boards;
     }
-
-
 
 }
