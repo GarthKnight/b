@@ -1,5 +1,8 @@
 package com.appb.app.appb.ui.adapters;
 
+import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -21,11 +24,10 @@ import butterknife.BindView;
 
 public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter.VHThread> {
 
-    ArrayList<Thread> threads;
+    private ArrayList<Thread> threads;
 
-    public ThreadListAdapter(ArrayList<Thread> threads) {
+    protected ThreadListAdapter(ArrayList<Thread> threads) {
         this.threads = threads;
-
     }
 
     @Override
@@ -36,20 +38,17 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
 
     @Override
     public void onBindViewHolder(final VHThread holder, int position) {
+        super.onBindViewHolder(holder, position);
         String threadNumber = String.format("%s%s", NUMBER_SYMBOL,
                 threads.get(position).getPosts().get(0).getNum());
 
         Spanned comment = Html.fromHtml(threads.get(position).getPosts().get(0).getComment());
-        holder.tvCommentThread.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCommentClick(v, holder.getAdapterPosition());
-            }
-        });
+        holder.tvCommentThread.setOnClickListener(v -> onCommentClick(v, holder.getAdapterPosition()));
         holder.tvDateThread.setText(threads.get(position).getPosts().get(0).getDate());
         holder.tvThreadNumber.setText(threadNumber);
         holder.tvCommentThread.setText(comment);
         holder.tvThreadCounter.setText("#" + position);
+
     }
 
     @Override
@@ -57,9 +56,7 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
         return threads.get(pos).getPosts().get(0).getFiles();
     }
 
-    public void onCommentClick(View v, int pos) {
-
-    }
+    public void onCommentClick(View v, int pos) {}
 
     @Override
     public int getItemCount() {
@@ -67,7 +64,7 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
     }
 
 
-    public class VHThread extends VHImages {
+    class VHThread extends VHImages {
 
         @BindView(R.id.tvDateThread)
         TextView tvDateThread;
@@ -78,8 +75,7 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
         @BindView(R.id.tvThreadCounter)
         TextView tvThreadCounter;
 
-
-        public VHThread(View v) {
+        VHThread(View v) {
             super(v);
         }
     }

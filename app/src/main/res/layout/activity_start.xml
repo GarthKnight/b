@@ -9,10 +9,25 @@
     tools:openDrawer="start"
     android:background="@color/grayBack">
 
-    <include
-        layout="@layout/app_bar_start"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        >
+
+        <include
+            android:id="@+id/toolbarLayout"
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:id="@+id/container"
+            android:layout_below="@+id/toolbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </RelativeLayout>
+
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

@@ -64,27 +64,26 @@ public class AnswersForPostDialog extends Dialog {
         }
         answers = stringBuilder.toString();
         clickableTextView.setSpannableText(answers);
-        clickableTextView.setLinkClickListener(new TextViewWithClickableSpan.LinkClickListener() {
-            @Override
-            public void onLinkClick(int number) {
+        clickableTextView.setLinkClickListener(number -> {
 
-                int tmp = -1;
+            int tmp = -1;
 
-                for (int i = 0; i < posts.size(); i++) {
-                    if (posts.get(i).getNum() == number) {
-                        tmp = i;
-                    }
+            for (int i = 0; i < posts.size(); i++) {
+                if (posts.get(i).getNum() == number) {
+                    tmp = i;
                 }
+            }
 
-                if (tmp != -1) {
-                    AnswerDialog answerDialog = new AnswerDialog(getContext(), posts, tmp){
-                        @Override
-                        public void onItemClick(View v, int position, int pos) {
-                            startPicViewerActivity(position, pos);
-                        }
-                    };
-                    answerDialog.show();
-                }
+            if (tmp != -1) {
+                AnswerDialog answerDialog = new AnswerDialog(getContext(), posts, tmp)
+//                {
+//                    @Override
+//                    public void onItemClick(View v, int position, int pos) {
+//                        startPicViewerActivity(position, pos);
+//                    }
+//                }
+                ;
+                answerDialog.show();
             }
         });
     }

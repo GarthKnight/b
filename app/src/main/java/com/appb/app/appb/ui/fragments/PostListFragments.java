@@ -1,5 +1,6 @@
 package com.appb.app.appb.ui.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,21 +9,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.File;
 import com.appb.app.appb.data.Post;
+import com.appb.app.appb.mvp.presenters.PostListPresenter;
+import com.appb.app.appb.mvp.views.PostListView;
 import com.appb.app.appb.ui.activities.PicViewerActivity;
 import com.appb.app.appb.ui.adapters.PostsAdapter;
 import com.appb.app.appb.ui.dialogs.AnswerDialog;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.Observable;
+import rx.Subscriber;
 
 import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
 import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
@@ -31,20 +35,29 @@ import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
  * Created by 1 on 20.03.2017.
  */
 
-public class PostListFragments extends BaseFragment {
+public class PostListFragments extends BaseFragment implements PostListView {
 
     private static final String POSTS = "posts";
     private static final String THREAD_NUMBER = "num";
-    private static final int FIRST = 1;
-
-    @BindView(R.id.rvPosts) RecyclerView rvPosts;
+    private static final String BOARD = "board";
 
     private PostsAdapter postsAdapter;
     private ArrayList<Post> posts = new ArrayList<>();
+    public HashMap<Integer, ArrayList<Integer>> answers;
+
+    @BindView(R.id.rvPosts)
+    RecyclerView rvPosts;
+    @BindView(R.id.pbPosts)
+    ProgressBar pbPosts;
+
+    @InjectPresenter
+    PostListPresenter presenter;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (savedInstanceState != null) {
             posts = savedInstanceState.getParcelableArrayList(POSTS);
         }
@@ -62,49 +75,42 @@ public class PostListFragments extends BaseFragment {
     public void init() {
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         initAdapter();
+
         if (posts.size() == 0) {
             loadPosts();
         }
 
+        getAnswers();
+
     }
+
 
     private void loadPosts() {
-        String board = "b";
         int threadNumber = getArguments().getInt(THREAD_NUMBER);
-        API.getInstance().getPosts(board, threadNumber, FIRST, new Callback<ArrayList<Post>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Post>> call, Response<ArrayList<Post>> response) {
-                posts.addAll(response.body());
-                postsAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<Post>> call, Throwable t) {
-                showError(t.getMessage());
-            }
-        });
-
+        String board = getArguments().getString(BOARD);
+        presenter.getPosts(threadNumber, board);
     }
 
+    private void getAnswers() {
+        presenter.getAnswers();
+    }
 
     public void initAdapter() {
-        postsAdapter = new PostsAdapter(posts) {
+        postsAdapter = new PostsAdapter(posts, answers) {
+
             @Override
-            public void onImageClick(View v, int position, int pos) {
-                startPicViewerActivity(posts.get(position).getFiles(), pos);
+            public void onThumbnailClick(int position, ArrayList<File> files) {
+                super.onThumbnailClick(position, files);
+                startPicViewerActivity(files, position);
             }
 
             @Override
             public void onAnswerClick(ArrayList<Post> postsAnswer, int index) {
-                AnswerDialog answerDialog = new AnswerDialog((getContext()), postsAnswer, index) {
-                    @Override
-                    public void onItemClick(View v, int position, int pos) {
-                        startPicViewerActivity(posts.get(position).getFiles(), pos);
-                    }
-                };
+                AnswerDialog answerDialog = new AnswerDialog((getContext()), postsAnswer, index);
                 answerDialog.show();
             }
         };
+
         rvPosts.setAdapter(postsAdapter);
     }
 
@@ -121,12 +127,41 @@ public class PostListFragments extends BaseFragment {
         outState.putParcelableArrayList(POSTS, posts);
     }
 
-    public static PostListFragments newInstance(int num) {
+    public static PostListFragments create(int num, String board) {
         Bundle args = new Bundle();
         args.putInt(THREAD_NUMBER, num);
+        args.putString(BOARD, board);
         PostListFragments fragment = new PostListFragments();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void getAnswers(HashMap<Integer, ArrayList<Integer>> _answers) {
+        answers = _answers;
+    }
+
+    @Override
+    public void onPostsLoaded(ArrayList<Post> _posts) {
+        posts.clear();
+        posts.addAll(_posts);
+        postsAdapter.notifyDataSetChanged();
+        pbPosts.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onError(String error) {
+        //// TODO: 28.05.17
+    }
+
+    @Override
+    public void onLoadingEnd() {
+        //progressBar.setVisible(false);
+    }
+
+    @Override
+    public void onLoadingStart() {
+
     }
 }
 

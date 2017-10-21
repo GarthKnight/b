@@ -1,6 +1,9 @@
 package com.appb.app.appb.data;
 
+import com.appb.app.appb.ui.adapters.ListAdapterItem;
 import com.google.gson.annotations.SerializedName;
+
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -8,11 +11,12 @@ import java.util.Objects;
 /**
  * Created by 1 on 06.03.2017.
  */
-
-public class Board {
+@Parcel
+public class Board implements ListAdapterItem {
     @SerializedName("bump_limit")
     int bumpLimit;
-    String category;
+    @SerializedName("category")
+    String categoryName;
     @SerializedName("default_name")
     String defaultName;
     String id;
@@ -30,5 +34,17 @@ public class Board {
 
     public String getName() {
         return name;
+    }
+    public String getId() {
+        return id;
+    }
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+
+    @Override
+    public String getItemName() {
+        return getName();
     }
 }

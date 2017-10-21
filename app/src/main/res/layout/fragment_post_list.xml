@@ -5,12 +5,14 @@
     android:background="@color/grayBack">
 
     <ProgressBar
+        android:id="@+id/pbPosts"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@color/grayBack"
         android:layout_centerInParent="true"/>
 
     <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/rvPosts"

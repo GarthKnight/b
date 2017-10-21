@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.appb.app.appb.R;
+import com.appb.app.appb.ui.activities.BaseActivity;
+import com.arellomobile.mvp.MvpAppCompatFragment;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -16,7 +18,7 @@ import butterknife.Unbinder;
  * Created by 1 on 06.03.2017.
  */
 
-public class BaseFragment extends Fragment {
+public class BaseFragment extends MvpAppCompatFragment {
 
     private Unbinder unbinder;
 
@@ -42,11 +44,7 @@ public class BaseFragment extends Fragment {
     }
 
     public void showFragment(Fragment fragment, boolean addToBack) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
-        transaction.replace(R.id.container, fragment);
-        if (addToBack) transaction.addToBackStack(null);
-        transaction.commitAllowingStateLoss();
+        ((BaseActivity) getActivity()).showFragment(fragment, addToBack);
     }
 
     public void log(String log) {

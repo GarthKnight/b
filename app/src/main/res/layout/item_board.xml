@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/grayBack">
+    android:background="@color/white">
 
     <TextView
+        android:id="@+id/tvName"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:id="@+id/tvBoardName"
-        android:text="доска"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:paddingLeft="20dp"
-        android:textSize="24dp"
+        android:padding="16dp"
+        android:text="доска"
         android:textColor="@color/black"
-        />
+        android:textSize="21dp" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:src="@color/gray"
-        android:layout_below="@+id/tvBoardName"/>
+        android:layout_below="@+id/tvName"
+        android:src="@color/subGray" />
 
 </RelativeLayout>

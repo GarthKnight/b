@@ -10,23 +10,10 @@ import java.util.ArrayList;
 
 public class Boards {
 
-    private static final String B = "b";
+    private ArrayList<Board> boards;
 
-    @SerializedName("Разное")
-    private ArrayList<Board> different;
-
-    public ArrayList<Board> getDifferent() {
-        return different;
-    }
-
-    public ArrayList<Board> getBordsByIndex(){
-        ArrayList<Board> newBoards = new ArrayList<>();
-        for (int i = 0; i < different.size(); i++){
-            if (different.get(i).id.toLowerCase().contains(B) ){
-                newBoards.add(different.get(i));
-            }
-        }
-        return newBoards;
+    public ArrayList<Board> getBoards() {
+        return boards;
     }
 
 }
