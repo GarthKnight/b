@@ -1,4 +1,4 @@
-package com.appb.app.appb.ui.fragments;
+package com.appb.app.appb.ui.fragments.borads;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,23 +9,29 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.data.Category;
-import com.appb.app.appb.data.Data;
 import com.appb.app.appb.ui.adapters.ListAdapter;
+import com.appb.app.appb.ui.adapters.ListAdapterItem;
+import com.appb.app.appb.ui.fragments.BaseFragment;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 
 /**
- * Created by seishu on 15.07.17.
+ * Created by seishu on 17.10.2017.
  */
 
-public class CategoriesListFragment extends BaseFragment {
+public abstract class BaseBoardListFragment<T extends ListAdapterItem> extends BaseFragment {
+    public static final String EXTRAS_BOARD_ID = "boardId";
 
-    @BindView(R.id.rvList)
-    RecyclerView rvList;
-    ListAdapter rvAdapter;
+    @BindView(R.id.rvList) RecyclerView rvBoard;
+
+    ListAdapter<T> rvAdapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
@@ -41,22 +47,26 @@ public class CategoriesListFragment extends BaseFragment {
     }
 
     private void initRV() {
-        rvList.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvAdapter = new ListAdapter<Category>(getCategories()) {
+        rvBoard.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvAdapter = new ListAdapter<T>(getArray()) {
             @Override
             public void onItemClick(int pos) {
                 super.onItemClick(pos);
-                showFragment(BoardsByCategoriesListFragment.create(getCategories().get(pos).getName()), true);
+                BaseBoardListFragment.this.onItemClick(pos);
             }
         };
-        rvList.setAdapter(rvAdapter);
+        rvBoard.setAdapter(rvAdapter);
     }
 
-    public void notifyDataSetChanged(){
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
         rvAdapter.notifyDataSetChanged();
     }
 
-    private ArrayList<Category> getCategories() {
-        return Data.getInstance().getCategories();
-    }
+    public abstract ArrayList<T> getArray();
+
+    public abstract void onItemClick(int pos);
 }

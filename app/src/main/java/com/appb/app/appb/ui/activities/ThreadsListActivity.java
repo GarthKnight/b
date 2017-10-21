@@ -9,8 +9,9 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.ToggleButton;
 
-import com.appb.app.appb.PrefUtils;
+import com.appb.app.appb.utils.PrefUtils;
 import com.appb.app.appb.R;
+import com.appb.app.appb.data.Data;
 import com.appb.app.appb.data.File;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.data.Thread;
@@ -158,6 +159,7 @@ public class ThreadsListActivity extends BaseActivity implements ThreadListView 
             set.remove(boardId);
             PrefUtils.setMyBoards(set);
         }
+        Data.getInstance().syncFavouritesWithPreference();
 
     }
 

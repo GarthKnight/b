@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.ui.fragments.BoardsTabFragment;
+import com.appb.app.appb.ui.fragments.borads.BoardsTabFragment;
 
 import butterknife.BindView;
 import butterknife.OnClick;

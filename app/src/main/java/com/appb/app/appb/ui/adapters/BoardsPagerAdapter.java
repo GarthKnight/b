@@ -5,10 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.ui.fragments.CategoriesListFragment;
-import com.appb.app.appb.ui.fragments.MyFavoritesBoardsListFragment;
-
-import rx.Observable;
+import com.appb.app.appb.ui.fragments.borads.CategoriesListFragment;
+import com.appb.app.appb.ui.fragments.borads.MyFavoritesBoardsListFragment;
 
 /**
  * Created by Logvinov.sv on 14.07.2017.

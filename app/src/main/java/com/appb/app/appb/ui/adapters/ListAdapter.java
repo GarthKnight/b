@@ -19,11 +19,11 @@ import butterknife.ButterKnife;
 
 public class ListAdapter<T extends ListAdapterItem> extends RecyclerView.Adapter<ListAdapter.VH> {
 
-    private ArrayList<T> boards;
+    private ArrayList<T> items;
 
 
-    protected ListAdapter(ArrayList<T> boards){
-        this.boards = boards;
+    protected ListAdapter(ArrayList<T> items){
+        this.items = items;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ListAdapter<T extends ListAdapterItem> extends RecyclerView.Adapter
 
     @Override
     public void onBindViewHolder(ListAdapter.VH holder, int position) {
-        holder.tvName.setText(boards.get(position).getItemName());
+        holder.tvName.setText(items.get(position).getItemName());
         holder.tvName.setOnClickListener(v -> onItemClick(position));
     }
 
@@ -44,7 +44,7 @@ public class ListAdapter<T extends ListAdapterItem> extends RecyclerView.Adapter
 
     @Override
     public int getItemCount() {
-        return boards.size();
+        return items.size();
     }
 
     static class VH extends RecyclerView.ViewHolder {

@@ -1,7 +1,6 @@
 package com.appb.app.appb.mvp.presenters;
 
 import com.appb.app.appb.api.API;
-import com.appb.app.appb.data.Board;
 import com.appb.app.appb.data.Boards;
 import com.appb.app.appb.data.Category;
 import com.appb.app.appb.data.Data;
@@ -10,7 +9,6 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -44,8 +42,7 @@ public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
 
                         @Override
                         public void onNext(Boards boards) {
-                            Data.getInstance().setBoards(boards.getBoards());
-                            Data.getInstance().setCategories(getCategories(boards.getBoards()));
+                            Data.getInstance().setAllBoardsData(boards.getBoards());
                             getViewState().onDataLoaded();
                         }
                     });
@@ -55,23 +52,5 @@ public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
 
     }
 
-    public ArrayList<Category> getCategories(ArrayList<Board> boards) {
-        for (Board board : boards){
-            addBoardsToCategory(board);
-        }
-        return categories;
-    }
 
-    private void addBoardsToCategory(Board board) {
-        for (Category category : categories) {
-
-            if (Objects.equals(category.getItemName(), board.getCategoryName())) {
-                category.getBoards().add(board);
-                return;
-            }
-        }
-        ArrayList<Board> boards = new ArrayList<>();
-        boards.add(board);
-        categories.add(new Category(board.getCategoryName(), boards));
-    }
 }

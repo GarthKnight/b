@@ -1,9 +1,11 @@
-package com.appb.app.appb.ui.fragments;
+package com.appb.app.appb.ui.fragments.borads;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.appb.app.appb.data.Board;
 import com.appb.app.appb.data.Data;
+import com.appb.app.appb.ui.activities.ThreadsListActivity;
 
 import java.util.ArrayList;
 
@@ -11,7 +13,9 @@ import java.util.ArrayList;
  * Created by seishu on 17.10.2017.
  */
 
-public class BoardsByCategoriesListFragment extends BaseBoardListFragment{
+public class BoardsByCategoriesListFragment extends BaseBoardListFragment<Board> {
+
+
 
     private static final String CATEGORY_NAME = "categoryName";
     private String categoryName;
@@ -26,9 +30,19 @@ public class BoardsByCategoriesListFragment extends BaseBoardListFragment{
 
 
     @Override
-    public ArrayList<Board> getBoards() {
+    public ArrayList<Board> getArray() {
         categoryName = getArguments().getString(CATEGORY_NAME);
         return Data.getInstance().getBoardsByCategory(categoryName);
     }
 
+    @Override
+    public void onItemClick(int pos) {
+        openThreadsListActivity(getArray().get(pos).getId());
+    }
+
+    private void openThreadsListActivity(String boardId) {
+        Intent intent = new Intent(getContext(), ThreadsListActivity.class);
+        intent.putExtra(EXTRAS_BOARD_ID, boardId);
+        startActivity(intent);
+    }
 }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 @Parcel
 public class Boards {
 
-    private ArrayList<Board> boards;
+    ArrayList<Board> boards;
 
     public ArrayList<Board> getBoards() {
         return boards;

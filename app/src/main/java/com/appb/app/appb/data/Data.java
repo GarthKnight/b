@@ -1,10 +1,10 @@
 package com.appb.app.appb.data;
 
-import com.appb.app.appb.PrefUtils;
-import com.appb.app.appb.ui.fragments.BaseBoardListFragment;
+import com.appb.app.appb.utils.PrefUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * Created by seishu on 08.10.2017.
@@ -21,6 +21,7 @@ public class Data {
     }
 
      private ArrayList<Board> boards = new ArrayList<>();
+     private ArrayList<Board> myBoards = new ArrayList<>();
      private ArrayList<Category> categories = new ArrayList<>();
 
     public ArrayList<Board> getBoards() {
@@ -57,9 +58,16 @@ public class Data {
         return boards;
     }
 
-    public ArrayList<Board> getMyBoards(){
+    public ArrayList<Board> getMyBoards() {
+        if (myBoards == null || myBoards.isEmpty()) {
+            syncFavouritesWithPreference();
+        }
+        return myBoards;
+    }
 
-        ArrayList<Board> myBoards = new ArrayList<>();
+    public void syncFavouritesWithPreference(){
+        if (myBoards == null) myBoards = new ArrayList<>();
+        myBoards.clear();
         HashSet<String> boardIds = PrefUtils.getMyBoards();
 
         for (String id : boardIds) {
@@ -70,7 +78,29 @@ public class Data {
             }
         }
 
-        return myBoards;
     }
 
+    public void setAllBoardsData(ArrayList<Board> boards) {
+        setBoards(boards);
+        sortBoardsByCategories(boards);
+        syncFavouritesWithPreference();
+    }
+
+    private void sortBoardsByCategories(ArrayList<Board> boards) {
+        for (Board board : boards){
+            addBoardsToCategory(board);
+        }
+    }
+
+    private void addBoardsToCategory(Board board) {
+        for (Category category : categories) {
+            if (Objects.equals(category.getItemName(), board.getCategoryName())) {
+                category.getBoards().add(board);
+                return;
+            }
+        }
+        ArrayList<Board> boards = new ArrayList<>();
+        boards.add(board);
+        categories.add(new Category(board.getCategoryName(), boards));
+    }
 }

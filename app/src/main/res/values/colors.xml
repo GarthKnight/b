@@ -18,5 +18,9 @@
     <color name="lightGray">#A5A5A5</color>
     <color name="white">#ffffff</color>
 
+    <color name="colorDarkGreyText">#323232</color>
+    <color name="colorLightGreyText">#A5A5A5</color>
+    <color name="colorGreyForDivider">#E5E5E5</color>
+    <color name="colorTabTextActive">#6D6E71</color>
 
 </resources>
