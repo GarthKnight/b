@@ -11,48 +11,29 @@ import android.view.ViewGroup;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.data.Board;
-import com.appb.app.appb.data.Data;
-import com.appb.app.appb.data.File;
-import com.appb.app.appb.ui.activities.PicViewerActivity;
 import com.appb.app.appb.ui.activities.ThreadsListActivity;
 import com.appb.app.appb.ui.adapters.ListAdapter;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 
-import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
-import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
-
 /**
- * Created by seishu on 15.07.17.
+ * Created by seishu on 17.10.2017.
  */
 
-public class BoardsListFragment extends BaseFragment {
+public abstract class BaseBoardListFragment extends BaseFragment {
 
-    private static final String BOARDS = "boards";
     private static final String BOARD_ID = "boardId";
+
     @BindView(R.id.rvList)
     RecyclerView rvBoard;
 
-    ListAdapter boardListAdapter;
-    ArrayList<Board> boards = new ArrayList<>();
-
-    public static BoardsListFragment create(ArrayList<Board> boards) {
-
-        Bundle args = new Bundle();
-        args.putParcelable(BOARDS, Parcels.wrap(boards));
-        BoardsListFragment fragment = new BoardsListFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
+    ListAdapter rvAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boards = Parcels.unwrap(getArguments().getParcelable(BOARDS));
     }
 
     @Nullable
@@ -60,28 +41,24 @@ public class BoardsListFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_list, container, false);
         bindUI(v);
-        return v;    }
+        return v;
+    }
 
     @Override
     public void init() {
-        if (boards.size() == 0){
-
-        }
         initRV();
-
     }
 
     private void initRV() {
         rvBoard.setLayoutManager(new LinearLayoutManager(getContext()));
-        boardListAdapter = new ListAdapter<Board>(boards){
+        rvAdapter = new ListAdapter<Board>(getBoards()) {
             @Override
             public void onItemClick(int pos) {
                 super.onItemClick(pos);
-                openThreadsListActivity(boards.get(pos).getId());
-//                showFragment(ThreadListFragment.create(boards.get(pos).getId()), true);
+                openThreadsListActivity(getBoards().get(pos).getId());
             }
         };
-        rvBoard.setAdapter(boardListAdapter);
+        rvBoard.setAdapter(rvAdapter);
     }
 
     private void openThreadsListActivity(String boardId) {
@@ -93,7 +70,8 @@ public class BoardsListFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        boards = Data.getInstance().getMyBoards();
-        boardListAdapter.notifyDataSetChanged();
+        rvAdapter.notifyDataSetChanged();
     }
+
+    public abstract ArrayList<Board> getBoards();
 }

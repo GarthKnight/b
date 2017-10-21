@@ -1,7 +1,5 @@
 package com.appb.app.appb.ui.fragments;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,28 +11,21 @@ import android.view.ViewGroup;
 import com.appb.app.appb.R;
 import com.appb.app.appb.data.Category;
 import com.appb.app.appb.data.Data;
-import com.appb.app.appb.data.File;
-import com.appb.app.appb.ui.activities.PicViewerActivity;
 import com.appb.app.appb.ui.adapters.ListAdapter;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 
-import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
-import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
-
 /**
  * Created by seishu on 15.07.17.
  */
 
-public class BoardsCategoriesListFragment extends BaseFragment {
+public class CategoriesListFragment extends BaseFragment {
 
     @BindView(R.id.rvList)
     RecyclerView rvList;
-
-    ListAdapter adapter;
-    ArrayList<Category> categories = new ArrayList<>();
+    ListAdapter rvAdapter;
 
     @Nullable
     @Override
@@ -46,19 +37,26 @@ public class BoardsCategoriesListFragment extends BaseFragment {
 
     @Override
     public void init() {
-        categories = Data.getInstance().getCategories();
         initRV();
     }
 
     private void initRV() {
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new ListAdapter<Category>(categories) {
+        rvAdapter = new ListAdapter<Category>(getCategories()) {
             @Override
             public void onItemClick(int pos) {
                 super.onItemClick(pos);
-                showFragment(BoardsListFragment.create(categories.get(pos).getBoards()), true);
+                showFragment(BoardsByCategoriesListFragment.create(getCategories().get(pos).getName()), true);
             }
         };
-        rvList.setAdapter(adapter);
+        rvList.setAdapter(rvAdapter);
+    }
+
+    public void notifyDataSetChanged(){
+        rvAdapter.notifyDataSetChanged();
+    }
+
+    private ArrayList<Category> getCategories() {
+        return Data.getInstance().getCategories();
     }
 }

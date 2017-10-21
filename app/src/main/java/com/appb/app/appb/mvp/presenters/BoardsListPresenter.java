@@ -25,44 +25,49 @@ public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
 
     private ArrayList<Category> categories = new ArrayList<>();
 
-    public void getData() {
+    public void loadData() {
+        if (Data.getInstance().getBoards().isEmpty()){
+            API.getInstance()
+                    .getBoards()
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<Boards>() {
+                        @Override
+                        public void onCompleted() {
 
-        API.getInstance()
-                .getBoards()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Boards>() {
-                    @Override
-                    public void onCompleted() {
+                        }
 
-                    }
+                        @Override
+                        public void onError(Throwable e) {
+                            getViewState().onError(e.getMessage());
+                        }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        getViewState().onError(e.getMessage());
-                    }
+                        @Override
+                        public void onNext(Boards boards) {
+                            Data.getInstance().setBoards(boards.getBoards());
+                            Data.getInstance().setCategories(getCategories(boards.getBoards()));
+                            getViewState().onDataLoaded();
+                        }
+                    });
+        } else {
+            getViewState().onDataLoaded();
+        }
 
-                    @Override
-                    public void onNext(Boards boards) {
-                        Data.getInstance().setBoards(boards.getBoards());
-                        Data.getInstance().setCategories(getCategories(boards.getBoards()));
-                        getViewState().onDataLoaded();
-                    }
-                });
     }
 
     public ArrayList<Category> getCategories(ArrayList<Board> boards) {
         for (Board board : boards){
             addBoardsToCategory(board);
         }
-//        boards.forEach(this::addBoardsToCategory);
         return categories;
     }
 
     private void addBoardsToCategory(Board board) {
         for (Category category : categories) {
+
             if (Objects.equals(category.getItemName(), board.getCategoryName())) {
                 category.getBoards().add(board);
+                return;
             }
         }
         ArrayList<Board> boards = new ArrayList<>();

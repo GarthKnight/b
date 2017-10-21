@@ -23,18 +23,21 @@
             </intent-filter>
         </activity>
 
-
+        <activity
+            android:name=".ui.activities.ThreadsListActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".ui.activities.StartActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
 
         <activity
             android:name=".ui.activities.PicViewerActivity"
             android:configChanges="orientation|screenSize"
-            android:parentActivityName=".ui.activities.StartActivity"
+            android:parentActivityName=".ui.activities.ThreadsListActivity"
             android:theme="@style/Theme.Swipe.Back">
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activities.StartActivity" />
         </activity>
+
+
 
 
     </application>

@@ -1,6 +1,7 @@
 package com.appb.app.appb.data;
 
 import com.appb.app.appb.PrefUtils;
+import com.appb.app.appb.ui.fragments.BaseBoardListFragment;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,7 +28,11 @@ public class Data {
     }
 
     public void setBoards(ArrayList<Board> boards) {
-        this.boards = boards;
+        if (this.boards == null) {
+            this.boards = new ArrayList<>();
+        }
+        this.boards.clear();
+        this.boards.addAll(boards);
     }
 
     public ArrayList<Category> getCategories() {
@@ -35,7 +40,21 @@ public class Data {
     }
 
     public void setCategories(ArrayList<Category> categories) {
-        this.categories = categories;
+        if (this.categories == null) {
+            this.categories = new ArrayList<>();
+        }
+        this.categories.clear();
+        this.categories.addAll(categories);
+    }
+
+    public ArrayList<Board> getBoardsByCategory(String name){
+        ArrayList<Board> boards = new ArrayList<>();
+        for (Category category : categories){
+            if (category.getName().equals(name)){
+                boards = category.getBoards();
+            }
+        }
+        return boards;
     }
 
     public ArrayList<Board> getMyBoards(){

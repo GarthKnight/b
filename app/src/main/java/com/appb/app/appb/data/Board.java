@@ -13,6 +13,7 @@ import java.util.Objects;
  */
 @Parcel
 public class Board implements ListAdapterItem {
+
     @SerializedName("bump_limit")
     int bumpLimit;
     @SerializedName("category")
@@ -30,7 +31,9 @@ public class Board implements ListAdapterItem {
     int enablePosting;
     @SerializedName("enable_thread_tags")
     int enableThreadTags;
-    ArrayList<Objects> icons;
+
+    public Board() {
+    }
 
     public String getName() {
         return name;

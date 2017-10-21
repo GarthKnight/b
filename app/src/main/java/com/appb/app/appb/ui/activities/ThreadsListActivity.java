@@ -1,26 +1,23 @@
-package com.appb.app.appb.ui.fragments;
+package com.appb.app.appb.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.ToggleButton;
 
 import com.appb.app.appb.PrefUtils;
 import com.appb.app.appb.R;
-import com.appb.app.appb.data.Board;
 import com.appb.app.appb.data.File;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.data.Thread;
 import com.appb.app.appb.mvp.presenters.ThreadListPresenter;
 import com.appb.app.appb.mvp.views.ThreadListView;
-import com.appb.app.appb.ui.activities.PicViewerActivity;
 import com.appb.app.appb.ui.adapters.ThreadListAdapter;
+import com.appb.app.appb.ui.fragments.PostListFragments;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.ArrayList;
@@ -33,18 +30,18 @@ import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
 import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
 
 /**
- * Created by 1 on 10.03.2017.
+ * Created by seishu on 11.10.2017.
  */
 
-public class ThreadListFragment extends BaseFragment implements ThreadListView {
+public class ThreadsListActivity extends BaseActivity implements ThreadListView {
 
     private static final String THREADS = "threads";
     private static final int FIRST = 0;
     private static final int THREAD_MAX_COUNT = 22;
-    private static final String BOARD_NAME = "boardName";
+    private static final String BOARD_ID = "boardId";
 
     private int currentPage = 1;
-    private String boardName = "b";
+    private String boardId = "b";
     private boolean mIsLoadingData = false;
     private boolean hasNextPage;
 
@@ -56,64 +53,37 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
     RecyclerView rvThreads;
     @BindView(R.id.progressBarLoading)
     ProgressBar progressBarLoading;
+    @BindView(R.id.btnStar)
+    ToggleButton btnStar;
 
     @InjectPresenter
     ThreadListPresenter presenter;
 
 
-    public static ThreadListFragment create(String boardName) {
-        Bundle args = new Bundle();
-        args.putString(BOARD_NAME, boardName);
-        ThreadListFragment fragment = new ThreadListFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boardName = getArguments().getString(BOARD_NAME);
-        if (savedInstanceState != null) {
-            threads = savedInstanceState.getParcelableArrayList(THREADS);
-        }
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_thread_list, container, false);
-        bindUI(v);
-        return v;
-    }
-
-    @OnClick(R.id.btnStar)
-    public void onStarClick(View v) {
-        HashSet<String> set = PrefUtils.getMyBoards();
-        if (((ToggleButton) v).isChecked()) {
-            set.add(boardName);
-            PrefUtils.setMyBoards(set);
-        } else {
-            set.remove(boardName);
-            PrefUtils.setMyBoards(set);
-        }
-
+        setContentView(R.layout.activity_thread_list);
+        bindUI(this);
     }
 
     @Override
     public void init() {
+        super.init();
+        HashSet<String> myBoardsIds = PrefUtils.getMyBoards();
+        boardId = getIntent().getExtras().getString(BOARD_ID);
+        btnStar.setChecked(myBoardsIds.contains(boardId));
         initAdapter();
         initRV();
 
         if (threads.size() == 0) {
             loadThreadsRX();
         }
-
     }
-
 
     public void initRV() {
         rvThreads.setHasFixedSize(true);
-        llm = new LinearLayoutManager(getContext());
+        llm = new LinearLayoutManager(this);
         rvThreads.setLayoutManager(llm);
         rvThreads.addOnScrollListener(listScrollListener);
     }
@@ -130,14 +100,14 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
             //может быть тебе пора?
             @Override
             public void onCommentClick(View v, int pos) {
-                showFragment(PostListFragments.create(getFirstPostForThread(pos).getNum(), boardName), true);
+                showFragment(PostListFragments.create(getFirstPostForThread(pos).getNum(), boardId), true);
             }
         };
         rvThreads.setAdapter(threadListAdapter);
     }
 
     private void openPicViewerActivity(ArrayList<File> files, int imageIndex) {
-        Intent intent = new Intent(getContext(), PicViewerActivity.class);
+        Intent intent = new Intent(this, PicViewerActivity.class);
         intent.putExtra(FILES, files);
         intent.putExtra(POS, imageIndex);
         startActivity(intent);
@@ -149,7 +119,7 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
 
     public void loadThreadsRX() {
         mIsLoadingData = true;
-        presenter.getThreads(currentPage, boardName);
+        presenter.getThreads(currentPage, boardId);
     }
 
     private RecyclerView.OnScrollListener listScrollListener = new RecyclerView.OnScrollListener() {
@@ -177,6 +147,27 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
         }
     };
 
+
+    @OnClick(R.id.btnStar)
+    public void onStarClick(View v) {
+        HashSet<String> set = PrefUtils.getMyBoards();
+        if (((ToggleButton) v).isChecked()) {
+            set.add(boardId);
+            PrefUtils.setMyBoards(set);
+        } else {
+            set.remove(boardId);
+            PrefUtils.setMyBoards(set);
+        }
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(THREADS, threads);
+    }
+
+
     @Override
     public void onThreadsLoaded(ArrayList<Thread> _threads) {
         mIsLoadingData = false;
@@ -200,17 +191,13 @@ public class ThreadListFragment extends BaseFragment implements ThreadListView {
 
     @Override
     public void onLoadingEnd() {
-
-    }
-
-    @Override
-    public void setProgressBarLoading() {
         progressBarLoading.setVisibility(View.GONE);
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(THREADS, threads);
+    public void setProgressBarLoading() {
+
     }
+
+
 }

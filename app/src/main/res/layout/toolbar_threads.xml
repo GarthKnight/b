@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@color/grayBack"
     android:fitsSystemWindows="true"
-    tools:context=".ui.activities.StartActivity">
+    tools:context=".ui.activities.ThreadsListActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/toolbarLayout"
@@ -47,10 +47,21 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="72dp"
                     android:gravity="center_vertical"
-                    android:text="@string/boards"
+                    android:text="Треды"
                     android:textColor="@color/white"
                     android:textSize="21sp"
                     android:textStyle="bold" />
+
+                <ToggleButton
+                    android:id="@+id/btnStar"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="12dp"
+                    android:background="@drawable/star_toggle_drawable"
+                    android:textOff=""
+                    android:textOn="" />
 
             </RelativeLayout>
 

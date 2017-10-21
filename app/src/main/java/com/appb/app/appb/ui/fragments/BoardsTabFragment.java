@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.appb.app.appb.R;
+import com.appb.app.appb.data.Data;
 import com.appb.app.appb.mvp.presenters.BoardsListPresenter;
 import com.appb.app.appb.mvp.views.BoardlistView;
 import com.appb.app.appb.ui.adapters.BoardsPagerAdapter;
@@ -21,9 +22,9 @@ import butterknife.BindView;
  * Created by seishu on 18.07.17.
  */
 
-public class BoardsPagerFragment extends BaseFragment implements BoardlistView {
+public class BoardsTabFragment extends BaseFragment implements BoardlistView {
 
-    private static final String TAG = "BoardsPagerFragment";
+    private static final String TAG = "BoardsTabFragment";
 
     @BindView(R.id.vpBoards)
     ViewPager vpBoards;
@@ -32,6 +33,7 @@ public class BoardsPagerFragment extends BaseFragment implements BoardlistView {
 
     @InjectPresenter
     BoardsListPresenter presenter;
+    private BoardsPagerAdapter adapter;
 
     @Nullable
     @Override
@@ -43,7 +45,8 @@ public class BoardsPagerFragment extends BaseFragment implements BoardlistView {
 
     @Override
     public void init() {
-        presenter.getData();
+        presenter.loadData();
+        setUpAdapter();
     }
 
     @Override
@@ -53,9 +56,18 @@ public class BoardsPagerFragment extends BaseFragment implements BoardlistView {
 
     @Override
     public void onDataLoaded() {
-        vpBoards.setAdapter(new BoardsPagerAdapter(getChildFragmentManager(), new String[]{"Мои доски", "Мои категории"}));
+        log("onDataLoaded : " + TAG);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void setUpAdapter() {
+        if (adapter == null) {
+            adapter = new BoardsPagerAdapter(getChildFragmentManager(), new String[]{"Мои доски", "Мои категории"});
+        }
+        vpBoards.setAdapter(adapter);
         vpBoards.setPageMargin(6);
         vpBoards.setPageMarginDrawable(getResources().getDrawable(R.color.subGray));
         tabView.setupWithViewPager(vpBoards);
     }
+
 }

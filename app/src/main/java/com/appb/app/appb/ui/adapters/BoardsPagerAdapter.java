@@ -4,15 +4,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.appb.app.appb.PrefUtils;
-import com.appb.app.appb.data.Board;
-import com.appb.app.appb.data.Data;
-import com.appb.app.appb.ui.fragments.BaseFragment;
-import com.appb.app.appb.ui.fragments.BoardsCategoriesListFragment;
-import com.appb.app.appb.ui.fragments.BoardsListFragment;
+import com.appb.app.appb.R;
+import com.appb.app.appb.ui.fragments.CategoriesListFragment;
+import com.appb.app.appb.ui.fragments.MyFavoritesBoardsListFragment;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import rx.Observable;
 
 /**
  * Created by Logvinov.sv on 14.07.2017.
@@ -21,18 +17,20 @@ import java.util.HashSet;
 public class BoardsPagerAdapter extends FragmentPagerAdapter {
 
     private final String[] titles;
+    private FragmentManager fragmentManager;
 
     public BoardsPagerAdapter(FragmentManager fm, String[] titles) {
         super(fm);
+        fragmentManager = fm;
         this.titles = titles;
     }
 
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return BoardsListFragment.create(Data.getInstance().getMyBoards());
+            return new MyFavoritesBoardsListFragment();
         } else {
-            return new BoardsCategoriesListFragment();
+            return new CategoriesListFragment();
         }
     }
 
@@ -44,5 +42,26 @@ public class BoardsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return 2;
+    }
+
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        Object fragment =  fragmentManager.findFragmentByTag(makeFragmentName(R.id.vpBoards, getItemId(0)));
+        if (fragment != null) {
+            ((MyFavoritesBoardsListFragment) fragment).notifyDataSetChanged();
+        }
+
+        fragment = fragmentManager.findFragmentByTag(makeFragmentName(R.id.vpBoards, getItemId(1)));
+        if (fragment != null) {
+            ((CategoriesListFragment) fragment).notifyDataSetChanged();
+        }
+    }
+
+    private static String makeFragmentName(int viewId, long id) {
+        return "android:switcher:" + viewId + ":" + id;
+    }
+
+    public long getItemId(int position) {
+        return position;
     }
 }

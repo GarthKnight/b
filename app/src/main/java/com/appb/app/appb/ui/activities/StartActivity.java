@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.ui.fragments.BoardsPagerFragment;
+import com.appb.app.appb.ui.fragments.BoardsTabFragment;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -35,7 +35,7 @@ public class StartActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         bindUI(this);
-        showFragment(new BoardsPagerFragment(), false);
+        showFragment(new BoardsTabFragment(), false);
     }
 
 

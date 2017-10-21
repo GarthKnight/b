@@ -29,12 +29,14 @@ public class PrefUtils {
 
     public static HashSet<String> getMyBoards(){
         SharedPreferences sp = getContext().getSharedPreferences(MY_BOARDS, Context.MODE_PRIVATE);
+        Log.d("MY_BOARDS_GET", "getMyBoards: " +  ((HashSet<String>) sp.getStringSet(MY_BOARDS, new HashSet<>())).toString());
         return ((HashSet<String>) sp.getStringSet(MY_BOARDS, new HashSet<>()));
     }
 
     public static void setMyBoards(Set<String> boards){
         SharedPreferences sp = getContext().getSharedPreferences(MY_BOARDS, Context.MODE_PRIVATE);
-        sp.edit().putStringSet(MY_BOARDS, boards).apply();
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putStringSet(MY_BOARDS, boards).apply();
         Log.d("MY_BOARDS SAVE: ", boards.toString());
     }
 
