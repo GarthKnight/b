@@ -24,6 +24,7 @@ import butterknife.BindView;
 
 public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter.VHThread> {
 
+    private static final int THREAD_TEXT_SIZE = 240;
     private ArrayList<Thread> threads;
 
     protected ThreadListAdapter(ArrayList<Thread> threads) {
@@ -46,14 +47,21 @@ public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter
         holder.tvCommentThread.setOnClickListener(v -> onCommentClick(v, holder.getAdapterPosition()));
         holder.tvDateThread.setText(threads.get(position).getPosts().get(0).getDate());
         holder.tvThreadNumber.setText(threadNumber);
-        holder.tvCommentThread.setText(comment);
+        holder.tvCommentThread.setText(formatStringForThread(comment.toString()));
         holder.tvThreadCounter.setText("#" + position);
-
     }
 
     @Override
     public ArrayList<File> getFiles(int pos) {
         return threads.get(pos).getPosts().get(0).getFiles();
+    }
+
+    private String formatStringForThread(String text){
+        if (text.length() < THREAD_TEXT_SIZE){
+            return text;
+        } else {
+            return text.substring(0, THREAD_TEXT_SIZE) + "...";
+        }
     }
 
     public void onCommentClick(View v, int pos) {}

@@ -1,5 +1,7 @@
 package com.appb.app.appb.ui.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,6 +14,7 @@ import com.appb.app.appb.R;
 import com.appb.app.appb.custom.TextViewWithClickableSpan;
 import com.appb.app.appb.data.File;
 import com.appb.app.appb.data.Post;
+import com.appb.app.appb.ui.activities.PicViewerActivity;
 import com.appb.app.appb.ui.dialogs.AnswerDialog;
 import com.appb.app.appb.ui.dialogs.AnswersForPostDialog;
 
@@ -23,6 +26,8 @@ import butterknife.ButterKnife;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
+import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
 
 /**
  * Created by 1 on 31.03.2017.
@@ -33,12 +38,11 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
     private ArrayList<Post> posts;
     private String answersText = "";
     private static final String ARROWS = ">>";
-    HashMap<Integer, ArrayList<Integer>> answers;
 
 
-    protected PostsAdapter(ArrayList<Post> posts, HashMap<Integer, ArrayList<Integer>> answers) {
+    protected PostsAdapter(ArrayList<Post> posts) {
         this.posts = posts;
-        this.answers = answers;
+
     }
 
     @Override
@@ -81,40 +85,41 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
 
     }
 
-    private void setAnswers(TextViewWithClickableSpan tvAnswers, int position) {
-
-        ArrayList<Integer> realAnswers = answers.get(posts.get(position).getNum());
-
-        if (realAnswers.size() > 0) {
-            tvAnswers.setVisibility(VISIBLE);
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(answersText);
-            for (int i = 0; i < realAnswers.size(); i++) {
-                stringBuilder.append(ARROWS).append(realAnswers.get(i))
-                        .append(i == realAnswers.size() - 1 ? "" : ", ");
-            }
-            answersText = stringBuilder.toString();
-            tvAnswers.setSpannableText(answersText);
-
-            tvAnswers.setLinkClickListener(number -> {
-                for (int i = 0; i < posts.size(); i++) {
-                    if (posts.get(i).getNum() == number) {
-                        new AnswerDialog(tvAnswers.getContext(), posts, i).show();
-                        break;
-                    }
-                }
-
-            });
-
-        }
-
-
-    }
+//    private void setAnswers(TextViewWithClickableSpan tvAnswers, int position) {
+//
+//        ArrayList<Integer> realAnswers = answers.get(posts.get(position).getNum());
+//
+//        if (realAnswers.size() > 0) {
+//            tvAnswers.setVisibility(VISIBLE);
+//            StringBuilder stringBuilder = new StringBuilder();
+//            stringBuilder.append(answersText);
+//            for (int i = 0; i < realAnswers.size(); i++) {
+//                stringBuilder.append(ARROWS).append(realAnswers.get(i))
+//                        .append(i == realAnswers.size() - 1 ? "" : ", ");
+//            }
+//            answersText = stringBuilder.toString();
+//            tvAnswers.setSpannableText(answersText);
+//
+//            tvAnswers.setLinkClickListener(number -> {
+//                for (int i = 0; i < posts.size(); i++) {
+//                    if (posts.get(i).getNum() == number) {
+//                        new AnswerDialog(tvAnswers.getContext(), posts, i).show();
+//                        break;
+//                    }
+//                }
+//
+//            });
+//
+//        }
+//
+//
+//    }
 
     public void onPictureClick(int position, ArrayList<File> files) {
 
     }
-//
+
+    //
 //    private void checkAnswers(TextViewWithClickableSpan tvAnswers, int position) {
 //        final ArrayList<Integer> realPosts = getRealPostsFromAnswers(position);
 //        if (realPosts.size() != 0) {
@@ -131,78 +136,92 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
 //
 //    }
 //
-//    private void simpleAnswers(TextViewWithClickableSpan tvAnswers, final int position, final ArrayList<Integer> realPosts) {
-//
-//        tvAnswers.setVisibility(VISIBLE);
-//        StringBuilder stringBuilder = new StringBuilder();
-//        stringBuilder.append(answersText);
-//        for (int i = 0; i < realPosts.size(); i++) {
-//
-//            stringBuilder.append(ARROWS).append(posts.get(realPosts.get(i)).getNum())
-//                    .append(i == realPosts.size() - 1 ? "" : ", ");
-//        }
-//        answersText = stringBuilder.toString();
-//        tvAnswers.setSpannableText(answersText);
-//
-//
-//        tvAnswers.setLinkClickListener(new TextViewWithClickableSpan.LinkClickListener() {
-//            @Override
-//            public void onLinkClick(int number) {
-//                int tmp = -1;
-//
-//                for (int i = 0; i < posts.size(); i++) {
-//                    if (posts.get(i).getNum() == number) {
-//                        tmp = i;
-//                    }
-//                }
-//
-//                Log.d("SEI", "realPosts: " + realPosts + " position: " + position);
-//
-//                if (tmp != -1) {
-//                    AnswerDialog answerDialog = new AnswerDialog(context, posts, tmp) {
-//                        @Override
-//                        public void onItemClick(View v, int position, int pos) {
-//                            startPicViewerActivity(position, pos);
-//                        }
-//                    };
-//                    answerDialog.show();
-//                }
-//            }
-//        });
-//
-//
-//    }
-//
-//    private void answersByButton(TextViewWithClickableSpan tvAnswers, final int position, final ArrayList<Integer> realPosts) {
-//        tvAnswers.setVisibility(VISIBLE);
-//        tvAnswers.setText(tvAnswers.getResources().getString(R.string.answers));
-//        tvAnswers.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d("SEI", "realPostsWithButton: " + realPosts + " position: " + position);
-//                new AnswersForPostDialog(v.getContext(), posts, realPosts).show();
-//            }
-//        });
-//
-//    }
+    private void simpleAnswers(TextViewWithClickableSpan tvAnswers, final int position) {
 
+        ArrayList<Integer> answersNumbers = getAnswersNumbers(position);
+        Context context = tvAnswers.getContext();
+        if (answersNumbers != null){
+
+            tvAnswers.setVisibility(VISIBLE);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(answersText);
+
+            for (int i = 0; i < answersNumbers.size(); i++) {
+
+                stringBuilder
+                        .append(ARROWS)
+                        .append(posts.get(answersNumbers.get(i)).getNum())
+                        .append(i == answersNumbers.size() - 1 ? "" : ", ");
+            }
+
+            answersText = stringBuilder.toString();
+            tvAnswers.setSpannableText(answersText);
+            tvAnswers.setLinkClickListener(number -> {
+
+
+            });
+
+        } else {
+            tvAnswers.setVisibility(GONE);
+        }
+    }
+
+    private void startPicViewerActivity(ArrayList<File> files, int pos, Context context) {
+        Intent intent = new Intent(context, PicViewerActivity.class);
+        intent.putExtra(FILES, files);
+        intent.putExtra(POS, pos);
+        context.startActivity(intent);
+    }
+
+    private TextViewWithClickableSpan.LinkClickListener getLinkClickListener(Context context){
+        return new TextViewWithClickableSpan.LinkClickListener() {
+            @Override
+            public void onLinkClick(int number) {
+
+                int answerPostNumber = -1;
+
+                for (int i = 0; i < posts.size(); i++) {
+                    if (posts.get(i).getNum() == number) {
+                        answerPostNumber = i;
+                    }
+                }
+
+                if (answerPostNumber != -1) {
+                    AnswerDialog answerDialog = new AnswerDialog(context, posts, answerPostNumber) {
+                        @Override
+                        public void onThumbnailClick(int position, ArrayList<File> files) {
+                            super.onThumbnailClick(position, files);
+                            startPicViewerActivity(files, position, context);
+                        }
+                    };
+                    answerDialog.show();
+                }
+
+            }
+        };
+    }
+
+    private ArrayList<Integer> getAnswersNumbers(int position) {
+
+        ArrayList<Integer> answersNumber = new ArrayList<>();
+        ArrayList<Post> answers = posts.get(position).getAnswers();
+        for (Post answer : answers) {
+            answersNumber.add(answer.getNum());
+        }
+
+        if (answersNumber.size() > 0) {
+            return answersNumber;
+        } else {
+            return null;
+        }
+    }
+
+    private void getAnswers() {
+    }
 
     public void onAnswerClick(ArrayList<Post> posts, int index) {
 
     }
-
-
-    public ArrayList<Integer> getRealPostsFromAnswers(int position) {
-        ArrayList<Integer> realPostsFromAnswers = new ArrayList<>();
-        for (int i = 0; i < posts.size(); i++) {
-            if (Html.fromHtml(posts.get(i).getComment()).toString().contains(String.valueOf(posts.get(position).getNum()))) {
-                realPostsFromAnswers.add(i);
-                Log.d("SHU", "getRealPostsFromAnswers: " + Html.fromHtml(posts.get(i).getComment()) + " number: " + posts.get(position).getNum());
-            }
-        }
-        return realPostsFromAnswers;
-    }
-
 
     @Override
     public int getItemCount() {

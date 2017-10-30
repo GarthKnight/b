@@ -28,6 +28,7 @@ public class Post implements Parcelable{
     private long timestamp;
     private String trip;
     private int num;
+    private ArrayList<Post> answers;
 
     private Post(Parcel in) {
         banned = in.readInt();
@@ -47,6 +48,7 @@ public class Post implements Parcelable{
         timestamp = in.readLong();
         trip = in.readString();
         num = in.readInt();
+        answers = in.createTypedArrayList(Post.CREATOR);
     }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {
@@ -85,6 +87,15 @@ public class Post implements Parcelable{
         return files;
     }
 
+    public ArrayList<Post> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(ArrayList<Post> answers) {
+        this.answers = answers;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -109,5 +120,6 @@ public class Post implements Parcelable{
         dest.writeLong(timestamp);
         dest.writeString(trip);
         dest.writeInt(num);
+        dest.writeTypedList(answers);
     }
 }

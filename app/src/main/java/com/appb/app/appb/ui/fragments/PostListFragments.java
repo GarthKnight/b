@@ -1,6 +1,5 @@
 package com.appb.app.appb.ui.fragments;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,8 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import butterknife.BindView;
-import rx.Observable;
-import rx.Subscriber;
 
 import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
 import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
@@ -43,7 +40,6 @@ public class PostListFragments extends BaseFragment implements PostListView {
 
     private PostsAdapter postsAdapter;
     private ArrayList<Post> posts = new ArrayList<>();
-    public HashMap<Integer, ArrayList<Integer>> answers;
 
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
@@ -79,24 +75,17 @@ public class PostListFragments extends BaseFragment implements PostListView {
         if (posts.size() == 0) {
             loadPosts();
         }
-
-        getAnswers();
-
     }
 
 
     private void loadPosts() {
         int threadNumber = getArguments().getInt(THREAD_NUMBER);
         String board = getArguments().getString(BOARD);
-        presenter.getPosts(threadNumber, board);
-    }
-
-    private void getAnswers() {
-        presenter.getAnswers();
+        presenter.loadPosts(threadNumber, board);
     }
 
     public void initAdapter() {
-        postsAdapter = new PostsAdapter(posts, answers) {
+        postsAdapter = new PostsAdapter(posts) {
 
             @Override
             public void onThumbnailClick(int position, ArrayList<File> files) {
@@ -137,11 +126,6 @@ public class PostListFragments extends BaseFragment implements PostListView {
     }
 
     @Override
-    public void getAnswers(HashMap<Integer, ArrayList<Integer>> _answers) {
-        answers = _answers;
-    }
-
-    @Override
     public void onPostsLoaded(ArrayList<Post> _posts) {
         posts.clear();
         posts.addAll(_posts);
@@ -151,7 +135,7 @@ public class PostListFragments extends BaseFragment implements PostListView {
 
     @Override
     public void onError(String error) {
-        //// TODO: 28.05.17
+        // TODO: 28.05.17
     }
 
     @Override

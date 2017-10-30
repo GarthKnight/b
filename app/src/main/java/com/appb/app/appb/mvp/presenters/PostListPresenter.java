@@ -15,6 +15,7 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -23,17 +24,20 @@ import rx.schedulers.Schedulers;
 @InjectViewState
 public class PostListPresenter extends MvpPresenter<PostListView> {
 
-
     private static final int FIRST = 1;
 
-    private ArrayList<Post> posts;
-
-    public void getPosts(int threadNumber, String board) {
+    public void loadPosts(int threadNumber, String board) {
 
         API.getInstance()
                 .getPostsRX(board, threadNumber, FIRST)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<ArrayList<Post>, Observable<ArrayList<Post>>>() {
+                    @Override
+                    public Observable<ArrayList<Post>> call(ArrayList<Post> posts) {
+                        return setAnswersForPosts(posts);
+                    }
+                })
                 .doOnSubscribe(() -> getViewState().onLoadingStart())
                 .doOnTerminate(() -> getViewState().onLoadingEnd())
                 .subscribe(new Observer<ArrayList<Post>>() {
@@ -48,47 +52,18 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
                     }
 
                     @Override
-                    public void onNext(ArrayList<Post> _posts) {
-                        posts = _posts;
+                    public void onNext(ArrayList<Post> posts) {
                         getViewState().onPostsLoaded(posts);
                     }
                 });
     }
 
-    public void getAnswers() {
-
-        setAnswers()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<HashMap<Integer, ArrayList<Integer>>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(HashMap<Integer, ArrayList<Integer>> _answers) {
-                        getViewState().getAnswers(_answers);
-                    }
-                });
-    }
-
-    private Observable<HashMap<Integer,ArrayList<Integer>>> setAnswers(){
-        return Observable.create(subscriber -> new Thread(() -> {
-
-            HashMap<Integer, ArrayList<Integer>> answers;
-
-            answers = new HashMap<>();
-
+    public Observable<ArrayList<Post>> setAnswersForPosts(ArrayList<Post> posts){
+        return Observable.create(subscriber -> {
 
             for (int i = 0; i < posts.size(); i++) {
 
-                ArrayList<Integer> postNumbers = new ArrayList<>();
+                ArrayList<Post> answers = new ArrayList<>();
 
                 for (int j = 0; j < posts.size(); j++) {
 
@@ -96,18 +71,16 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
                     String number = String.valueOf(posts.get(i).getNum());
 
                     if (comment.contains(number)) {
-                        postNumbers.add(Integer.valueOf(number));
+                        answers.add(posts.get(j));
                     }
-
                 }
 
-                if (postNumbers.size() > 0){
-                    answers.put(posts.get(i).getNum(), postNumbers);
+                if (answers.size() > 0){
+                    posts.get(i).setAnswers(answers);
                 }
             }
 
-            subscriber.onNext(answers);
-
-        }));
+            subscriber.onNext(posts);
+        });
     }
 }

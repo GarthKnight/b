@@ -43,6 +43,10 @@ public class Thread implements Parcelable {
         return posts;
     }
 
+    public String getThreadNum() {
+        return threadNum;
+    }
+
     @Override
     public int describeContents() {
         return 0;

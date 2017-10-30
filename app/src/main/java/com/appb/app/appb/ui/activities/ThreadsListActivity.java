@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.ToggleButton;
@@ -40,6 +41,7 @@ public class ThreadsListActivity extends BaseActivity implements ThreadListView 
     private static final int FIRST = 0;
     private static final int THREAD_MAX_COUNT = 22;
     private static final String BOARD_ID = "boardId";
+    private static final String TAG = "ThreadsListActivity";
 
     private int currentPage = 1;
     private String boardId = "b";
@@ -171,12 +173,33 @@ public class ThreadsListActivity extends BaseActivity implements ThreadListView 
 
 
     @Override
-    public void onThreadsLoaded(ArrayList<Thread> _threads) {
+    public void onThreadsLoaded(ArrayList<Thread> justLoadedThreads) {
         mIsLoadingData = false;
-        threads.addAll(_threads);
+
+        if (threads.size() > 0) {
+            ArrayList<Thread> newThreads = new ArrayList<>();
+
+            for (Thread justLoadedThread : justLoadedThreads) {
+                boolean isContains = false;
+                for (Thread thread : threads) {
+                    if (justLoadedThread.getThreadNum().equals(thread.getThreadNum())) {
+                        isContains = true;
+                        break;
+                    }
+                }
+
+                if (!isContains) {
+                    newThreads.add(justLoadedThread);
+                }
+            }
+            threads.addAll(newThreads);
+        } else {
+            threads.addAll(justLoadedThreads);
+        }
+
         threadListAdapter.notifyDataSetChanged();
         currentPage++;
-        if (threads.size() == THREAD_MAX_COUNT) {
+        if (justLoadedThreads.size() == THREAD_MAX_COUNT) {
             hasNextPage = true;
         }
     }
@@ -184,6 +207,7 @@ public class ThreadsListActivity extends BaseActivity implements ThreadListView 
     @Override
     public void onError(String error) {
         mIsLoadingData = false;
+        Log.d(TAG, "onError: " + error);
     }
 
     @Override

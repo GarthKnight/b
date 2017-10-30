@@ -21,7 +21,7 @@ import rx.schedulers.Schedulers;
 @InjectViewState
 public class ThreadListPresenter extends MvpPresenter<ThreadListView> {
 
-    private ArrayList<Thread> threads;
+
 
     public void getThreads(int currentPage, String board) {
 
@@ -39,13 +39,13 @@ public class ThreadListPresenter extends MvpPresenter<ThreadListView> {
                     @Override
                     public void onError(Throwable e) {
                         getViewState().onError(e.getMessage());
+                        e.printStackTrace();
                     }
 
                     @Override
                     public void onNext(BoardPage boardPage) {
-                        threads = boardPage.getThreads();
                         getViewState().setProgressBarLoading();
-                        getViewState().onThreadsLoaded(threads);
+                        getViewState().onThreadsLoaded(boardPage.getThreads());
                     }
                 });
     }

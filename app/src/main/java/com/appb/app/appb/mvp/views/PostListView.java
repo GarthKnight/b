@@ -12,8 +12,6 @@ import java.util.HashMap;
 
 public interface PostListView extends MvpView {
 
-    void getAnswers(HashMap<Integer, ArrayList<Integer>> answers);
-
     void onPostsLoaded(ArrayList<Post> posts);
 
     void onError(String error);
