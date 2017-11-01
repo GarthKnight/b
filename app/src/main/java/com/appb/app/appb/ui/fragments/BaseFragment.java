@@ -48,7 +48,7 @@ public class BaseFragment extends MvpAppCompatFragment {
     }
 
     public void log(String log) {
-        Log.d("Base Fragment", log);
+        Log.d(this.getClass().getName(), log);
     }
 
     @Override

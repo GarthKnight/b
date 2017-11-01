@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.TextView;
 
 import com.appb.app.appb.R;
@@ -93,8 +94,15 @@ public class AnswerDialog extends Dialog {
 
     }
 
-    public void initRV(){
-        thumbnailsAdapter = new ThumbnailsAdapter(posts.get(answerPostNumber).getFiles()){
+    private void initRV() {
+
+        if (posts.get(answerPostNumber).getFiles().isEmpty()) {
+            rvThumbnails.setVisibility(GONE);
+        } else {
+            rvThumbnails.setVisibility(View.VISIBLE);
+        }
+
+        thumbnailsAdapter = new ThumbnailsAdapter(posts.get(answerPostNumber).getFiles()) {
             @Override
             public void onPictureClick(int positionOfImage) {
                 super.onPictureClick(positionOfImage);

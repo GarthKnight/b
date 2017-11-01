@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.ToggleButton;
 
+import com.appb.app.appb.ui.fragments.PostListFragment;
 import com.appb.app.appb.utils.PrefUtils;
 import com.appb.app.appb.R;
 import com.appb.app.appb.data.Data;
@@ -19,7 +20,6 @@ import com.appb.app.appb.data.Thread;
 import com.appb.app.appb.mvp.presenters.ThreadListPresenter;
 import com.appb.app.appb.mvp.views.ThreadListView;
 import com.appb.app.appb.ui.adapters.ThreadListAdapter;
-import com.appb.app.appb.ui.fragments.PostListFragments;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class ThreadsListActivity extends BaseActivity implements ThreadListView 
             //может быть тебе пора?
             @Override
             public void onCommentClick(View v, int pos) {
-                showFragment(PostListFragments.create(getFirstPostForThread(pos).getNum(), boardId), true);
+                showFragment(PostListFragment.create(getFirstPostForThread(pos).getNum(), boardId), true);
             }
         };
         rvThreads.setAdapter(threadListAdapter);

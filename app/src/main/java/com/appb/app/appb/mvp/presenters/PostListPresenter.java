@@ -30,14 +30,12 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
 
         API.getInstance()
                 .getPostsRX(board, threadNumber, FIRST)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Func1<ArrayList<Post>, Observable<ArrayList<Post>>>() {
-                    @Override
-                    public Observable<ArrayList<Post>> call(ArrayList<Post> posts) {
-                        return setAnswersForPosts(posts);
-                    }
-                })
+                .flatMap(posts -> setAnswersForPosts(posts)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                )
                 .doOnSubscribe(() -> getViewState().onLoadingStart())
                 .doOnTerminate(() -> getViewState().onLoadingEnd())
                 .subscribe(new Observer<ArrayList<Post>>() {

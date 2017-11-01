@@ -21,7 +21,6 @@ import com.appb.app.appb.ui.dialogs.AnswerDialog;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import butterknife.BindView;
 
@@ -32,7 +31,7 @@ import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
  * Created by 1 on 20.03.2017.
  */
 
-public class PostListFragments extends BaseFragment implements PostListView {
+public class PostListFragment extends BaseFragment implements PostListView {
 
     private static final String POSTS = "posts";
     private static final String THREAD_NUMBER = "num";
@@ -95,7 +94,13 @@ public class PostListFragments extends BaseFragment implements PostListView {
 
             @Override
             public void onAnswerClick(ArrayList<Post> postsAnswer, int index) {
-                AnswerDialog answerDialog = new AnswerDialog((getContext()), postsAnswer, index);
+                AnswerDialog answerDialog = new AnswerDialog((getContext()), postsAnswer, index){
+                    @Override
+                    public void onThumbnailClick(int position, ArrayList<File> files) {
+                        super.onThumbnailClick(position, files);
+                        startPicViewerActivity(files, position);
+                    }
+                };
                 answerDialog.show();
             }
         };
@@ -116,11 +121,11 @@ public class PostListFragments extends BaseFragment implements PostListView {
         outState.putParcelableArrayList(POSTS, posts);
     }
 
-    public static PostListFragments create(int num, String board) {
+    public static PostListFragment create(int num, String board) {
         Bundle args = new Bundle();
         args.putInt(THREAD_NUMBER, num);
         args.putString(BOARD, board);
-        PostListFragments fragment = new PostListFragments();
+        PostListFragment fragment = new PostListFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -135,7 +140,7 @@ public class PostListFragments extends BaseFragment implements PostListView {
 
     @Override
     public void onError(String error) {
-        // TODO: 28.05.17
+        log(error);
     }
 
     @Override
