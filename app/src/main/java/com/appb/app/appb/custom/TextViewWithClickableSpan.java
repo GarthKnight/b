@@ -66,7 +66,8 @@ public class TextViewWithClickableSpan extends android.support.v7.widget.AppComp
         for (int i = 0; i < answersLinkArray.size(); i++) {
 
             int startOfAnswerNumber = answersLinkArray.get(i) + ARROWS_LENGTH;
-            int endOfAnswerNumber = answersLinkArray.get(i) + ANSWER_NUMBER_LENGTH;
+//            int endOfAnswerNumber = answersLinkArray.get(i) + ANSWER_NUMBER_LENGTH;
+            int endOfAnswerNumber = getEndOfAnswer(answersLinkArray.get(i), text);
 
             String answerNumber = text.substring(startOfAnswerNumber, endOfAnswerNumber);
             NumberClickableSpan span = getSpanForNumber(answerNumber);
@@ -75,6 +76,21 @@ public class TextViewWithClickableSpan extends android.support.v7.widget.AppComp
 
         super.setText(ss);
         setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private int getEndOfAnswer(int startIndex, String text){
+
+        int startOfAnswerNumber = startIndex + ARROWS_LENGTH;
+        int endOfAnswerNumber = startOfAnswerNumber;
+
+        for (int i = startOfAnswerNumber; i < text.length(); i++){
+            if(Character.isDigit(text.charAt(i))) {
+                endOfAnswerNumber++;
+            } else {
+                break;
+            }
+        }
+        return endOfAnswerNumber;
     }
 
     private NumberClickableSpan getSpanForNumber(String number) {
