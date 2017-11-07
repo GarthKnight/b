@@ -20,6 +20,8 @@ import com.appb.app.appb.ui.adapters.PostsAdapter;
 import com.appb.app.appb.ui.dialogs.AnswerDialog;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -54,7 +56,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
-            posts = savedInstanceState.getParcelableArrayList(POSTS);
+            posts = savedInstanceState.getParcelable(POSTS);
         }
     }
 
@@ -118,7 +120,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(POSTS, posts);
+        outState.putParcelable(POSTS, Parcels.wrap(posts));
     }
 
     public static PostListFragment create(int num, String board) {
