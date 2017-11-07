@@ -1,6 +1,7 @@
 package com.appb.app.appb.mvp.presenters;
 
 import android.text.Html;
+import android.util.Log;
 
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Post;
@@ -10,6 +11,9 @@ import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import rx.Observable;
 import rx.Observer;
@@ -25,6 +29,8 @@ import rx.schedulers.Schedulers;
 public class PostListPresenter extends MvpPresenter<PostListView> {
 
     private static final int FIRST = 1;
+    private static final int ARROWS_LENGTH = 2;
+    private static final String TAG = "PostListPresenter";
 
     public void loadPosts(int threadNumber, String board) {
 
@@ -32,7 +38,7 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
                 .getPostsRX(board, threadNumber, FIRST)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(posts -> setAnswersForPosts(posts)
+                .flatMap(posts -> subscribeForAnswers(posts)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                 )
@@ -56,7 +62,7 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
                 });
     }
 
-    public Observable<ArrayList<Post>> setAnswersForPosts(ArrayList<Post> posts){
+    private Observable<ArrayList<Post>> setAnswersForPosts(ArrayList<Post> posts){
         return Observable.create(subscriber -> {
 
             for (int i = 0; i < posts.size(); i++) {
@@ -80,5 +86,39 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
 
             subscriber.onNext(posts);
         });
+    }
+
+    private Observable<ArrayList<Post>> subscribeForAnswers(ArrayList<Post> posts){
+        return Observable.create(subscriber -> {
+
+            HashMap<Integer, Post> postNumbers = new HashMap<>();
+
+            for (Post post : posts){
+                setPostNumberFromComment(post);
+                postNumbers.put(post.getNum(), post);
+            }
+
+            for (Post post : posts){
+                ArrayList<Post> answersPosts = new ArrayList<>();
+                for (int postNumber : post.getPostNumbersFromComments()){
+                    Post answerPost = postNumbers.get(postNumber);
+                    answersPosts.add(answerPost);
+                }
+                post.setAnswers(answersPosts);
+            }
+
+            subscriber.onNext(posts);
+        });
+    }
+
+    private void setPostNumberFromComment(Post post){
+        ArrayList<Integer> postNumbers = new ArrayList<>();
+        Pattern pattern = Pattern.compile("^([>]{2})+([0-9]+)$");
+        Matcher matcher = pattern.matcher(post.getComment());
+        while (matcher.find()){
+            postNumbers.add(Integer.valueOf(matcher.group().substring(ARROWS_LENGTH)));
+            Log.d(TAG, "setPostNumberFromComment: " +matcher.group());
+        }
+        post.setPostNumbersFromComments(postNumbers);
     }
 }
