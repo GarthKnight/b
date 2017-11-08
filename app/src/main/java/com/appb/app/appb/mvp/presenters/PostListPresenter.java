@@ -113,18 +113,10 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
 
     private void setPostNumberFromComment(Post post){
         ArrayList<Integer> postNumbers = new ArrayList<>();
-        Pattern pattern = Pattern.compile("^.*([>]{2})+([0-9]+).*$");
+        Pattern pattern = Pattern.compile("([>]{2})+([0-9]+)");
         Matcher matcher = pattern.matcher(post.getComment());
-        if (matcher.find()){
-            postNumbers.add(Integer.valueOf(matcher.group().substring(ARROWS_LENGTH)));
-            try {
-                Log.d(TAG, "setPostNumberFromComment: " +matcher.group(1));
-
-            } catch (Exception e){
-                Log.d(TAG, "setPostNumberFromComment: " + e.getMessage());
-            }
-            Log.d(TAG, "setPostNumberFromComment: " +matcher.group(1));
-
+        while (matcher.find()){
+            postNumbers.add(Integer.valueOf(matcher.group(2)));
         }
         post.setPostNumbersFromComments(postNumbers);
     }
