@@ -2,44 +2,40 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/white_rect_with_grey_border"
     android:layout_marginBottom="10dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
-    >
+    android:background="@drawable/white_rect_with_grey_border">
 
     <TextView
         android:id="@+id/tvCommentDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="09/03/17 Чтв 15:18"
-        android:textSize="16sp"
-        android:layout_marginTop="12dp"
         android:layout_marginLeft="@dimen/right_thread"
-        />
+        android:layout_marginTop="12dp"
+        android:text="09/03/17 Чтв 15:18"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tvPosition"
-        android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/tvCommentNumer"
-        android:layout_marginTop="12dp"
         android:layout_marginRight="15dp"
-        android:text="#1"/>
+        android:layout_marginTop="12dp"
+        android:layout_toLeftOf="@+id/tvCommentNumer"
+        android:text="#1"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tvCommentNumer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/right_thread"
-        android:textSize="16sp"
+        android:layout_marginTop="12dp"
         android:text="№000000000"
         android:textColor="@color/colorPrimary"
-        />
-
+        android:textSize="16sp" />
 
 
     <com.appb.app.appb.custom.TextViewWithClickableSpan
@@ -47,39 +43,50 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvCommentDate"
-        android:layout_marginTop="14dp"
         android:layout_marginLeft="@dimen/right_thread"
+        android:layout_marginTop="14dp"
         android:paddingRight="14dp"
-        android:textSize="18sp"
-        android:textColor="@color/black"
         android:text="@string/example_text"
-        />
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvThumbnails"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_below="@+id/tvTextComment"
+        android:layout_marginTop="6dp"
         android:orientation="horizontal"
         android:paddingBottom="6dp"
-        android:layout_marginTop="6dp"
         android:paddingLeft="14dp"
         android:paddingRight="14dp"
         android:paddingTop="6dp" />
 
 
-    <com.appb.app.appb.custom.TextViewWithClickableSpan
-        android:id="@+id/tvAnswers"
+    <TextView
+        android:id="@+id/btnAnswers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rvThumbnails"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:layout_marginTop="8dp"
-        android:textSize="14sp"
+        android:text="@string/answers"
         android:textColor="@color/colorPrimary"
-        />
+        android:textSize="14sp" />
 
+    <com.appb.app.appb.custom.TextViewWithClickableSpan
+        android:id="@+id/tvAnswers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnAnswers"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp"
+        />
 
 
 </RelativeLayout>
