@@ -59,9 +59,9 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
             vh.tvTextComment.setVisibility(VISIBLE);
             vh.tvTextComment.setSpannableText(Html.fromHtml(postText));
             vh.tvTextComment.setLinkClickListener(number -> {
-                for (int i = 0; i < posts.size(); i++) {
-                    if (posts.get(i).getNum() == number) {
-                        PostsAdapter.this.onAnswerClick(posts, i);
+                for (Post answer : posts) {
+                    if (answer.getNum() == number) {
+                        PostsAdapter.this.onAnswerClick(posts, answer);
                         break;
                     }
                 }
@@ -108,9 +108,16 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
 
         //TODO: replace code below to onBindViewHolder
         tv.setLinkClickListener(number -> {
-            for (int i = 0; i < answers.size(); i++) {
-                if (answers.get(i).getNum() == number) {
-                    new AnswerDialog(tv.getContext(), posts, i).show();
+            for (Post answer : answers) {
+                if (answer.getNum() == number) {
+                    AnswerDialog dialog = new AnswerDialog(tv.getContext(), posts, answer){
+                        @Override
+                        public void onThumbnailClick(int position, ArrayList<File> files) {
+                            super.onThumbnailClick(position, files);
+                            PostsAdapter.this.onThumbnailClick(position, files);
+                        }
+                    };
+                    dialog.show();
                     break;
                 }
             }
@@ -118,8 +125,9 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
 
     }
 
-    public void onAnswerClick(ArrayList<Post> posts, int index) {
+    public void onAnswerClick(ArrayList<Post> posts, Post post) {
     }
+
 
     @Override
     public int getItemCount() {

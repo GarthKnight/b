@@ -111,7 +111,7 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
             for(Post post : posts){
                 for (int postNumber : post.getPostNumbersFromComments()){
                     Post answerPost = postNumbers.get(postNumber);
-                    ArrayList<Post> answers = post.getAnswers();
+                    ArrayList<Post> answers = answerPost.getAnswers();
                     answers.add(post);
                     answerPost.setAnswers(answers);
                 }

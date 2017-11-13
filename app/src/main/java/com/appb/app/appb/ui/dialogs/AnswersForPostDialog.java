@@ -75,7 +75,7 @@ public class AnswersForPostDialog extends Dialog {
             }
 
             if (tmp != -1) {
-                AnswerDialog answerDialog = new AnswerDialog(getContext(), posts, tmp)
+//                AnswerDialog answerDialog = new AnswerDialog(getContext(), posts, tmp)
 //                {
 //                    @Override
 //                    public void onItemClick(View v, int position, int pos) {
@@ -83,7 +83,7 @@ public class AnswersForPostDialog extends Dialog {
 //                    }
 //                }
                 ;
-                answerDialog.show();
+//                answerDialog.show();
             }
         });
     }

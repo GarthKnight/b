@@ -95,8 +95,8 @@ public class PostListFragment extends BaseFragment implements PostListView {
             }
 
             @Override
-            public void onAnswerClick(ArrayList<Post> postsAnswer, int index) {
-                AnswerDialog answerDialog = new AnswerDialog((getContext()), postsAnswer, index){
+            public void onAnswerClick(ArrayList<Post> posts, Post answer) {
+                AnswerDialog answerDialog = new AnswerDialog((getContext()), posts, answer){
                     @Override
                     public void onThumbnailClick(int position, ArrayList<File> files) {
                         super.onThumbnailClick(position, files);

@@ -1,5 +1,7 @@
 package com.appb.app.appb.data;
+
 import org.parceler.Parcel;
+
 import java.util.ArrayList;
 
 /**
@@ -8,38 +10,36 @@ import java.util.ArrayList;
 @Parcel
 public class Post {
 
-    private int banned;
-    private int closed;
-    private String comment;
-    private String date;
-    private String email;
-    private ArrayList<File> files;
-    private int files_count;
-    private long lastshit;
-    private int op;
-    private String parent;
-    private int post_count;
-    private int sticky;
-    private String subject;
-    private String tags;
-    private long timestamp;
-    private String trip;
-    private int num;
-    private ArrayList<Post> answers = new ArrayList<>();
-    private ArrayList<Integer> postNumbersFromComments;
+    protected int banned;
+    protected int closed;
+    protected String comment;
+    protected String date;
+    protected String email;
+    protected ArrayList<File> files;
+    protected int files_count;
+    protected long lastshit;
+    protected int op;
+    protected String parent;
+    protected int post_count;
+    protected int sticky;
+    protected String subject;
+    protected String tags;
+    protected long timestamp;
+    protected String trip;
+    protected int num;
+    protected ArrayList<Post> answers = new ArrayList<>();
+    protected ArrayList<Integer> postNumbersFromComments;
 
 
-
-
-    public String getName(){
+    public String getName() {
         return subject;
     }
 
-    public String getComment(){
+    public String getComment() {
         return comment;
     }
 
-    public String getDate(){
+    public String getDate() {
         return date;
     }
 
@@ -47,7 +47,7 @@ public class Post {
         return num;
     }
 
-    public String getSubject(){
+    public String getSubject() {
         return subject;
     }
 
@@ -71,8 +71,6 @@ public class Post {
     public void setPostNumbersFromComments(ArrayList<Integer> postNumbersFromComments) {
         this.postNumbersFromComments = postNumbersFromComments;
     }
-
-
 
 
 }
