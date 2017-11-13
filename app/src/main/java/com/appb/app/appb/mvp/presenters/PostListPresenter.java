@@ -98,13 +98,23 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
                 postNumbers.put(post.getNum(), post);
             }
 
-            for (Post post : posts){
-                ArrayList<Post> answersPosts = new ArrayList<>();
+//            for (Post post : posts){
+//
+//                ArrayList<Post> answersPosts = new ArrayList<>();
+//                for (int postNumber : post.getPostNumbersFromComments()){
+//                    Post answerPost = postNumbers.get(postNumber);
+//                    answersPosts.add(answerPost);
+//                }
+//                post.setAnswers(answersPosts);
+//            }
+//
+            for(Post post : posts){
                 for (int postNumber : post.getPostNumbersFromComments()){
                     Post answerPost = postNumbers.get(postNumber);
-                    answersPosts.add(answerPost);
+                    ArrayList<Post> answers = post.getAnswers();
+                    answers.add(post);
+                    answerPost.setAnswers(answers);
                 }
-                post.setAnswers(answersPosts);
             }
 
             subscriber.onNext(posts);

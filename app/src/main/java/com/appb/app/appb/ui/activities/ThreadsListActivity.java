@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.ToggleButton;
 
+import com.appb.app.appb.ui.adapters.ThreadsAdapter;
 import com.appb.app.appb.ui.fragments.PostListFragment;
 import com.appb.app.appb.utils.PrefUtils;
 import com.appb.app.appb.R;
@@ -19,7 +20,6 @@ import com.appb.app.appb.data.Post;
 import com.appb.app.appb.data.Thread;
 import com.appb.app.appb.mvp.presenters.ThreadListPresenter;
 import com.appb.app.appb.mvp.views.ThreadListView;
-import com.appb.app.appb.ui.adapters.ThreadListAdapter;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class ThreadsListActivity extends BaseActivity implements ThreadListView 
     private boolean hasNextPage;
 
     private LinearLayoutManager llm;
-    private ThreadListAdapter threadListAdapter;
+    private ThreadsAdapter threadsAdapter;
     private ArrayList<Thread> threads = new ArrayList<>();
 
     @BindView(R.id.rvThreads)
@@ -92,7 +92,7 @@ public class ThreadsListActivity extends BaseActivity implements ThreadListView 
     }
 
     private void initAdapter() {
-        threadListAdapter = new ThreadListAdapter(threads) {
+        threadsAdapter = new ThreadsAdapter(threads) {
 
             @Override
             public void onThumbnailClick(int position, ArrayList<File> files) {
@@ -106,7 +106,7 @@ public class ThreadsListActivity extends BaseActivity implements ThreadListView 
                 showFragment(PostListFragment.create(getFirstPostForThread(pos).getNum(), boardId), true);
             }
         };
-        rvThreads.setAdapter(threadListAdapter);
+        rvThreads.setAdapter(threadsAdapter);
     }
 
     private void openPicViewerActivity(ArrayList<File> files, int imageIndex) {
@@ -197,7 +197,7 @@ public class ThreadsListActivity extends BaseActivity implements ThreadListView 
             threads.addAll(justLoadedThreads);
         }
 
-        threadListAdapter.notifyDataSetChanged();
+        threadsAdapter.notifyDataSetChanged();
         currentPage++;
         if (justLoadedThreads.size() == THREAD_MAX_COUNT) {
             hasNextPage = true;

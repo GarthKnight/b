@@ -68,13 +68,7 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
             });
         }
 
-        setVisibilityToAnswersButton(post, vh.btnAnswers);
-        if (post.getAnswers().size() > 0){
-            vh.tvAnswers.setVisibility(VISIBLE);
-            setTextToAnswers(post, vh.tvAnswers);
-        } else {
-            vh.tvAnswers.setVisibility(GONE);
-        }
+        setVisibilityToAnswersButton(post, vh.btnAnswers, vh.tvAnswers);
     }
 
     private View.OnClickListener getAnswersOnClickListener() {
@@ -82,15 +76,23 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
         return null;
     }
 
-    private void setVisibilityToAnswersButton(Post post, TextView tv) {
+    private void setVisibilityToAnswersButton(Post post, TextView tv, TextViewWithClickableSpan tvAnswers) {
         if (post.getAnswers().size() > 0) {
-            tv.setVisibility(VISIBLE);
+            tv.setTextColor(tv.getContext().getResources().getColor(R.color.colorPrimary));
+            tv.setOnClickListener(getOpenAnswerClickListener(tvAnswers, post));
         } else {
-            tv.setVisibility(GONE);
+            tv.setTextColor(tv.getContext().getResources().getColor(R.color.gray));
+
         }
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
     private void setTextToAnswers(Post post, TextViewWithClickableSpan tv) {
+        tv.setVisibility(VISIBLE);
         ArrayList<Post> answers = post.getAnswers();
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -108,7 +110,8 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
         tv.setLinkClickListener(number -> {
             for (int i = 0; i < answers.size(); i++) {
                 if (answers.get(i).getNum() == number) {
-                    new AnswerDialog(tv.getContext(), posts, i);
+                    new AnswerDialog(tv.getContext(), posts, i).show();
+                    break;
                 }
             }
         });
@@ -126,6 +129,12 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
     @Override
     public ArrayList<File> getFiles(int pos) {
         return posts.get(pos).getFiles();
+    }
+
+    private View.OnClickListener getOpenAnswerClickListener(TextViewWithClickableSpan tv, Post post) {
+        return (View v) -> {
+            setTextToAnswers(post, tv);
+        };
     }
 
     class VHPost extends VHImages {

@@ -1,8 +1,5 @@
 package com.appb.app.appb.ui.adapters;
 
-import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -22,12 +19,12 @@ import butterknife.BindView;
  * Created by 1 on 10.03.2017.
  */
 
-public class ThreadListAdapter extends BaseRVAdapterWithImages<ThreadListAdapter.VHThread> {
+public class ThreadsAdapter extends BaseRVAdapterWithImages<ThreadsAdapter.VHThread> {
 
     private static final int THREAD_TEXT_SIZE = 240;
     private ArrayList<Thread> threads;
 
-    protected ThreadListAdapter(ArrayList<Thread> threads) {
+    protected ThreadsAdapter(ArrayList<Thread> threads) {
         this.threads = threads;
     }
 

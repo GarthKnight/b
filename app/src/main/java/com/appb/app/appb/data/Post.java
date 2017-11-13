@@ -25,7 +25,7 @@ public class Post {
     private long timestamp;
     private String trip;
     private int num;
-    private ArrayList<Post> answers;
+    private ArrayList<Post> answers = new ArrayList<>();
     private ArrayList<Integer> postNumbersFromComments;
 
 
