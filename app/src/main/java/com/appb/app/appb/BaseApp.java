@@ -23,4 +23,15 @@ public class BaseApp extends Application {
 //        MultiDex.install(this);   //this must be uncomment when min api level is 14
     }
 
+    public static BaseApp getInstance() {
+        if (instance == null) {
+            synchronized (BaseApp.class) {
+                if (instance == null) {
+                    instance = new BaseApp();
+                }
+            }
+        }
+        return instance;
+    }
+
 }

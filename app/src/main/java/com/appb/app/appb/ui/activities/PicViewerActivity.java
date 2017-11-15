@@ -1,10 +1,13 @@
 package com.appb.app.appb.ui.activities;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,10 +17,13 @@ import com.appb.app.appb.custom.TouchableViewPager;
 import com.appb.app.appb.data.File;
 import com.appb.app.appb.ui.adapters.ViewerAdapter;
 import com.appb.app.appb.ui.fragments.WebmFragment;
+import com.appb.app.appb.utils.Utils;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by 1 on 14.03.2017.
@@ -32,7 +38,7 @@ public class PicViewerActivity extends BaseActivity {
     @BindView(R.id.vpPicPager)
     TouchableViewPager vpPicPager;
 
-    private ViewerAdapter viewerAdapter;
+    private ArrayList<File> files;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,8 +57,8 @@ public class PicViewerActivity extends BaseActivity {
     }
 
     private void initPager() {
-        ArrayList<File> files = getIntent().getExtras().getParcelableArrayList(FILES);
-        viewerAdapter = new ViewerAdapter(files, getSupportFragmentManager());
+        files = getIntent().getExtras().getParcelableArrayList(FILES);
+        ViewerAdapter viewerAdapter = new ViewerAdapter(files, getSupportFragmentManager());
         vpPicPager.setAdapter(viewerAdapter);
         vpPicPager.setPageMargin(16);
         vpPicPager.addOnPageChangeListener(onPageChangeListener);
@@ -123,6 +129,44 @@ public class PicViewerActivity extends BaseActivity {
         String tag = makeVPFragmentName(R.id.vpPicPager, position);
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
         return fragment;
+    }
+
+    @OnClick(R.id.ibMenu)
+    public void onMenuClick(View v) {
+        PopupMenu myPopup = new PopupMenu(this, v);
+        myPopup.inflate(R.menu.menu_picture);
+        myPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+
+                    case R.id.download:
+                        Log.d(TAG, "onMenuItemClick: ");
+                        savePicture();
+                        return true;
+
+                    default:
+                        return this.onMenuItemClick(item);
+
+                }
+            }
+        });
+        myPopup.show();
+    }
+
+    private void savePicture() {
+        File file = files.get(vpPicPager.getCurrentItem());
+        Bitmap bitmap = null;
+        try {
+
+            bitmap = Glide.with(this).load(file.getPath()).asBitmap().into(100, 100).get();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (bitmap != null){
+        }
     }
 
 }

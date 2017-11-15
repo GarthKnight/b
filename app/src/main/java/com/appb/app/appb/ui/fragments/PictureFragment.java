@@ -33,7 +33,11 @@ public class PictureFragment extends BaseFragment {
 
     @Override
     public void init() {
-        Glide.with(this).load(getArguments().getString(PATH)).asBitmap().into(pvPicture);
+        Glide
+                .with(this)
+                .load(getArguments().getString(PATH))
+                .asBitmap()
+                .into(pvPicture);
     }
 
     public static PictureFragment newInstance(String path) {
