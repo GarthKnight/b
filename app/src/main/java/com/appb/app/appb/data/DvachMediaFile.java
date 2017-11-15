@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by 1 on 11.03.2017.
  */
 
-public class File implements Parcelable {
+public class DvachMediaFile implements Parcelable {
 
     private static final String JPG = ".jpg";
     private static final String PNG = ".png";
@@ -25,7 +25,7 @@ public class File implements Parcelable {
     String path;
     String thumbnail;
 
-    protected File(Parcel in) {
+    protected DvachMediaFile(Parcel in) {
         displayName = in.readString();
         fullName = in.readString();
         name = in.readString();
@@ -33,15 +33,15 @@ public class File implements Parcelable {
         thumbnail = in.readString();
     }
 
-    public static final Creator<File> CREATOR = new Creator<File>() {
+    public static final Creator<DvachMediaFile> CREATOR = new Creator<DvachMediaFile>() {
         @Override
-        public File createFromParcel(Parcel in) {
-            return new File(in);
+        public DvachMediaFile createFromParcel(Parcel in) {
+            return new DvachMediaFile(in);
         }
 
         @Override
-        public File[] newArray(int size) {
-            return new File[size];
+        public DvachMediaFile[] newArray(int size) {
+            return new DvachMediaFile[size];
         }
     };
 

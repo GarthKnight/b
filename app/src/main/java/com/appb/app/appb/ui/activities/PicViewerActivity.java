@@ -14,12 +14,14 @@ import android.view.WindowManager;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.custom.TouchableViewPager;
-import com.appb.app.appb.data.File;
+import com.appb.app.appb.data.DvachMediaFile;
 import com.appb.app.appb.ui.adapters.ViewerAdapter;
 import com.appb.app.appb.ui.fragments.WebmFragment;
 import com.appb.app.appb.utils.Utils;
 import com.bumptech.glide.Glide;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -38,7 +40,7 @@ public class PicViewerActivity extends BaseActivity {
     @BindView(R.id.vpPicPager)
     TouchableViewPager vpPicPager;
 
-    private ArrayList<File> files;
+    private ArrayList<DvachMediaFile> dvachMediaFiles;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,8 +59,8 @@ public class PicViewerActivity extends BaseActivity {
     }
 
     private void initPager() {
-        files = getIntent().getExtras().getParcelableArrayList(FILES);
-        ViewerAdapter viewerAdapter = new ViewerAdapter(files, getSupportFragmentManager());
+        dvachMediaFiles = getIntent().getExtras().getParcelableArrayList(FILES);
+        ViewerAdapter viewerAdapter = new ViewerAdapter(dvachMediaFiles, getSupportFragmentManager());
         vpPicPager.setAdapter(viewerAdapter);
         vpPicPager.setPageMargin(16);
         vpPicPager.addOnPageChangeListener(onPageChangeListener);
@@ -155,11 +157,17 @@ public class PicViewerActivity extends BaseActivity {
     }
 
     private void savePicture() {
-        File file = files.get(vpPicPager.getCurrentItem());
+        DvachMediaFile dvachMediaFile = dvachMediaFiles.get(vpPicPager.getCurrentItem());
+        File file = new File(Utils.getDocumentFolderPath("2ch") + "/" + dvachMediaFile.getName());
         Bitmap bitmap = null;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        byte[] byteArray;
+
         try {
 
-            bitmap = Glide.with(this).load(file.getPath()).asBitmap().into(100, 100).get();
+            bitmap = Glide.with(this).load(dvachMediaFile.getPath()).asBitmap().into(100, 100).get();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byteArray = stream.toByteArray();
 
         } catch (Exception e) {
             e.printStackTrace();

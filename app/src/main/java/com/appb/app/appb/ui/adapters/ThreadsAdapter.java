@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.data.File;
+import com.appb.app.appb.data.DvachMediaFile;
 import com.appb.app.appb.data.Thread;
 
 import java.util.ArrayList;
@@ -49,8 +49,8 @@ public class ThreadsAdapter extends BaseRVAdapterWithImages<ThreadsAdapter.VHThr
     }
 
     @Override
-    public ArrayList<File> getFiles(int pos) {
-        return threads.get(pos).getPosts().get(0).getFiles();
+    public ArrayList<DvachMediaFile> getFiles(int pos) {
+        return threads.get(pos).getPosts().get(0).getDvachMediaFiles();
     }
 
     private String formatStringForThread(String text){

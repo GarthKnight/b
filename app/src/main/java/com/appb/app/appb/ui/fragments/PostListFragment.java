@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.appb.app.appb.R;
-import com.appb.app.appb.data.File;
+import com.appb.app.appb.data.DvachMediaFile;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.mvp.presenters.PostListPresenter;
 import com.appb.app.appb.mvp.views.PostListView;
@@ -89,16 +89,16 @@ public class PostListFragment extends BaseFragment implements PostListView {
         postsAdapter = new PostsAdapter(posts) {
 
             @Override
-            public void onThumbnailClick(int position, ArrayList<File> files) {
-                super.onThumbnailClick(position, files);
-                startPicViewerActivity(files, position);
+            public void onThumbnailClick(int position, ArrayList<DvachMediaFile> dvachMediaFiles) {
+                super.onThumbnailClick(position, dvachMediaFiles);
+                startPicViewerActivity(dvachMediaFiles, position);
             }
 
             @Override
             public void onAnswerClick(ArrayList<Post> posts, Post answer) {
                 AnswerDialog answerDialog = new AnswerDialog((getContext()), posts, answer){
                     @Override
-                    public void onThumbnailClick(int position, ArrayList<File> files) {
+                    public void onThumbnailClick(int position, ArrayList<DvachMediaFile> files) {
                         super.onThumbnailClick(position, files);
                         startPicViewerActivity(files, position);
                     }
@@ -110,9 +110,9 @@ public class PostListFragment extends BaseFragment implements PostListView {
         rvPosts.setAdapter(postsAdapter);
     }
 
-    private void startPicViewerActivity(ArrayList<File> files, int pos) {
+    private void startPicViewerActivity(ArrayList<DvachMediaFile> dvachMediaFiles, int pos) {
         Intent intent = new Intent(getContext(), PicViewerActivity.class);
-        intent.putExtra(FILES, files);
+        intent.putExtra(FILES, dvachMediaFiles);
         intent.putExtra(POS, pos);
         startActivity(intent);
     }

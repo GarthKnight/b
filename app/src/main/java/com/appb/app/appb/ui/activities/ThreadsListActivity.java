@@ -10,12 +10,12 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.ToggleButton;
 
+import com.appb.app.appb.data.DvachMediaFile;
 import com.appb.app.appb.ui.adapters.ThreadsAdapter;
 import com.appb.app.appb.ui.fragments.PostListFragment;
 import com.appb.app.appb.utils.PrefUtils;
 import com.appb.app.appb.R;
 import com.appb.app.appb.data.Data;
-import com.appb.app.appb.data.File;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.data.Thread;
 import com.appb.app.appb.mvp.presenters.ThreadListPresenter;
@@ -95,9 +95,9 @@ public class ThreadsListActivity extends BaseActivity implements ThreadListView 
         threadsAdapter = new ThreadsAdapter(threads) {
 
             @Override
-            public void onThumbnailClick(int position, ArrayList<File> files) {
-                super.onThumbnailClick(position, files);
-                openPicViewerActivity(files, position);
+            public void onThumbnailClick(int position, ArrayList<DvachMediaFile> dvachMediaFiles) {
+                super.onThumbnailClick(position, dvachMediaFiles);
+                openPicViewerActivity(dvachMediaFiles, position);
             }
 
             //может быть тебе пора?
@@ -109,9 +109,9 @@ public class ThreadsListActivity extends BaseActivity implements ThreadListView 
         rvThreads.setAdapter(threadsAdapter);
     }
 
-    private void openPicViewerActivity(ArrayList<File> files, int imageIndex) {
+    private void openPicViewerActivity(ArrayList<DvachMediaFile> dvachMediaFiles, int imageIndex) {
         Intent intent = new Intent(this, PicViewerActivity.class);
-        intent.putExtra(FILES, files);
+        intent.putExtra(FILES, dvachMediaFiles);
         intent.putExtra(POS, imageIndex);
         startActivity(intent);
     }

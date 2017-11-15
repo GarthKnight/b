@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.appb.app.appb.api.API;
-import com.appb.app.appb.data.File;
+import com.appb.app.appb.data.DvachMediaFile;
 import com.appb.app.appb.ui.fragments.PictureFragment;
 import com.appb.app.appb.ui.fragments.WebmFragment;
 
@@ -19,19 +19,19 @@ public class ViewerAdapter extends FragmentPagerAdapter {
 
     private static final String WEBM = ".webm";
 
-    private ArrayList<File> files;
+    private ArrayList<DvachMediaFile> dvachMediaFiles;
 
-    public ViewerAdapter(ArrayList<File> files, FragmentManager fm) {
+    public ViewerAdapter(ArrayList<DvachMediaFile> dvachMediaFiles, FragmentManager fm) {
         super(fm);
-        this.files = files;
+        this.dvachMediaFiles = dvachMediaFiles;
     }
 
     @Override
     public Fragment getItem(int position) {
 
-        String fileName = files.get(position).getName();
-        String fileUrl = API.URL + files.get(position).getPath();
-        String thumbUrl = API.URL + files.get(position).getThumbnail();
+        String fileName = dvachMediaFiles.get(position).getName();
+        String fileUrl = API.URL + dvachMediaFiles.get(position).getPath();
+        String thumbUrl = API.URL + dvachMediaFiles.get(position).getThumbnail();
 
         if (fileName.toLowerCase().contains(WEBM)) {
             return WebmFragment.newInstance(fileUrl, thumbUrl);
@@ -42,7 +42,7 @@ public class ViewerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return files.size();
+        return dvachMediaFiles.size();
     }
 
 }

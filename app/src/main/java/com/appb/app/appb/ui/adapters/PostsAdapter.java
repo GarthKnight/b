@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.custom.TextViewWithClickableSpan;
-import com.appb.app.appb.data.File;
+import com.appb.app.appb.data.DvachMediaFile;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.ui.dialogs.AnswerDialog;
 
@@ -112,7 +112,7 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
                 if (answer.getNum() == number) {
                     AnswerDialog dialog = new AnswerDialog(tv.getContext(), posts, answer){
                         @Override
-                        public void onThumbnailClick(int position, ArrayList<File> files) {
+                        public void onThumbnailClick(int position, ArrayList<DvachMediaFile> files) {
                             super.onThumbnailClick(position, files);
                             PostsAdapter.this.onThumbnailClick(position, files);
                         }
@@ -135,8 +135,8 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
     }
 
     @Override
-    public ArrayList<File> getFiles(int pos) {
-        return posts.get(pos).getFiles();
+    public ArrayList<DvachMediaFile> getFiles(int pos) {
+        return posts.get(pos).getDvachMediaFiles();
     }
 
     private View.OnClickListener getOpenAnswerClickListener(TextViewWithClickableSpan tv, Post post) {

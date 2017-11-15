@@ -15,7 +15,7 @@ public class Post {
     protected String comment;
     protected String date;
     protected String email;
-    protected ArrayList<File> files;
+    protected ArrayList<DvachMediaFile> dvachMediaFiles;
     protected int files_count;
     protected long lastshit;
     protected int op;
@@ -51,8 +51,8 @@ public class Post {
         return subject;
     }
 
-    public ArrayList<File> getFiles() {
-        return files;
+    public ArrayList<DvachMediaFile> getDvachMediaFiles() {
+        return dvachMediaFiles;
     }
 
     public ArrayList<Post> getAnswers() {

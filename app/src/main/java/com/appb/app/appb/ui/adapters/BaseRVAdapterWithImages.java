@@ -3,13 +3,9 @@ package com.appb.app.appb.ui.adapters;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 
-import com.appb.app.appb.api.API;
-import com.appb.app.appb.data.File;
-import com.bumptech.glide.Glide;
+import com.appb.app.appb.data.DvachMediaFile;
 
 import java.util.ArrayList;
 
@@ -33,9 +29,9 @@ public abstract class BaseRVAdapterWithImages<VH extends VHImages> extends Recyc
 
     @Override
     public void onBindViewHolder(VH vh, int position) {
-        ArrayList<File> files = getFiles(position);
+        ArrayList<DvachMediaFile> dvachMediaFiles = getFiles(position);
 
-        if (files.size() > 0){
+        if (dvachMediaFiles.size() > 0){
             vh.rvThumbnails.setVisibility(VISIBLE);
         } else {
             vh.rvThumbnails.setVisibility(GONE);
@@ -46,7 +42,7 @@ public abstract class BaseRVAdapterWithImages<VH extends VHImages> extends Recyc
             @Override
             public void onPictureClick(int position) {
                 super.onPictureClick(position);
-                onThumbnailClick(position, files);
+                onThumbnailClick(position, dvachMediaFiles);
             }
         };
         vh.rvThumbnails.setAdapter(thumbnailsAdapter);
@@ -55,8 +51,8 @@ public abstract class BaseRVAdapterWithImages<VH extends VHImages> extends Recyc
 
     }
 
-    public void onThumbnailClick(int position, ArrayList<File> files){}
+    public void onThumbnailClick(int position, ArrayList<DvachMediaFile> dvachMediaFiles){}
 
-    public abstract ArrayList<File> getFiles(int pos);
+    public abstract ArrayList<DvachMediaFile> getFiles(int pos);
 
 }

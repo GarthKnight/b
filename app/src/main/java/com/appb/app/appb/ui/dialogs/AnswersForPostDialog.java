@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.View;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.custom.TextViewWithClickableSpan;
@@ -90,7 +89,7 @@ public class AnswersForPostDialog extends Dialog {
 
     private void startPicViewerActivity(int position, int pos) {
         Intent intent = new Intent(getContext(), PicViewerActivity.class);
-        intent.putExtra(FILES, posts.get(position).getFiles());
+        intent.putExtra(FILES, posts.get(position).getDvachMediaFiles());
         intent.putExtra(POS, pos);
         getContext().startActivity(intent);
     }

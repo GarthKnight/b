@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.api.API;
-import com.appb.app.appb.data.File;
+import com.appb.app.appb.data.DvachMediaFile;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -23,10 +23,10 @@ import butterknife.ButterKnife;
 
 public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.VHThumbnails> {
 
-    private ArrayList<File> files;
+    private ArrayList<DvachMediaFile> dvachMediaFiles;
 
-    public ThumbnailsAdapter(ArrayList<File> _files){
-        files = _files;
+    public ThumbnailsAdapter(ArrayList<DvachMediaFile> _DvachMedia_files){
+        dvachMediaFiles = _DvachMedia_files;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.VH
 
     @Override
     public void onBindViewHolder(VHThumbnails holder, int position) {
-        String path = API.URL + files.get(position).getThumbnail();
+        String path = API.URL + dvachMediaFiles.get(position).getThumbnail();
         Context context = holder.ivThumbnail.getContext();
         Glide.with(context).load(path).asBitmap().into(holder.ivThumbnail);
         holder.ivThumbnail.setOnClickListener(v -> onPictureClick(position));
@@ -50,7 +50,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.VH
 
     @Override
     public int getItemCount() {
-        return files.size();
+        return dvachMediaFiles.size();
     }
 
     public class VHThumbnails extends RecyclerView.ViewHolder{
