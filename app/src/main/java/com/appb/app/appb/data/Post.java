@@ -1,5 +1,7 @@
 package com.appb.app.appb.data;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
@@ -10,25 +12,26 @@ import java.util.ArrayList;
 @Parcel
 public class Post {
 
-    protected int banned;
-    protected int closed;
-    protected String comment;
-    protected String date;
-    protected String email;
-    protected ArrayList<DvachMediaFile> dvachMediaFiles;
-    protected int files_count;
-    protected long lastshit;
-    protected int op;
+    int banned;
+    int closed;
+    String comment;
+    String date;
+    String email;
+    @SerializedName("files")
+    ArrayList<DvachMediaFile> dvachMediaFiles;
+    int files_count;
+    long lastshit;
+    int op;
     protected String parent;
-    protected int post_count;
-    protected int sticky;
-    protected String subject;
-    protected String tags;
-    protected long timestamp;
-    protected String trip;
-    protected int num;
-    protected ArrayList<Post> answers = new ArrayList<>();
-    protected ArrayList<Integer> postNumbersFromComments;
+    int post_count;
+    int sticky;
+    String subject;
+    String tags;
+    long timestamp;
+    String trip;
+    int num;
+    ArrayList<Post> answers = new ArrayList<>();
+    ArrayList<Integer> postNumbersFromComments;
 
 
     public String getName() {

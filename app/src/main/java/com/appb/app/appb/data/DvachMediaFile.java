@@ -58,17 +58,6 @@ public class DvachMediaFile implements Parcelable {
     }
 
     public String getName() {
-        if (name.toLowerCase().contains(JPG)) {
-            name = JPG;
-        } else if (name.toLowerCase().contains(WEBM)) {
-            name = WEBM;
-        } else if (name.toLowerCase().contains(PNG)) {
-            name = PNG;
-        } else if (name.toLowerCase().contains(GIF)) {
-            name = GIF;
-        } else {
-            name = UNKNOWN;
-        }
         return name;
     }
 

@@ -10,13 +10,16 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -83,6 +86,9 @@ public class API {
         return serviceBoards.postsRX("get_thread", boardName, threadNumber, pathNum);
     }
 
+    public Observable<ResponseBody> dowloadFileWithDynamicUrl(String url){
+        return serviceBoards.downloadFileWithDynamicUrlSync(url);
+    }
 
 
     public interface DvachService {
@@ -103,6 +109,10 @@ public class API {
                                     @Query("thread") int threadNumber,
                                     @Query("post") int pathNum);
 
+        @GET
+        Observable<ResponseBody> downloadFileWithDynamicUrlSync(@Url String fileUrl);
     }
+
+
 
 }

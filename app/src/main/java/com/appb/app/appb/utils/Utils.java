@@ -17,17 +17,17 @@ import java.io.FileOutputStream;
 
 public class Utils {
 
-    public static String getDocumentFolderPath(String name) {
+    public static String getPicturesDirectory(String name) {
         if (isExternalStorageWritable() && isExternalStorageReadable()) {
-            File fileDocs = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            if (!fileDocs.exists()) {
-                fileDocs.mkdir();
+            File picsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            if (!picsDir.exists()) {
+                picsDir.mkdirs();
             }
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath() + "/" + name);
-            if (!file.exists()) {
-                file.mkdir();
+            File dvachDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath() + "/" + name);
+            if (!dvachDir.exists()) {
+                dvachDir.mkdirs();
             }
-            return file.getAbsolutePath();
+            return dvachDir.getAbsolutePath();
         } else {
             return BaseApp.getInstance().getFilesDir().getAbsolutePath();
         }
@@ -54,9 +54,8 @@ public class Utils {
     }
 
 
-    public static void savePhotoToStorage(byte[] data, String path, String name, File file) {
+    public static void savePhotoToStorage(byte[] data, File file) {
         if (data == null) return;
-        file = new File(path, name);
         FileOutputStream fileOutputStream = null;
         try {
             //saving image to get exif info
