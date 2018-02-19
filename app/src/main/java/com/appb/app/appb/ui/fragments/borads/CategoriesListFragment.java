@@ -14,7 +14,7 @@ public class CategoriesListFragment extends BaseBoardListFragment<Category> {
 
     @Override
     public ArrayList<Category> getArray() {
-        return Data.getInstance().getCategories();
+        return Data.get().getCategories();
     }
 
     @Override
@@ -23,7 +23,7 @@ public class CategoriesListFragment extends BaseBoardListFragment<Category> {
     }
 
     public void notifyDataSetChanged(){
-        Data.getInstance().getCategories();
+        Data.get().getCategories();
         rvAdapter.notifyDataSetChanged();
     }
 

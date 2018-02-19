@@ -14,7 +14,7 @@ public class MyFavoritesBoardsListFragment extends BaseBoardListFragment {
 
     @Override
     public ArrayList<Board> getArray() {
-        return Data.getInstance().getMyBoards();
+        return Data.get().getMyBoards();
     }
 
     @Override

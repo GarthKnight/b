@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/grayBack"
-    android:fitsSystemWindows="true"
     tools:context=".ui.activities.ThreadsListActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -31,15 +30,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-
-                <ImageButton
-                    android:id="@+id/btnMenu"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/tranparent"
-                    android:src="@drawable/ic_menu" />
 
                 <TextView
                     android:id="@+id/tvTitle"

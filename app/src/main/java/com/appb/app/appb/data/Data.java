@@ -3,7 +3,6 @@ package com.appb.app.appb.data;
 import com.appb.app.appb.utils.PrefUtils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Objects;
 
 /**
@@ -13,7 +12,7 @@ import java.util.Objects;
 public class Data {
     private static final Data ourInstance = new Data();
 
-    public static Data getInstance() {
+    public static Data get() {
         return ourInstance;
     }
 
@@ -68,7 +67,7 @@ public class Data {
     public void syncFavouritesWithPreference(){
         if (myBoards == null) myBoards = new ArrayList<>();
         myBoards.clear();
-        HashSet<String> boardIds = PrefUtils.getMyBoards();
+        ArrayList<String> boardIds = PrefUtils.getMyBoards();
 
         for (String id : boardIds) {
             for (Board board : boards) {

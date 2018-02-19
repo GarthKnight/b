@@ -81,7 +81,7 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
             tv.setTextColor(tv.getContext().getResources().getColor(R.color.colorPrimary));
             tv.setOnClickListener(getOpenAnswerClickListener(tvAnswers, post));
         } else {
-            tv.setTextColor(tv.getContext().getResources().getColor(R.color.gray));
+            tv.setTextColor(tv.getContext().getResources().getColor(R.color.appBackground));
 
         }
     }

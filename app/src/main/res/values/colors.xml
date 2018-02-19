@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#e65100</color>
     <color name="colorAccent">#4056ff</color>
     <color name="black">#000000</color>
-    <color name="gray">#e6e6e6</color>
+    <color name="appBackground">#e6e6e6</color>
     <color name="grayBack">#eeeeee</color>
     <color name="grayThred">#dcdcdc</color>
     <color name="blackTranparent">#62000000</color>

@@ -10,20 +10,19 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.ToggleButton;
 
-import com.appb.app.appb.data.DvachMediaFile;
-import com.appb.app.appb.ui.adapters.ThreadsAdapter;
-import com.appb.app.appb.ui.fragments.PostListFragment;
-import com.appb.app.appb.utils.PrefUtils;
 import com.appb.app.appb.R;
 import com.appb.app.appb.data.Data;
+import com.appb.app.appb.data.DvachMediaFile;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.data.Thread;
 import com.appb.app.appb.mvp.presenters.ThreadListPresenter;
 import com.appb.app.appb.mvp.views.ThreadListView;
+import com.appb.app.appb.ui.adapters.ThreadsAdapter;
+import com.appb.app.appb.ui.fragments.PostListFragment;
+import com.appb.app.appb.utils.PrefUtils;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -73,9 +72,9 @@ public class ThreadsListActivity extends BaseActivity implements ThreadListView 
     @Override
     public void init() {
         super.init();
-        HashSet<String> myBoardsIds = PrefUtils.getMyBoards();
-        boardId = getIntent().getExtras().getString(BOARD_ID);
-        btnStar.setChecked(myBoardsIds.contains(boardId));
+
+        boardId = getIntent().getExtras().getString(BOARD_ID, "");
+        btnStar.setChecked(PrefUtils.isFavourite(boardId));
         initAdapter();
         initRV();
 
@@ -153,15 +152,13 @@ public class ThreadsListActivity extends BaseActivity implements ThreadListView 
 
     @OnClick(R.id.btnStar)
     public void onStarClick(View v) {
-        HashSet<String> set = PrefUtils.getMyBoards();
+
         if (((ToggleButton) v).isChecked()) {
-            set.add(boardId);
-            PrefUtils.setMyBoards(set);
+            PrefUtils.saveBoard(boardId);
         } else {
-            set.remove(boardId);
-            PrefUtils.setMyBoards(set);
+            PrefUtils.removeBoard(boardId);
         }
-        Data.getInstance().syncFavouritesWithPreference();
+        Data.get().syncFavouritesWithPreference();
 
     }
 

@@ -32,7 +32,7 @@ public class BoardsByCategoriesListFragment extends BaseBoardListFragment<Board>
     @Override
     public ArrayList<Board> getArray() {
         categoryName = getArguments().getString(CATEGORY_NAME);
-        return Data.getInstance().getBoardsByCategory(categoryName);
+        return Data.get().getBoardsByCategory(categoryName);
     }
 
     @Override

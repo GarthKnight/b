@@ -24,7 +24,7 @@ public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
     private ArrayList<Category> categories = new ArrayList<>();
 
     public void loadData() {
-        if (Data.getInstance().getBoards().isEmpty()){
+        if (Data.get().getBoards().isEmpty()){
             API.getInstance()
                     .getBoards()
                     .subscribeOn(Schedulers.newThread())
@@ -42,7 +42,7 @@ public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
 
                         @Override
                         public void onNext(Boards boards) {
-                            Data.getInstance().setAllBoardsData(boards.getBoards());
+                            Data.get().setAllBoardsData(boards.getBoards());
                             getViewState().onDataLoaded();
                         }
                     });

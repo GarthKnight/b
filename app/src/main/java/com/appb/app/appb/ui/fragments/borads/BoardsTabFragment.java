@@ -14,6 +14,7 @@ import com.appb.app.appb.mvp.presenters.BoardsListPresenter;
 import com.appb.app.appb.mvp.views.BoardlistView;
 import com.appb.app.appb.ui.adapters.BoardsPagerAdapter;
 import com.appb.app.appb.ui.fragments.BaseFragment;
+import com.appb.app.appb.utils.PrefUtils;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import butterknife.BindView;
@@ -47,6 +48,7 @@ public class BoardsTabFragment extends BaseFragment implements BoardlistView {
     public void init() {
         presenter.loadData();
         setUpAdapter();
+        PrefUtils.getMyBoards();
     }
 
     @Override
@@ -58,6 +60,7 @@ public class BoardsTabFragment extends BaseFragment implements BoardlistView {
     public void onDataLoaded() {
         log("onDataLoaded : " + TAG);
         adapter.notifyDataSetChanged();
+
     }
 
     private void setUpAdapter() {
