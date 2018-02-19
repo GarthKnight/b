@@ -56,7 +56,7 @@ public class ThreadsListActivity extends BaseActivity implements ThreadListView 
     @BindView(R.id.progressBarLoading)
     ProgressBar progressBarLoading;
     @BindView(R.id.btnStar)
-    ToggleButton btnStar;
+    public ToggleButton btnStar;
 
     @InjectPresenter
     ThreadListPresenter presenter;

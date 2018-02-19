@@ -16,8 +16,10 @@ import com.appb.app.appb.data.Post;
 import com.appb.app.appb.mvp.presenters.PostListPresenter;
 import com.appb.app.appb.mvp.views.PostListView;
 import com.appb.app.appb.ui.activities.PicViewerActivity;
+import com.appb.app.appb.ui.activities.ThreadsListActivity;
 import com.appb.app.appb.ui.adapters.PostsAdapter;
 import com.appb.app.appb.ui.dialogs.AnswerDialog;
+import com.appb.app.appb.utils.ViewUtils;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import org.parceler.Parcels;
@@ -76,6 +78,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
         if (posts.size() == 0) {
             loadPosts();
         }
+        ViewUtils.makeGone(((ThreadsListActivity) getActivity()).btnStar);
     }
 
 
@@ -138,6 +141,12 @@ public class PostListFragment extends BaseFragment implements PostListView {
         posts.addAll(_posts);
         postsAdapter.notifyDataSetChanged();
         pbPosts.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        ViewUtils.makeVisible(((ThreadsListActivity) getActivity()).btnStar);
+        super.onDestroyView();
     }
 
     @Override
