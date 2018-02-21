@@ -27,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
 import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
 
@@ -37,6 +38,8 @@ import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
 public class AnswerDialog extends Dialog {
 
     static final String NUMBER_SYMBOL = "№";
+    private static final String ARROWS = ">>";
+
 
     private ArrayList<Post> posts;
     private ThumbnailsAdapter thumbnailsAdapter;
@@ -51,6 +54,10 @@ public class AnswerDialog extends Dialog {
     TextView tvCommentNumber;
     @BindView(R.id.tvTextComment)
     TextViewWithClickableSpan tvTextComment;
+    @BindView(R.id.cbAnswers)
+    TextView btnAnswers;
+    @BindView(R.id.tvAnswers)
+    TextViewWithClickableSpan tvAnswers;
 
     public AnswerDialog(Context context, ArrayList<Post> posts, Post answer) {
         super(context);
@@ -75,9 +82,8 @@ public class AnswerDialog extends Dialog {
         tvCommentNumber.setText(postNum);
         Spanned text = Html.fromHtml(answer.getComment());
         tvCommentDate.setText(answer.getDate());
-
+        setVisibilityToAnswersButton(answer);
         initRV();
-
         if (TextUtils.isEmpty(text)) {
             tvTextComment.setVisibility(GONE);
         } else {
@@ -100,9 +106,60 @@ public class AnswerDialog extends Dialog {
                 }
             });
         }
+    }
 
+
+    private void setVisibilityToAnswersButton(Post post) {
+        if (post.getAnswers().size() > 0) {
+            btnAnswers.setTextColor(getContext().getResources().getColor(R.color.colorPrimary));
+            btnAnswers.setOnClickListener(getOpenAnswerClickListener( post));
+        } else {
+            btnAnswers.setTextColor(getContext().getResources().getColor(R.color.appBackground));
+
+        }
+    }
+
+    private View.OnClickListener getOpenAnswerClickListener( Post post) {
+        return (View v) -> {
+            setTextToAnswers(post);
+        };
+    }
+
+    private void setTextToAnswers(Post post) {
+        tvAnswers.setVisibility(VISIBLE);
+        ArrayList<Post> answers = post.getAnswers();
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < answers.size(); i++) {
+            stringBuilder
+                    .append(ARROWS)
+                    .append(answers.get(i).getNum())
+                    .append(i == answers.size() - 1 ? "" : ", ");
+        }
+
+        tvAnswers.setSpannableText(stringBuilder.toString());
+
+
+        //TODO: replace code below to onBindViewHolder
+        tvAnswers.setLinkClickListener(number -> {
+            for (Post answer : answers) {
+                if (answer.getNum() == number) {
+                    AnswerDialog dialog = new AnswerDialog(getContext(), posts, answer){
+                        @Override
+                        public void onThumbnailClick(int position, ArrayList<DvachMediaFile> files) {
+                            super.onThumbnailClick(position, files);
+                            onThumbnailClick(position, files);
+                        }
+                    };
+                    dialog.show();
+                    break;
+                }
+            }
+        });
 
     }
+
+
 
     private void startPicViewerActivity(ArrayList<DvachMediaFile> dvachMediaFiles, int pos) {
         Intent intent = new Intent(getContext(), PicViewerActivity.class);

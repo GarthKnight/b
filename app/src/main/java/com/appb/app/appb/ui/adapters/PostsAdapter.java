@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.appb.app.appb.R;
@@ -51,7 +52,6 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
         vh.tvCommentDate.setText(post.getDate());
         vh.tvCommentNumber.setText(postNum);
         vh.tvPosition.setText(String.valueOf(position));
-        vh.btnAnswers.setOnClickListener(getAnswersOnClickListener());
 
         if (TextUtils.isEmpty(postText)) {
             vh.tvTextComment.setVisibility(GONE);
@@ -68,21 +68,22 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
             });
         }
 
-        setVisibilityToAnswersButton(post, vh.btnAnswers, vh.tvAnswers);
+        setVisibilityToAnswersButton(post, vh);
     }
 
-    private View.OnClickListener getAnswersOnClickListener() {
-        //TODO: make expandable bar
-        return null;
-    }
-
-    private void setVisibilityToAnswersButton(Post post, TextView tv, TextViewWithClickableSpan tvAnswers) {
+    private void setVisibilityToAnswersButton(Post post, VHPost vhPost) {
         if (post.getAnswers().size() > 0) {
-            tv.setTextColor(tv.getContext().getResources().getColor(R.color.colorPrimary));
-            tv.setOnClickListener(getOpenAnswerClickListener(tvAnswers, post));
+            vhPost.cbAnswers.setTextColor(vhPost.cbAnswers.getContext().getResources().getColor(R.color.colorPrimary));
+            vhPost.cbAnswers.setOnClickListener(v -> {
+                if (!vhPost.cbAnswers.isChecked()){
+                    setTextToAnswers(post, vhPost.tvAnswers);
+                } else {
+                    vhPost.tvAnswers.setVisibility(GONE);
+                }
+            });
         } else {
-            tv.setTextColor(tv.getContext().getResources().getColor(R.color.appBackground));
-
+            vhPost.cbAnswers.setTextColor(vhPost.cbAnswers.getContext().getResources().getColor(R.color.appBackground));
+            vhPost.tvAnswers.setVisibility(GONE);
         }
     }
 
@@ -139,12 +140,6 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
         return posts.get(pos).getDvachMediaFiles();
     }
 
-    private View.OnClickListener getOpenAnswerClickListener(TextViewWithClickableSpan tv, Post post) {
-        return (View v) -> {
-            setTextToAnswers(post, tv);
-        };
-    }
-
     class VHPost extends VHImages {
 
         @BindView(R.id.tvCommentDate)
@@ -153,8 +148,8 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
         TextView tvCommentNumber;
         @BindView(R.id.tvTextComment)
         TextViewWithClickableSpan tvTextComment;
-        @BindView(R.id.btnAnswers)
-        TextView btnAnswers;
+        @BindView(R.id.cbAnswers)
+        CheckBox cbAnswers;
         @BindView(R.id.tvPosition)
         TextView tvPosition;
         @BindView(R.id.tvAnswers)

@@ -41,7 +41,7 @@ public class ThreadsAdapter extends BaseRVAdapterWithImages<ThreadsAdapter.VHThr
                 threads.get(position).getPosts().get(0).getNum());
 
         Spanned comment = Html.fromHtml(threads.get(position).getPosts().get(0).getComment());
-        holder.tvCommentThread.setOnClickListener(v -> onCommentClick(v, holder.getAdapterPosition()));
+        holder.itemView.setOnClickListener(v -> onCommentClick(v, holder.getAdapterPosition()));
         holder.tvDateThread.setText(threads.get(position).getPosts().get(0).getDate());
         holder.tvThreadNumber.setText(threadNumber);
         holder.tvCommentThread.setText(formatStringForThread(comment.toString()));

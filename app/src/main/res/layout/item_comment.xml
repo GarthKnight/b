@@ -63,15 +63,17 @@
         android:paddingTop="6dp" />
 
 
-    <TextView
-        android:id="@+id/btnAnswers"
+    <CheckBox
+        android:id="@+id/cbAnswers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rvThumbnails"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
+        android:button="@null"
         android:text="@string/answers"
+        android:layout_marginBottom="4dp"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
 
@@ -79,11 +81,10 @@
         android:id="@+id/tvAnswers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnAnswers"
+        android:layout_below="@+id/cbAnswers"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:layout_marginTop="2dp"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp"
         android:visibility="gone"
