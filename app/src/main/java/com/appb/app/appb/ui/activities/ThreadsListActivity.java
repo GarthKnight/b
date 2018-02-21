@@ -34,7 +34,7 @@ import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
  * Created by seishu on 11.10.2017.
  */
 
-public class ThreadsListActivity extends BaseActivity implements ThreadListView {
+public class ThreadsListActivity extends MerlinActivity implements ThreadListView {
 
     private static final String THREADS = "threads";
     private static final int FIRST = 0;

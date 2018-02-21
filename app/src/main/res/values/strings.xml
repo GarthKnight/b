@@ -12,4 +12,5 @@
     <string name="example_text">Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой. Пьяный серб убил акулу жопой.</string>
     <string name="boards">Борды</string>
     <string name="answers">Ответы</string>
+    <string name="no_internet_connection_detected_please_check_your_settings">Отсутствует интернет - соединение</string>
 </resources>
