@@ -1,5 +1,6 @@
 package com.appb.app.appb.ui.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -52,6 +53,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
     ProgressBar pbPosts;
     @BindView(R.id.rlMain)
     RelativeLayout rlMain;
+   ;
 
 
     @InjectPresenter
@@ -156,13 +158,14 @@ public class PostListFragment extends BaseFragment implements PostListView {
 
     @Override
     public void onError(String errorMessage) {
+        pbPosts.setVisibility(View.GONE);
         Snackbar snackbar = Snackbar.make(rlMain, errorMessage, Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 
     @Override
     public void onLoadingEnd() {
-//        progressBar.setVisible(false);
+       pbPosts.setVisibility(View.GONE);
     }
 
     @Override

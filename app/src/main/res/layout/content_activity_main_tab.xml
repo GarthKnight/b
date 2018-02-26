@@ -13,11 +13,13 @@
 
 
     <FrameLayout
+        android:layout_below="@+id/noInternetLayout"
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
     <include
+        android:id="@+id/noInternetLayout"
         layout="@layout/layout_connection"
         android:layout_width="match_parent"
         android:layout_height="30dp"/>
