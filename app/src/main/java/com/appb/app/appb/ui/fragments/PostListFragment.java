@@ -3,12 +3,14 @@ package com.appb.app.appb.ui.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.data.DvachMediaFile;
@@ -48,6 +50,9 @@ public class PostListFragment extends BaseFragment implements PostListView {
     RecyclerView rvPosts;
     @BindView(R.id.pbPosts)
     ProgressBar pbPosts;
+    @BindView(R.id.rlMain)
+    RelativeLayout rlMain;
+
 
     @InjectPresenter
     PostListPresenter presenter;
@@ -150,13 +155,14 @@ public class PostListFragment extends BaseFragment implements PostListView {
     }
 
     @Override
-    public void onError(String error) {
-        log(error);
+    public void onError(String errorMessage) {
+        Snackbar snackbar = Snackbar.make(rlMain, errorMessage, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @Override
     public void onLoadingEnd() {
-        //progressBar.setVisible(false);
+//        progressBar.setVisible(false);
     }
 
     @Override

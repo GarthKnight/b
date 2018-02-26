@@ -3,6 +3,10 @@ package com.appb.app.appb.mvp.views;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.data.Thread;
 import com.arellomobile.mvp.MvpView;
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
+import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.util.ArrayList;
 
@@ -12,13 +16,14 @@ import java.util.ArrayList;
 
 public interface ThreadListView extends MvpView {
 
+    @StateStrategyType(AddToEndSingleStrategy.class)
     void onThreadsLoaded(ArrayList<Thread> threads);
 
-    void  onError(String error);
+    @StateStrategyType(SkipStrategy.class)
+    void  onError(String errorMessage);
 
-    void onLoadingStart();
-
+    @StateStrategyType(AddToEndSingleStrategy.class)
     void onLoadingEnd();
 
-    void setProgressBarLoading();
+
 }

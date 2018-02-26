@@ -10,6 +10,7 @@ import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.ArrayList;
 
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -32,19 +33,21 @@ public class ThreadListPresenter extends MvpPresenter<ThreadListView> {
                 .subscribe(new Observer<BoardPage>() {
                     @Override
                     public void onCompleted() {
-                        getViewState().onLoadingStart();
                         getViewState().onLoadingEnd();
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        getViewState().onError(e.getMessage());
-                        e.printStackTrace();
+                    public void onError(Throwable t) {
+                        String errorMessage = "";
+                        t.printStackTrace();
+                        if (t instanceof HttpException){
+                            //TODO: обработка ошибок
+                        }
+                        getViewState().onError(errorMessage);
                     }
 
                     @Override
                     public void onNext(BoardPage boardPage) {
-                        getViewState().setProgressBarLoading();
                         getViewState().onThreadsLoaded(boardPage.getThreads());
                     }
                 });

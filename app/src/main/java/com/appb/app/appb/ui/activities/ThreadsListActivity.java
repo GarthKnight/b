@@ -43,7 +43,7 @@ public class ThreadsListActivity extends MerlinActivity implements ThreadListVie
     private static final String TAG = "ThreadsListActivity";
 
     private int currentPage = 1;
-    private String boardId = "b";
+    private String boardId;
     private boolean mIsLoadingData = false;
     private boolean hasNextPage;
 
@@ -61,7 +61,6 @@ public class ThreadsListActivity extends MerlinActivity implements ThreadListVie
     @InjectPresenter
     ThreadListPresenter presenter;
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,11 +71,9 @@ public class ThreadsListActivity extends MerlinActivity implements ThreadListVie
     @Override
     public void init() {
         super.init();
-
         boardId = getIntent().getExtras().getString(BOARD_ID, "");
         btnStar.setChecked(PrefUtils.isFavourite(boardId));
         initAdapter();
-        initRV();
 
         if (threads.size() == 0) {
             loadThreadsRX();
@@ -106,6 +103,7 @@ public class ThreadsListActivity extends MerlinActivity implements ThreadListVie
             }
         };
         rvThreads.setAdapter(threadsAdapter);
+        initRV();
     }
 
     private void openPicViewerActivity(ArrayList<DvachMediaFile> dvachMediaFiles, int imageIndex) {
@@ -125,10 +123,6 @@ public class ThreadsListActivity extends MerlinActivity implements ThreadListVie
     }
 
     private RecyclerView.OnScrollListener listScrollListener = new RecyclerView.OnScrollListener() {
-
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-        }
-
         public void onScrolled(RecyclerView recyclerView, int scrollHorizontal, int scrollVertical) {
             if (scrollVertical > 0) {
 
@@ -137,10 +131,17 @@ public class ThreadsListActivity extends MerlinActivity implements ThreadListVie
                 int pastVisibleItems = llm.findFirstVisibleItemPosition();
 
                 if (!mIsLoadingData) {
-                    if ((visibleItemCount + pastVisibleItems) >= totalItemCount && hasNextPage) {
-                        mIsLoadingData = true;
-                        hasNextPage = false;
-                        loadThreadsRX();
+                    if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+                        if (hasNextPage) {
+                            mIsLoadingData = true;
+                            hasNextPage = false;
+                            loadThreadsRX();
+                        } else {
+                            mIsLoadingData = true;
+                            hasNextPage = false;
+                            currentPage = 1;
+                            loadThreadsRX();
+                        }
                         progressBarLoading.setVisibility(View.VISIBLE);
                     }
                 }
@@ -152,14 +153,12 @@ public class ThreadsListActivity extends MerlinActivity implements ThreadListVie
 
     @OnClick(R.id.btnStar)
     public void onStarClick(View v) {
-
         if (((ToggleButton) v).isChecked()) {
             PrefUtils.saveBoard(boardId);
         } else {
             PrefUtils.removeBoard(boardId);
         }
         Data.get().syncFavouritesWithPreference();
-
     }
 
     @Override
@@ -184,7 +183,6 @@ public class ThreadsListActivity extends MerlinActivity implements ThreadListVie
                         break;
                     }
                 }
-
                 if (!isContains) {
                     newThreads.add(justLoadedThread);
                 }
@@ -202,25 +200,13 @@ public class ThreadsListActivity extends MerlinActivity implements ThreadListVie
     }
 
     @Override
-    public void onError(String error) {
+    public void onError(String t) {
         mIsLoadingData = false;
-        Log.d(TAG, "onError: " + error);
-    }
-
-    @Override
-    public void onLoadingStart() {
-
+        Log.d(TAG, "onError: " + t);
     }
 
     @Override
     public void onLoadingEnd() {
         progressBarLoading.setVisibility(View.GONE);
     }
-
-    @Override
-    public void setProgressBarLoading() {
-
-    }
-
-
 }

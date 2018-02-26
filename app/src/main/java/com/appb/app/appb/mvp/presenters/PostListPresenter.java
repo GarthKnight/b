@@ -15,6 +15,8 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import retrofit2.adapter.rxjava.HttpException;
+import retrofit2.http.HTTP;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -29,8 +31,6 @@ import rx.schedulers.Schedulers;
 public class PostListPresenter extends MvpPresenter<PostListView> {
 
     private static final int FIRST = 1;
-    private static final int ARROWS_LENGTH = 2;
-    private static final String TAG = "PostListPresenter";
 
     public void loadPosts(int threadNumber, String board) {
 
@@ -52,7 +52,11 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
 
                     @Override
                     public void onError(Throwable e) {
-                       getViewState().onError(e.getMessage());
+                        String errorMessage = "";
+                        if (e instanceof HttpException){
+                            //TODO: обработка ошибок
+                        }
+                       getViewState().onError(errorMessage);
                     }
 
                     @Override
@@ -60,32 +64,6 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
                         getViewState().onPostsLoaded(posts);
                     }
                 });
-    }
-
-    private Observable<ArrayList<Post>> setAnswersForPosts(ArrayList<Post> posts){
-        return Observable.create(subscriber -> {
-
-            for (int i = 0; i < posts.size(); i++) {
-
-                ArrayList<Post> answers = new ArrayList<>();
-
-                for (int j = 0; j < posts.size(); j++) {
-
-                    String comment =  Html.fromHtml(posts.get(j).getComment()).toString();
-                    String number = String.valueOf(posts.get(i).getNum());
-
-                    if (comment.contains(number)) {
-                        answers.add(posts.get(j));
-                    }
-                }
-
-                if (answers.size() > 0){
-                    posts.get(i).setAnswers(answers);
-                }
-            }
-
-            subscriber.onNext(posts);
-        });
     }
 
     private Observable<ArrayList<Post>> subscribeForAnswers(ArrayList<Post> posts){
@@ -98,16 +76,6 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
                 postNumbers.put(post.getNum(), post);
             }
 
-//            for (Post post : posts){
-//
-//                ArrayList<Post> answersPosts = new ArrayList<>();
-//                for (int postNumber : post.getPostNumbersFromComments()){
-//                    Post answerPost = postNumbers.get(postNumber);
-//                    answersPosts.add(answerPost);
-//                }
-//                post.setAnswers(answersPosts);
-//            }
-//
             for(Post post : posts){
                 for (int postNumber : post.getPostNumbersFromComments()){
                     Post answerPost = postNumbers.get(postNumber);
