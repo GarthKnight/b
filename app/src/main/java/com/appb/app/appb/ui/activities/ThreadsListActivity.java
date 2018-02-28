@@ -3,6 +3,7 @@ package com.appb.app.appb.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -200,9 +201,10 @@ public class ThreadsListActivity extends MerlinActivity implements ThreadListVie
     }
 
     @Override
-    public void onError(String t) {
+    public void onError(String errorMessage) {
         mIsLoadingData = false;
-        Log.d(TAG, "onError: " + t);
+        Snackbar snackbar = Snackbar.make(rvThreads, errorMessage, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @Override

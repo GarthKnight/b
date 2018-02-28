@@ -5,11 +5,13 @@ import com.appb.app.appb.data.Boards;
 import com.appb.app.appb.data.Category;
 import com.appb.app.appb.data.Data;
 import com.appb.app.appb.mvp.views.BoardlistView;
+import com.appb.app.appb.utils.Utils;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.ArrayList;
 
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -24,7 +26,7 @@ public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
     private ArrayList<Category> categories = new ArrayList<>();
 
     public void loadData() {
-        if (Data.get().getBoards().isEmpty()){
+        if (Data.get().getBoards().isEmpty()) {
             API.getInstance()
                     .getBoards()
                     .subscribeOn(Schedulers.newThread())
@@ -51,6 +53,8 @@ public class BoardsListPresenter extends MvpPresenter<BoardlistView> {
         }
 
     }
+
+
 
 
 }

@@ -7,9 +7,12 @@ import android.os.Build;
 import android.os.Environment;
 
 import com.appb.app.appb.BaseApp;
+import com.appb.app.appb.data.DvachError;
 
 import java.io.File;
 import java.io.FileOutputStream;
+
+import retrofit2.adapter.rxjava.HttpException;
 
 /**
  * Created by Logvinov.sv on 15.11.2017.
@@ -67,6 +70,10 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getErrorMessage(DvachError dvachError) {
+        return dvachError.getCode() + " " + dvachError.getError();
     }
 
 

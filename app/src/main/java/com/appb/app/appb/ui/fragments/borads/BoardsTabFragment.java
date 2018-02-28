@@ -2,6 +2,7 @@ package com.appb.app.appb.ui.fragments.borads;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,8 +53,9 @@ public class BoardsTabFragment extends BaseFragment implements BoardlistView {
     }
 
     @Override
-    public void onError(String error) {
-        Log.d(TAG, "onError: " + error);
+    public void onError(String errorMessage) {
+        Snackbar snackbar = Snackbar.make(getView(), errorMessage, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.appb.app.appb.api;
 
-import com.appb.app.appb.data.Board;
 import com.appb.app.appb.data.BoardPage;
 import com.appb.app.appb.data.Boards;
 import com.appb.app.appb.data.Post;
@@ -12,11 +11,11 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
@@ -50,6 +49,7 @@ public class API {
         OkHttpClient client = new OkHttpClient
                 .Builder()
                 .addInterceptor(interceptor)
+                .addInterceptor(new DownloadingInterceptor())
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
@@ -66,15 +66,8 @@ public class API {
 
     }
 
-
-
     public Observable<Boards> getBoards() {
         return serviceBoards.boards();
-    }
-
-
-    public Observable<Boards> getDifferentBoardsRX() {
-        return serviceBoards.differentBoardsRX();
     }
 
     public Observable<BoardPage> getThreadsRX(int index, String board) {
@@ -94,16 +87,16 @@ public class API {
     public interface DvachService {
 
         @GET("/boards.json")
+        @Headers("Downloader-Id: download-identifier")
         Observable<Boards> boards();
 
         @GET("{board}/{index}.json")
+        @Headers("Downloader-Id: download-identifier")
         Observable<BoardPage> threadsRX(@Path("board") String board,
                                         @Path("index") String index);
 
-        @GET("makaba/mobile.fcgi?task=get_boards")
-        Observable<Boards> differentBoardsRX();
-
         @GET("/makaba/mobile.fcgi")
+        @Headers("Downloader-Id: download-identifier")
         Observable<ArrayList<Post>> postsRX(@Query("task") String thread,
                                     @Query("board") String boardName,
                                     @Query("thread") int threadNumber,

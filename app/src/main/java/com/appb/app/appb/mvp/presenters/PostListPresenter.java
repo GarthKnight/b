@@ -6,6 +6,7 @@ import android.util.Log;
 import com.appb.app.appb.api.API;
 import com.appb.app.appb.data.Post;
 import com.appb.app.appb.mvp.views.PostListView;
+import com.appb.app.appb.utils.Utils;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
@@ -31,9 +32,9 @@ import rx.schedulers.Schedulers;
 public class PostListPresenter extends MvpPresenter<PostListView> {
 
     private static final int FIRST = 1;
+    private static final String TAG = "PostListPresenter";
 
     public void loadPosts(int threadNumber, String board) {
-
         API.getInstance()
                 .getPostsRX(board, threadNumber, FIRST)
                 .subscribeOn(Schedulers.io())
@@ -52,11 +53,9 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        String errorMessage = "";
-                        if (e instanceof HttpException){
-                            //TODO: обработка ошибок
-                        }
-                       getViewState().onError(errorMessage);
+                        Log.d(TAG, "onError: " + e.getMessage());
+                        e.printStackTrace();
+                        getViewState().onError(e.getMessage());
                     }
 
                     @Override
@@ -66,22 +65,26 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
                 });
     }
 
-    private Observable<ArrayList<Post>> subscribeForAnswers(ArrayList<Post> posts){
+
+
+    private Observable<ArrayList<Post>> subscribeForAnswers(ArrayList<Post> posts) {
         return Observable.create(subscriber -> {
 
             HashMap<Integer, Post> postNumbers = new HashMap<>();
 
-            for (Post post : posts){
+            for (Post post : posts) {
                 setPostNumberFromComment(post);
                 postNumbers.put(post.getNum(), post);
             }
 
-            for(Post post : posts){
-                for (int postNumber : post.getPostNumbersFromComments()){
+            for (Post post : posts) {
+                for (int postNumber : post.getPostNumbersFromComments()) {
                     Post answerPost = postNumbers.get(postNumber);
-                    ArrayList<Post> answers = answerPost.getAnswers();
-                    answers.add(post);
-                    answerPost.setAnswers(answers);
+                    if(answerPost!= null){
+                        ArrayList<Post> answers = answerPost.getAnswers();
+                        answers.add(post);
+                        answerPost.setAnswers(answers);
+                    }
                 }
             }
 
@@ -89,11 +92,11 @@ public class PostListPresenter extends MvpPresenter<PostListView> {
         });
     }
 
-    private void setPostNumberFromComment(Post post){
+    private void setPostNumberFromComment(Post post) {
         ArrayList<Integer> postNumbers = new ArrayList<>();
         Pattern pattern = Pattern.compile("([>]{2})+([0-9]+)");
         Matcher matcher = pattern.matcher(post.getComment());
-        while (matcher.find()){
+        while (matcher.find()) {
             postNumbers.add(Integer.valueOf(matcher.group(2)));
         }
         post.setPostNumbersFromComments(postNumbers);

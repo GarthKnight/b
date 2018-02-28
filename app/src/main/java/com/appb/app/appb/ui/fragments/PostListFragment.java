@@ -51,14 +51,9 @@ public class PostListFragment extends BaseFragment implements PostListView {
     RecyclerView rvPosts;
     @BindView(R.id.pbPosts)
     ProgressBar pbPosts;
-    @BindView(R.id.rlMain)
-    RelativeLayout rlMain;
-   ;
-
 
     @InjectPresenter
     PostListPresenter presenter;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -159,7 +154,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
     @Override
     public void onError(String errorMessage) {
         pbPosts.setVisibility(View.GONE);
-        Snackbar snackbar = Snackbar.make(rlMain, errorMessage, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(getView(), errorMessage, Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 

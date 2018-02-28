@@ -5,6 +5,7 @@ import com.appb.app.appb.data.BoardPage;
 import com.appb.app.appb.data.Thread;
 import com.appb.app.appb.mvp.views.ThreadListView;
 import com.appb.app.appb.ui.adapters.ThumbnailsAdapter;
+import com.appb.app.appb.utils.Utils;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
@@ -37,13 +38,8 @@ public class ThreadListPresenter extends MvpPresenter<ThreadListView> {
                     }
 
                     @Override
-                    public void onError(Throwable t) {
-                        String errorMessage = "";
-                        t.printStackTrace();
-                        if (t instanceof HttpException){
-                            //TODO: обработка ошибок
-                        }
-                        getViewState().onError(errorMessage);
+                    public void onError(Throwable e) {
+                        getViewState().onError(e.getMessage());
                     }
 
                     @Override
