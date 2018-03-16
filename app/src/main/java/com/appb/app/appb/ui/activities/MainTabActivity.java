@@ -5,7 +5,10 @@ import android.util.Log;
 
 import com.appb.app.appb.R;
 import com.appb.app.appb.ui.fragments.borads.BoardsTabFragment;
+import com.crashlytics.android.Crashlytics;
 import com.vk.sdk.util.VKUtil;
+
+import io.fabric.sdk.android.Fabric;
 
 public class MainTabActivity extends MerlinActivity {
 
@@ -18,6 +21,7 @@ public class MainTabActivity extends MerlinActivity {
         setContentView(R.layout.activity_main_tab);
         bindUI(this);
         showFragment(new BoardsTabFragment(), false);
+        Fabric.with(this, new Crashlytics());
         String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
         for (String string : fingerprints){
             Log.d(TAG, string);

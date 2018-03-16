@@ -82,5 +82,8 @@ dependencies {
     annotationProcessor 'org.parceler:parceler:1.1.9'
     compile 'com.novoda:merlin:0.8.0'
     compile 'com.vk:androidsdk:1.6.9'
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
+        transitive = true;
+    }
 
 }

@@ -29,14 +29,17 @@
             android:name=".ui.activities.ThreadsListActivity"
             android:configChanges="orientation|screenSize"
             android:parentActivityName=".ui.activities.MainTabActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".ui.activities.PicViewerActivity"
             android:configChanges="orientation|screenSize"
             android:parentActivityName=".ui.activities.ThreadsListActivity"
-            android:theme="@style/Theme.Swipe.Back"/>
+            android:theme="@style/Theme.Swipe.Back" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="00856d9724af6893a32235cd2904662d2a8b3f1f" />
 
     </application>
 
