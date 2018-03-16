@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import com.appb.app.appb.R;
 import com.arellomobile.mvp.MvpAppCompatActivity;
+import com.vk.sdk.util.VKUtil;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
