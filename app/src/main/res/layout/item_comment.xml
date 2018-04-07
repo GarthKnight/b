@@ -77,6 +77,18 @@
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
 
+    <TextView
+        android:id="@+id/btnShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:textSize="12dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="12dp"
+        android:layout_below="@+id/rvThumbnails"
+        android:text="Поделиться"
+        />
+
     <com.appb.app.appb.custom.TextViewWithClickableSpan
         android:id="@+id/tvAnswers"
         android:layout_width="wrap_content"

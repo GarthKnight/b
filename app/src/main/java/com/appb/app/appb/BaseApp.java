@@ -3,6 +3,11 @@ package com.appb.app.appb;
 import android.app.Application;
 import android.content.Context;
 
+import com.crashlytics.android.Crashlytics;
+import com.vk.sdk.VKSdk;
+
+import io.fabric.sdk.android.Fabric;
+
 public class BaseApp extends Application {
 
     private static BaseApp instance;
@@ -15,6 +20,13 @@ public class BaseApp extends Application {
 
     public static Context getContext() {
         return instance;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        VKSdk.initialize(getContext());
+//        Fabric.with(this, new Crashlytics());
     }
 
     @Override

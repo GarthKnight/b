@@ -15,6 +15,7 @@ import com.appb.app.appb.data.Post;
 import com.appb.app.appb.ui.dialogs.AnswerDialog;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,6 +53,12 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
         vh.tvCommentDate.setText(post.getDate());
         vh.tvCommentNumber.setText(postNum);
         vh.tvPosition.setText(String.valueOf(position));
+        vh.btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onShareClick(post);
+            }
+        });
 
         if (TextUtils.isEmpty(postText)) {
             vh.tvTextComment.setVisibility(GONE);
@@ -71,11 +78,15 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
         setVisibilityToAnswersButton(post, vh);
     }
 
+    public void onShareClick(Post post) {
+
+    }
+
     private void setVisibilityToAnswersButton(Post post, VHPost vhPost) {
         if (post.getAnswers().size() > 0) {
             vhPost.cbAnswers.setTextColor(vhPost.cbAnswers.getContext().getResources().getColor(R.color.colorPrimary));
             vhPost.cbAnswers.setOnClickListener(v -> {
-                if (!vhPost.cbAnswers.isChecked()){
+                if (!vhPost.cbAnswers.isChecked()) {
                     setTextToAnswers(post, vhPost.tvAnswers);
                 } else {
                     vhPost.tvAnswers.setVisibility(GONE);
@@ -111,7 +122,7 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
         tv.setLinkClickListener(number -> {
             for (Post answer : answers) {
                 if (answer.getNum() == number) {
-                    AnswerDialog dialog = new AnswerDialog(tv.getContext(), posts, answer){
+                    AnswerDialog dialog = new AnswerDialog(tv.getContext(), posts, answer) {
                         @Override
                         public void onThumbnailClick(int position, ArrayList<DvachMediaFile> files) {
                             super.onThumbnailClick(position, files);
@@ -154,6 +165,8 @@ public class PostsAdapter extends BaseRVAdapterWithImages<PostsAdapter.VHPost> {
         TextView tvPosition;
         @BindView(R.id.tvAnswers)
         TextViewWithClickableSpan tvAnswers;
+        @BindView(R.id.btnShare)
+        TextView btnShare;
 
         VHPost(View v) {
             super(v);

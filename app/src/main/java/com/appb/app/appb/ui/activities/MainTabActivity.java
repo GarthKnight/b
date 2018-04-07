@@ -21,11 +21,11 @@ public class MainTabActivity extends MerlinActivity {
         setContentView(R.layout.activity_main_tab);
         bindUI(this);
         showFragment(new BoardsTabFragment(), false);
-        Fabric.with(this, new Crashlytics());
         String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
-        for (String string : fingerprints){
+        for (String string : fingerprints) {
             Log.d(TAG, string);
         }
+        Log.d(TAG, getApplicationContext().getPackageName());
     }
 
 }

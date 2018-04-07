@@ -2,6 +2,7 @@ package com.appb.app.appb.ui.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -24,12 +25,23 @@ import com.appb.app.appb.ui.adapters.PostsAdapter;
 import com.appb.app.appb.ui.dialogs.AnswerDialog;
 import com.appb.app.appb.utils.ViewUtils;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.bumptech.glide.Glide;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.photo.VKImageParameters;
+import com.vk.sdk.api.photo.VKUploadImage;
+import com.vk.sdk.dialogs.VKShareDialogBuilder;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static com.appb.app.appb.ui.activities.PicViewerActivity.FILES;
 import static com.appb.app.appb.ui.activities.PicViewerActivity.POS;
@@ -101,7 +113,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
 
             @Override
             public void onAnswerClick(ArrayList<Post> posts, Post answer) {
-                AnswerDialog answerDialog = new AnswerDialog((getContext()), posts, answer){
+                AnswerDialog answerDialog = new AnswerDialog((getContext()), posts, answer) {
                     @Override
                     public void onThumbnailClick(int position, ArrayList<DvachMediaFile> files) {
                         super.onThumbnailClick(position, files);
@@ -110,9 +122,77 @@ public class PostListFragment extends BaseFragment implements PostListView {
                 };
                 answerDialog.show();
             }
+
+            @Override
+            public void onShareClick(Post post) {
+                super.onShareClick(post);
+                downloadBitmaps(post)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Subscriber<ArrayList<Bitmap>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(ArrayList<Bitmap> bitmaps) {
+                                VKUploadImage[] vkUploadImages = new VKUploadImage[bitmaps.size()];
+                                for (int i = 0; i < bitmaps.size(); i++) {
+                                    vkUploadImages[i] = new VKUploadImage(bitmaps.get(i), VKImageParameters.pngImage());
+                                }
+                                showDialog(vkUploadImages, post);
+                            }
+                        });
+            }
         };
 
         rvPosts.setAdapter(postsAdapter);
+    }
+
+    private Observable<ArrayList<Bitmap>> downloadBitmaps(Post post) {
+        return Observable.create(subscriber -> {
+            ArrayList<Bitmap> bitmaps = new ArrayList<>();
+            for (int i = 0; i < post.getDvachMediaFiles().size(); i++) {
+                try {
+                    Bitmap bitmap = Glide.with(getContext()).load(post.getDvachMediaFiles().get(i).getPath()).asBitmap().into(-1, -1).get();
+                    bitmaps.add(bitmap);
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+            subscriber.onNext(bitmaps);
+        });
+    }
+
+    private void showDialog(VKUploadImage[] vkUploadImages, Post post) {
+        VKShareDialogBuilder builder = new VKShareDialogBuilder();
+        builder.setText(post.getComment());
+        if (vkUploadImages.length > 0) {
+            builder.setAttachmentImages(vkUploadImages);
+        }
+        builder.setShareDialogListener(new VKShareDialogBuilder.VKShareDialogListener() {
+            @Override
+            public void onVkShareComplete(int postId) {
+
+            }
+
+            @Override
+            public void onVkShareCancel() {
+
+            }
+
+            @Override
+            public void onVkShareError(VKError error) {
+
+            }
+        });
+        builder.show(getChildFragmentManager(), "VK_SHARE_DIALOG");
     }
 
     private void startPicViewerActivity(ArrayList<DvachMediaFile> dvachMediaFiles, int pos) {
@@ -160,7 +240,7 @@ public class PostListFragment extends BaseFragment implements PostListView {
 
     @Override
     public void onLoadingEnd() {
-       pbPosts.setVisibility(View.GONE);
+        pbPosts.setVisibility(View.GONE);
     }
 
     @Override
